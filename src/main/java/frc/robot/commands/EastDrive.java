@@ -4,11 +4,12 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.Drivebase;
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.MathUtil;
 
-import java.util.function.Supplier;
+import frc.robot.subsystems.Drivebase;
 
 public class EastDrive extends CommandBase {
   private final Drivebase drivebase;
@@ -54,7 +55,7 @@ public class EastDrive extends CommandBase {
       if(Math.signum(speed) != Math.signum(acceleration)) {
         speed = Math.copySign(minSpeed, acceleration);
       } else {
-        double adjustment = (System.currentTimeMillis() - lastUpdate) / 750.0;
+        double adjustment = (System.currentTimeMillis() - lastUpdate) / 500.0;
         
         speed = Math.min(Math.abs(speed) + adjustment, Math.abs(acceleration));
         speed = Math.copySign(speed * throttle * (1.0 - minSpeed) + minSpeed, acceleration);
@@ -67,6 +68,8 @@ public class EastDrive extends CommandBase {
       double transitionRamp = MathUtil.clamp((System.currentTimeMillis() - lastAcceleration) / 500.0, 0.5, 1.0);
 
       rotation *= Math.max(throttle, 0.4) * transitionRamp * 0.4;
+
+      if(rotation > 0) rotation = Math.copySign(Math.abs(rotation) * (1.0 - minSpeed) + minSpeed, rotation);
 
       drivebase.curvatureDrive(speed, rotation, true);
     } else {

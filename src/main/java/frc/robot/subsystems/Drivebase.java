@@ -5,12 +5,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DrivebaseConstants;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import frc.robot.Constants.DrivebaseConstants;
 
 public class Drivebase extends SubsystemBase {
   private CANSparkMax leftLeader = new CANSparkMax(DrivebaseConstants.LEFT_LEADER, MotorType.kBrushless);
@@ -43,7 +44,7 @@ public class Drivebase extends SubsystemBase {
   }
 
   public void reverse() {
-    if(Math.abs(movementSpeed) < 0.4) direction *= -1;
+    if(Math.abs(movementSpeed) < 0.3) direction *= -1;
   }
 
   @Override

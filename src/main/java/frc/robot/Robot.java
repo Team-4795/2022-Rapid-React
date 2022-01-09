@@ -15,7 +15,7 @@ public class Robot extends TimedRobot {
 
   private long teleopStart;
 
-  public double getSecondsRemaining() {
+  private double getSecondsRemaining() {
     return 135.0 - (System.currentTimeMillis() - teleopStart) / 1000.0;
   }
 

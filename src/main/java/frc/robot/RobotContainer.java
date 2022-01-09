@@ -6,13 +6,20 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.EastDrive;
 import frc.robot.subsystems.Drivebase;
-import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Vision;
 
 public class RobotContainer {
   private final Drivebase drivebase = new Drivebase();
+  private final Intake intake = new Intake();
+  private final Shooter shooter = new Shooter();
+  private final Vision vision = new Vision();
   
   private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
 
@@ -23,6 +30,7 @@ public class RobotContainer {
       () -> applyDeadband(-controller.getRightX()),
       () -> applyDeadband(controller.getRightTriggerAxis())
     ));
+    
     configureButtonBindings();
   }
 
