@@ -6,13 +6,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Drivebase extends SubsystemBase {
-  public Drivebase() {}
-
-  public void curvatureDrive(double speed, double rotation, boolean quickTurn) {}
-
-  public void reverse() {}
+public class Climber extends SubsystemBase {
+  public Climber() {}
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
 }

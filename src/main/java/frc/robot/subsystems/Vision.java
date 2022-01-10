@@ -4,13 +4,50 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
+
+import frc.robot.Constants.VisionConstants;
+
 public class Vision extends SubsystemBase {
-  public Vision() {}
+  private PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_NAME);
+
+  private boolean hasTarget = false;
+  private double targetDistance = 0;
+  private double targetAngle = 0;
+
+  public boolean hasTarget() {
+    return hasTarget;
+  }
+
+  public double getTargetDistance() {
+    return targetDistance;
+  }
+
+  public double getTargetAngle() {
+    return targetAngle;
+  }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    var result = camera.getLatestResult();
+
+    if (result.hasTargets()) {
+      hasTarget = true;
+      targetDistance = Units.metersToFeet(PhotonUtils.calculateDistanceToTargetMeters(
+                      VisionConstants.CAMERA_HEIGHT_METERS,
+                      VisionConstants.TARGET_HEIGHT_METERS,
+                      VisionConstants.CAMERA_PITCH_RADIANS,
+                      Units.degreesToRadians(result.getBestTarget().getPitch()))
+                      );
+      targetAngle = result.getBestTarget().getYaw();
+    } else {
+      hasTarget = false;
+      targetDistance = -1;
+      targetAngle = -1;
+    }
   }
 }
