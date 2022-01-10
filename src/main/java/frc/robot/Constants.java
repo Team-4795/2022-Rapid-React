@@ -17,9 +17,9 @@ public final class Constants {
   public final static class VisionConstants {
     public static final String CAMERA_NAME = "mmal_service_16.1";
 
-		public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
-		public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(103.5);
-		public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(15);
+    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(103.5);
+    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(15);
   }
 
   public final class ControllerConstants {
