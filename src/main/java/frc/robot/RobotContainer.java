@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants.ControllerConstants;
-import frc.robot.commands.EastDrive;
+import frc.robot.commands.DrivebaseTeleop;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Intake;
@@ -26,7 +26,7 @@ public class RobotContainer {
   private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
 
   public RobotContainer() {
-    drivebase.setDefaultCommand(new EastDrive(
+    drivebase.setDefaultCommand(new DrivebaseTeleop(
       drivebase,
       () -> applyDeadband(-controller.getLeftY()),
       () -> applyDeadband(-controller.getRightX()),
