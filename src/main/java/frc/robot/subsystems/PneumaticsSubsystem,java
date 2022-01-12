@@ -5,9 +5,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class PneumaticsSubsystem extends SubsystemBase {
-  public PneumaticsSubsystem() {}
+  DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,forwardChannel,reverseChannel );
+  
+  public PneumaticsSubsystem() {
+  }
 
   @Override
   public void periodic() {
