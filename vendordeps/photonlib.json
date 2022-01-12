@@ -1,7 +1,11 @@
 {
     "fileName": "photonlib.json",
     "name": "photonlib",
+<<<<<<< Updated upstream
     "version": "v2022.1.1",
+=======
+    "version": "v2022.1.2",
+>>>>>>> Stashed changes
     "uuid": "515fe07e-bfc6-11fa-b3de-0242ac130004 ",
     "mavenUrls": [
         "https://maven.photonvision.org/repository/internal",
@@ -13,7 +17,11 @@
         {
             "groupId": "org.photonvision",
             "artifactId": "PhotonLib-cpp",
+<<<<<<< Updated upstream
             "version": "v2022.1.1",
+=======
+            "version": "v2022.1.2",
+>>>>>>> Stashed changes
             "libName": "Photon",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -30,12 +38,20 @@
         {
             "groupId": "org.photonvision",
             "artifactId": "PhotonLib-java",
+<<<<<<< Updated upstream
             "version": "v2022.1.1"
+=======
+            "version": "v2022.1.2"
+>>>>>>> Stashed changes
         },
         {
             "groupId": "org.photonvision",
             "artifactId": "PhotonTargeting-java",
+<<<<<<< Updated upstream
             "version": "v2022.1.1"
+=======
+            "version": "v2022.1.2"
+>>>>>>> Stashed changes
         }
     ]
 }
