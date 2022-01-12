@@ -7,6 +7,13 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
+
+  public final static class DrivebaseConstants {
+    public static final int LEFT_LEADER = 2;
+    public static final int LEFT_FOLLOWER = 3;
+    public static final int RIGHT_LEADER = 4;
+    public static final int RIGHT_FOLLOWER = 5;
+  }
  
   public final static class VisionConstants {
     public static final String CAMERA_NAME = "mmal_service_16.1";
