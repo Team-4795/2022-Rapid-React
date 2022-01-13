@@ -4,14 +4,31 @@
 
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Drivebase;
 
 public class curveDrive extends CommandBase {
-  /** Creates a new curveDrive. */
-  public curveDrive(Drivebase drivebase, ) {
-    // Use addRequirements() here to declare subsystem dependencies.
 
+  private final Drivebase m_drivebaseSubsystem;
+
+  Supplier<Double> speedValue;
+  Supplier<Double> roationValue;
+  Supplier<Boolean> quickTurnValue;
+  
+  /** Creates a new curveDrive. */
+  public curveDrive(Drivebase subsystem, Supplier<Double> xaxisSpeedSupplier, Supplier<Double> zaxisRotateSupplier, Supplier<Boolean> quickTurnSupplier) {
+
+    m_drivebaseSubsystem = subsystem;
+
+    speedValue = xaxisSpeedSupplier;
+    roationValue = zaxisRotateSupplier;
+    quickTurnValue = quickTurnSupplier;
+
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_drivebaseSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -20,7 +37,9 @@ public class curveDrive extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_drivebaseSubsystem.curvatureDrive(speedValue.get(), roationValue.get(), quickTurnValue.get());
+  }
 
   // Called once the command ends or is interrupted.
   @Override
