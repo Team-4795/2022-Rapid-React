@@ -23,7 +23,9 @@ public class RobotContainer {
      configureButtonBindings();
   }
 
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    
+  }
 
   public Command getAutonomousCommand() {
     return null;
