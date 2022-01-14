@@ -20,7 +20,7 @@ public class RobotContainer {
   private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
 
   public RobotContainer() {
-    drivebase.setDefaultCommand(new curveDrive(drivebase, () -> controller.getRawAxis(1), () -> controller.getRawAxis(2), () -> controller.getRawAxis(2)));
+    drivebase.setDefaultCommand(new curveDrive(drivebase, () -> controller.getRawAxis(ControllerConstants.SPEED_JOYSTICK), () -> controller.getRawAxis(ControllerConstants.ROTATION_JOYSTICK), () -> controller.getRawButtonPressed(ControllerConstants.ROTATE_IN_PLACE_BUTTON)));
      configureButtonBindings();
   }
 
