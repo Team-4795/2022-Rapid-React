@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.commands.curveDrive;
 import frc.robot.subsystems.Drivebase;
 
 
@@ -19,12 +20,12 @@ public class RobotContainer {
   private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
 
   public RobotContainer() {
-
+    drivebase.setDefaultCommand(new curveDrive(drivebase, () -> controller.getRawAxis(1), () -> controller.getRawAxis(2), () -> controller.getRawAxis(2)));
      configureButtonBindings();
   }
 
   private void configureButtonBindings() {
-    
+
   }
 
   public Command getAutonomousCommand() {
