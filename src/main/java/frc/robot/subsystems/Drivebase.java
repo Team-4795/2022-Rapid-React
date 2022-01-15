@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
@@ -29,6 +31,8 @@ public class Drivebase extends SubsystemBase {
 
   private double leftEncoderStart, rightEncoderStart;
 
+  private AHRS gyro;
+
   private DifferentialDrive diffDrive = new DifferentialDrive(leftLeader, rightLeader);
 
   public Drivebase() {
@@ -39,6 +43,8 @@ public class Drivebase extends SubsystemBase {
     // Also changes the units of getRate  
     leftEncoders.setDistancePerPulse(4./256.);
     rightEncoders.setDistancePerPulse(4./256.);
+
+    gyro = new AHRS(SPI.Port.kMXP);
 
     leftEncoderStart = leftEncoders.getDistance();
     rightEncoderStart = rightEncoders.getDistance();
