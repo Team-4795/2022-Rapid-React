@@ -23,6 +23,10 @@ public final class Constants {
     public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(15);
   }
 
+  public final static class GyroConstants {
+    public static final int I2C_PORT = 1;
+  }
+
   public final class ControllerConstants {
     public static final int CONTROLLER_PORT = 0;
 
