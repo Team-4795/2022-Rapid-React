@@ -56,6 +56,8 @@ public class Drivebase extends SubsystemBase {
 
     leftEncoderStart = leftEncoders.getDistance();
     rightEncoderStart = rightEncoders.getDistance();
+
+    diffDrive.setDeadband(0.02);
   }
 
   public void arcadeDrive(double speed, double rotation) {
