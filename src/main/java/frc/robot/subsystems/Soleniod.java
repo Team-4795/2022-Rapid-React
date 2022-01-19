@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
-public class PneumaticsSubsystem extends SubsystemBase {
+public class Soleniod extends SubsystemBase {
   /** new double solenoid */
   private DoubleSolenoid mySolenoid = new DoubleSolenoid(1,2); //forward channel, backward channel
   
-  public PneumaticsSubsystem() {}
+  public Soleniod() {}
   
   public void forward() { 
     mySolenoid.set(Value.kForward);
