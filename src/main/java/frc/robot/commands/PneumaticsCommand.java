@@ -5,15 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Soleniod;
+import frc.robot.subsystems.Solenoid;
 
 public class PneumaticsCommand extends CommandBase {
-  private final Soleniod soleniod;
+  private final Solenoid solenoid;
   /** Create new pneumatics commands. */
-  public PneumaticsCommand(Soleniod soleniod) {
+  public PneumaticsCommand(Solenoid solenoid) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.soleniod = soleniod;
-    addRequirements(intake);
+    this.solenoid = solenoid;
+    addRequirements(solenoid);
   }
 
   // Called when the command is initially scheduled.
@@ -23,13 +23,13 @@ public class PneumaticsCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    soleniod.forward();
+    solenoid.forward();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    soleniod.off();
+    solenoid.off();
   }
 
   // Returns true when the command should end.
