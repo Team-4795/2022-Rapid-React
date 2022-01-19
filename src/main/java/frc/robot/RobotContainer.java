@@ -15,7 +15,7 @@ import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.Soleniod;
+import frc.robot.subsystems.Solenoid;
 
 public class RobotContainer {
   private final Drivebase drivebase = new Drivebase();
@@ -23,7 +23,7 @@ public class RobotContainer {
   private final Shooter shooter = new Shooter();
   private final Climber climber = new Climber();
   private final Vision vision = new Vision();
-  private final Soleniod soleniod = new Soleniod();
+  private final Solenoid solenoid = new Solenoid();
   
   private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
 
@@ -40,8 +40,8 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
   
-    //soleniod on button press
-    Command command = new PneumaticsCommand(soleniod);
+    //Solenoid on button press
+    Command command = new PneumaticsCommand(solenoid);
     final JoystickButton buttonA = new JoystickButton(controller,12); //button A
     buttonA.whenPressed(command);
     final JoystickButton buttonB = new JoystickButton(controller,11); //button B
