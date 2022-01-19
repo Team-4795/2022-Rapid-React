@@ -15,6 +15,7 @@ import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Soleniod;
 
 public class RobotContainer {
   private final Drivebase drivebase = new Drivebase();
@@ -22,6 +23,7 @@ public class RobotContainer {
   private final Shooter shooter = new Shooter();
   private final Climber climber = new Climber();
   private final Vision vision = new Vision();
+  private final Soleniod solenoid = new Soleniod();
   
   private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
 
