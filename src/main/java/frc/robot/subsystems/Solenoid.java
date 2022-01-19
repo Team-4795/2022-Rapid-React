@@ -11,18 +11,35 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class Solenoid extends SubsystemBase {
   /** new double solenoid */
-  private DoubleSolenoid mySolenoid = new DoubleSolenoid(1,2); //forward channel, backward channel
+  private DoubleSolenoid mySolenoid = new DoubleSolenoid(null, 1,2); //forward channel, backward channel
+
+  private boolean isExtended = false;
   
   public Solenoid() {}
   
-  public void forward() { 
-    mySolenoid.set(Value.kForward);
+  public void run() { 
+    if (!isExtended) {
+      mySolenoid.set(Value.kForward);
+    } else {
+      mySolenoid.set(Value.kReverse);
+    }
   }
-  public void back() {
-    mySolenoid.set(Value.kReverse);
-  }
+  
   public void off() {
+    if (mySolenoid.get() == DoubleSolenoid.Value.kForward) {
+      isExtended = true;
+    } else if (mySolenoid.get() == DoubleSolenoid.Value.kReverse) {
+      isExtended = false;
+    }
     mySolenoid.set(Value.kOff);
+  }
+
+  public boolean getExtended() {
+    return isExtended;
+  }
+
+  public void setExtended(boolean Extended) {
+    isExtended = Extended;
   }
 
   @Override
