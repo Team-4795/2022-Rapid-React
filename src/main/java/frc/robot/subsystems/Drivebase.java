@@ -6,9 +6,9 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
-
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -39,6 +39,14 @@ public class Drivebase extends SubsystemBase {
     leftFollower.follow(leftLeader);
     rightFollower.follow(rightLeader);
 
+    leftLeader.setIdleMode(IdleMode.kBrake);
+    leftFollower.setIdleMode(IdleMode.kBrake);
+    rightLeader.setIdleMode(IdleMode.kBrake);
+    rightFollower.setIdleMode(IdleMode.kBrake);
+
+    leftLeader.setInverted(true);
+    leftFollower.setInverted(true);
+
     // Configures the encoder to return a distance of 4 for every 256 pulses
     // Also changes the units of getRate  
     leftEncoders.setDistancePerPulse(4./256.);
@@ -50,9 +58,13 @@ public class Drivebase extends SubsystemBase {
     rightEncoderStart = rightEncoders.getDistance();
   }
 
-  public void curvatureDrive(double speed, double rotation, boolean quickTurn) {
-    diffDrive.curvatureDrive(speed, rotation, quickTurn);
+  public void arcadeDrive(double speed, double rotation) {
+    diffDrive.arcadeDrive(speed, rotation);
   }
+
+  public void setMaxOutput(double maxOutput) {
+    diffDrive.setMaxOutput(maxOutput);
+}
 
   //ENCODER STUFF
   double getRightWheelDistance = rightEncoders.getDistance();
@@ -69,6 +81,19 @@ public class Drivebase extends SubsystemBase {
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(leftEncoders.getRate(), rightEncoders.getRate());
+  }
+
+  //GYRO STUFF
+  public void zeroHeading() {
+    gyro.reset();
+  }
+
+  public double getHeading() {
+    return gyro.getRotation2d().getDegrees();
+  }
+
+  public double getTurnRate() {
+    return gyro.getRate();
   }
 
   public void reverse() {}
