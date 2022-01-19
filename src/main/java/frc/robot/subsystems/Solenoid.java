@@ -13,7 +13,7 @@ public class Solenoid extends SubsystemBase {
   /** new double solenoid */
   private DoubleSolenoid mySolenoid = new DoubleSolenoid(1,2); //forward channel, backward channel
   
-  public Soleniod() {}
+  public Solenoid() {}
   
   public void forward() { 
     mySolenoid.set(Value.kForward);
