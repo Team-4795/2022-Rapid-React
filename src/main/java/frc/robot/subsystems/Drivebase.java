@@ -59,6 +59,9 @@ public class Drivebase extends SubsystemBase {
     leftLeader.setInverted(true);
     leftFollower.setInverted(true);
 
+    rightLeader.setInverted(true);
+    rightFollower.setInverted(true);
+
     m_leftEncoder = leftLeader.getEncoder();
     m_rightEncoder = rightLeader.getEncoder();
 

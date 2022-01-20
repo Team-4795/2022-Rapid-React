@@ -14,6 +14,8 @@ public final class Constants {
     public static final int RIGHT_LEADER = 4;
     public static final int RIGHT_FOLLOWER = 5;
     public static final double WHEEEEEEEEEEEEEL_DIAMETER_METERS = Units.inchesToMeters(6);
+    public static final int LEFT_DRIVE_GROUP_CURRENT_LIMIT = 60;
+    public static final int RIGHT_DRIVE_GROUP_CURRENT_LIMIT = 60;
   }
  
   public final static class VisionConstants {
@@ -35,6 +37,7 @@ public final class Constants {
 
     public static final int SPEED_JOYSTICK = 1;
     public static final int ROTATION_JOYSTICK = 2;
+    public static final int THROTTLE_TRIGGER = 4;
     public static final int ROTATE_IN_PLACE_BUTTON = 6;
   }
 }
