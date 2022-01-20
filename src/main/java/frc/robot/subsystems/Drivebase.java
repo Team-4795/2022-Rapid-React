@@ -6,12 +6,15 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivebaseConstants;
 
@@ -23,6 +26,9 @@ public class Drivebase extends SubsystemBase {
   private CANSparkMax rightLeader = new CANSparkMax(DrivebaseConstants.RIGHT_LEADER, MotorType.kBrushless);
   private CANSparkMax rightFollower = new CANSparkMax(DrivebaseConstants.RIGHT_FOLLOWER, MotorType.kBrushless);
 
+  private RelativeEncoder m_rightEncoder;
+  private RelativeEncoder m_leftEncoder;
+
   // The left-side drive encoder
   Encoder leftEncoders = new Encoder(DrivebaseConstants.LEFT_LEADER, DrivebaseConstants.LEFT_FOLLOWER, false, Encoder.EncodingType.k2X);
 
@@ -33,7 +39,13 @@ public class Drivebase extends SubsystemBase {
 
   private AHRS gyro;
 
+  private double leftStart;
+  
+  private double rightStart;
+
   private DifferentialDrive diffDrive = new DifferentialDrive(leftLeader, rightLeader);
+
+  private final edu.wpi.first.math.kinematics.DifferentialDriveOdometry odometry;
 
   public Drivebase() {
     leftFollower.follow(leftLeader);
@@ -47,6 +59,14 @@ public class Drivebase extends SubsystemBase {
     leftLeader.setInverted(true);
     leftFollower.setInverted(true);
 
+    m_leftEncoder = leftLeader.getEncoder();
+    m_rightEncoder = rightLeader.getEncoder();
+
+    leftStart = m_leftEncoder.getPosition();
+    rightStart = m_rightEncoder.getPosition();
+
+    resetEncoders();
+
     // Configures the encoder to return a distance of 4 for every 256 pulses
     // Also changes the units of getRate  
     leftEncoders.setDistancePerPulse(4./256.);
@@ -56,6 +76,8 @@ public class Drivebase extends SubsystemBase {
 
     leftEncoderStart = leftEncoders.getDistance();
     rightEncoderStart = rightEncoders.getDistance();
+
+    odometry = new edu.wpi.first.math.kinematics.DifferentialDriveOdometry(gyro.getRotation2d());
 
     diffDrive.setDeadband(0.02);
   }
@@ -69,16 +91,17 @@ public class Drivebase extends SubsystemBase {
 }
 
   //ENCODER STUFF
-  double getRightWheelDistance = rightEncoders.getDistance();
-  double getLeftWheelDistance = leftEncoders.getDistance();
-
-  public void resetEncoders() {
-    rightEncoders.reset();
-    leftEncoders.reset();
+  public double getLeftWheelEncoder() {
+    return m_leftEncoder.getPosition() - leftEncoderStart;
   }
 
-  public double getAverageEncoderDistance() {
-    return (leftEncoders.getDistance() + rightEncoders.getDistance()) / 2.0;
+  public double getRightWheelEncoder() {
+    return m_rightEncoder.getPosition() - rightEncoderStart;
+  }
+
+  public void resetEncoders() {
+    leftEncoderStart = m_leftEncoder.getPosition();
+    rightEncoderStart = m_rightEncoder.getPosition();
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
@@ -100,6 +123,24 @@ public class Drivebase extends SubsystemBase {
 
   public void reverse() {}
 
+  //ODOMETRY STUFF
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    odometry.resetPosition(pose, gyro.getRotation2d());
+  }
+
   @Override
-  public void periodic() {}
+  public void periodic() {
+    double leftDistance = getLeftWheelEncoder() / 10.0 * DrivebaseConstants.WHEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
+    double rightDistance = getRightWheelEncoder() / 10.0 * DrivebaseConstants.WHEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
+
+    odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
+
+    SmartDashboard.putNumber("Left distance", leftDistance);
+    SmartDashboard.putNumber("Right distance", rightDistance);
+  }
 }
