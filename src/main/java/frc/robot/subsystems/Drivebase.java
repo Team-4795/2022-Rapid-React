@@ -67,6 +67,9 @@ public class Drivebase extends SubsystemBase {
 
     resetEncoders();
 
+    leftLeader.setSmartCurrentLimit(DrivebaseConstants.LEFT_DRIVE_GROUP_CURRENT_LIMIT);
+    rightLeader.setSmartCurrentLimit(DrivebaseConstants.RIGHT_DRIVE_GROUP_CURRENT_LIMIT);
+
     // Configures the encoder to return a distance of 4 for every 256 pulses
     // Also changes the units of getRate  
     leftEncoders.setDistancePerPulse(4./256.);
@@ -85,10 +88,6 @@ public class Drivebase extends SubsystemBase {
   public void arcadeDrive(double speed, double rotation) {
     diffDrive.arcadeDrive(speed, rotation);
   }
-
-  public void setMaxOutput(double maxOutput) {
-    diffDrive.setMaxOutput(maxOutput);
-}
 
   //ENCODER STUFF
   public double getLeftWheelEncoder() {
