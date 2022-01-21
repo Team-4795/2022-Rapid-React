@@ -73,6 +73,9 @@ public class Drivebase extends SubsystemBase {
     leftLeader.setSmartCurrentLimit(DrivebaseConstants.LEFT_DRIVE_GROUP_CURRENT_LIMIT);
     rightLeader.setSmartCurrentLimit(DrivebaseConstants.RIGHT_DRIVE_GROUP_CURRENT_LIMIT);
 
+    leftFollower.setSmartCurrentLimit(DrivebaseConstants.LEFT_DRIVE_GROUP_CURRENT_LIMIT);
+    rightFollower.setSmartCurrentLimit(DrivebaseConstants.RIGHT_DRIVE_GROUP_CURRENT_LIMIT);
+
     // Configures the encoder to return a distance of 4 for every 256 pulses
     // Also changes the units of getRate  
     leftEncoders.setDistancePerPulse(4./256.);
