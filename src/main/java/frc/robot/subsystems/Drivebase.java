@@ -11,8 +11,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,12 +26,6 @@ public class Drivebase extends SubsystemBase {
 
   private RelativeEncoder m_rightEncoder;
   private RelativeEncoder m_leftEncoder;
-
-  // The left-side drive encoder
-  Encoder leftEncoders = new Encoder(DrivebaseConstants.LEFT_LEADER, DrivebaseConstants.LEFT_FOLLOWER, false, Encoder.EncodingType.k2X);
-
-  // The right-side drive encoder
-  Encoder rightEncoders = new Encoder(DrivebaseConstants.RIGHT_LEADER, DrivebaseConstants.RIGHT_FOLLOWER, false, Encoder.EncodingType.k2X);
 
   private double leftEncoderStart, rightEncoderStart;
 
@@ -76,15 +68,10 @@ public class Drivebase extends SubsystemBase {
     leftFollower.setSmartCurrentLimit(DrivebaseConstants.LEFT_DRIVE_GROUP_CURRENT_LIMIT);
     rightFollower.setSmartCurrentLimit(DrivebaseConstants.RIGHT_DRIVE_GROUP_CURRENT_LIMIT);
 
-    // Configures the encoder to return a distance of 4 for every 256 pulses
-    // Also changes the units of getRate  
-    leftEncoders.setDistancePerPulse(4./256.);
-    rightEncoders.setDistancePerPulse(4./256.);
-
     gyro = new AHRS(SPI.Port.kMXP);
 
-    leftEncoderStart = leftEncoders.getDistance();
-    rightEncoderStart = rightEncoders.getDistance();
+    leftEncoderStart = m_leftEncoder.getPosition();
+    rightEncoderStart = m_rightEncoder.getPosition();
 
     odometry = new edu.wpi.first.math.kinematics.DifferentialDriveOdometry(gyro.getRotation2d());
 
@@ -111,10 +98,6 @@ public class Drivebase extends SubsystemBase {
   public void resetEncoders() {
     leftEncoderStart = m_leftEncoder.getPosition();
     rightEncoderStart = m_rightEncoder.getPosition();
-  }
-
-  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(leftEncoders.getRate(), rightEncoders.getRate());
   }
 
   //GYRO STUFF
