@@ -13,7 +13,7 @@ public final class Constants {
     public static final int LEFT_FOLLOWER = 3;
     public static final int RIGHT_LEADER = 4;
     public static final int RIGHT_FOLLOWER = 5;
-    public static final double WHEEEEEEEEEEEEEL_DIAMETER_METERS = Units.inchesToMeters(6);
+    public static final double WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS = Units.inchesToMeters(6);
     public static final int LEFT_DRIVE_GROUP_CURRENT_LIMIT = 60;
     public static final int RIGHT_DRIVE_GROUP_CURRENT_LIMIT = 60;
   }
