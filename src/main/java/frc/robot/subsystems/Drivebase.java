@@ -31,10 +31,6 @@ public class Drivebase extends SubsystemBase {
 
   private AHRS gyro;
 
-  private double leftStart;
-  
-  private double rightStart;
-
   private DifferentialDrive diffDrive = new DifferentialDrive(leftLeader, rightLeader);
 
   private final edu.wpi.first.math.kinematics.DifferentialDriveOdometry odometry;
@@ -56,9 +52,6 @@ public class Drivebase extends SubsystemBase {
 
     m_leftEncoder = leftLeader.getEncoder();
     m_rightEncoder = rightLeader.getEncoder();
-
-    leftStart = m_leftEncoder.getPosition();
-    rightStart = m_rightEncoder.getPosition();
 
     resetEncoders();
 
