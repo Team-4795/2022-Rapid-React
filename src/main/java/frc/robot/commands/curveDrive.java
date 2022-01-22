@@ -14,7 +14,7 @@ public class curveDrive extends CommandBase {
   private final Drivebase m_drivebaseSubsystem;
 
   Supplier<Double> speedValue;
-  Supplier<Double> roationValue;
+  Supplier<Double> rotationValue;
   Supplier<Double> throttleSupplier;
   Supplier<Boolean> quickTurnValue;
   
@@ -24,7 +24,7 @@ public class curveDrive extends CommandBase {
     m_drivebaseSubsystem = subsystem;
 
     speedValue = xaxisSpeedSupplier;
-    roationValue = zaxisRotateSupplier;
+    rotationValue = zaxisRotateSupplier;
     throttleSupplier = m_throttleSupplier;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -38,7 +38,7 @@ public class curveDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivebaseSubsystem.curvatureDrive(speedValue.get() * (1 - throttleSupplier.get() * 0.3), roationValue.get() * (1 - throttleSupplier.get() * 0.3), quickTurnValue.get());
+    m_drivebaseSubsystem.curvatureDrive(speedValue.get() * (1 - throttleSupplier.get() * 0.3), rotationValue.get() * (1 - throttleSupplier.get() * 0.3), quickTurnValue.get());
   }
 
   // Called once the command ends or is interrupted.
