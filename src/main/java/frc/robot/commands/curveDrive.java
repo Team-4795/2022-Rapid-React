@@ -26,6 +26,7 @@ public class curveDrive extends CommandBase {
     speedValue = xaxisSpeedSupplier;
     rotationValue = zaxisRotateSupplier;
     throttleSupplier = m_throttleSupplier;
+    quickTurnValue = quickTurnSupplier;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drivebaseSubsystem);
