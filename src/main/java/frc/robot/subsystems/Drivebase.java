@@ -95,6 +95,10 @@ public class Drivebase extends SubsystemBase {
     diffDrive.curvatureDrive(speed, rotation, quickTurn);
   }
 
+  public void arcadeDrive(double speed, double rotation) {
+    diffDrive.arcadeDrive(speed, rotation);
+  }
+
   //ENCODER STUFF
   public double getLeftWheelEncoder() {
     return m_leftEncoder.getPosition() - leftEncoderStart;
