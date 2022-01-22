@@ -91,8 +91,8 @@ public class Drivebase extends SubsystemBase {
     diffDrive.setDeadband(0.02);
   }
 
-  public void arcadeDrive(double speed, double rotation) {
-    diffDrive.arcadeDrive(speed, rotation);
+  public void curvatureDrive(double speed, double rotation, boolean quickTurn) {
+    diffDrive.curvatureDrive(speed, rotation, quickTurn);
   }
 
   //ENCODER STUFF

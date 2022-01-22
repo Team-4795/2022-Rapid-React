@@ -23,7 +23,7 @@ public class RobotContainer {
   //private final PowerDistribution PDP = new PowerDistribution();
 
   public RobotContainer() {
-    drivebase.setDefaultCommand(new curveDrive(drivebase, () -> controller.getRawAxis(ControllerConstants.SPEED_JOYSTICK), () -> controller.getRawAxis(ControllerConstants.ROTATION_JOYSTICK), () -> controller.getRawAxis(ControllerConstants.THROTTLE_TRIGGER)));
+    drivebase.setDefaultCommand(new curveDrive(drivebase, () -> controller.getRawAxis(ControllerConstants.SPEED_JOYSTICK), () -> controller.getRawAxis(ControllerConstants.ROTATION_JOYSTICK), () -> controller.getRawButtonPressed(ControllerConstants.ROTATE_IN_PLACE_BUTTON), () -> controller.getRawAxis(ControllerConstants.THROTTLE_TRIGGER)));
     //PDP.clearStickyFaults();
     configureButtonBindings();
   }

@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivebase;
 
-public class curveDrive extends CommandBase {
+public class arcadeDrive extends CommandBase {
 
   private final Drivebase m_drivebaseSubsystem;
 
@@ -19,7 +19,7 @@ public class curveDrive extends CommandBase {
   Supplier<Boolean> quickTurnValue;
   
   /** Creates a new curveDrive. */
-  public curveDrive(Drivebase subsystem, Supplier<Double> xaxisSpeedSupplier, Supplier<Double> zaxisRotateSupplier, Supplier<Boolean> quickTurnSupplier, Supplier<Double> m_throttleSupplier) {
+  public arcadeDrive(Drivebase subsystem, Supplier<Double> xaxisSpeedSupplier, Supplier<Double> zaxisRotateSupplier, Supplier<Double> m_throttleSupplier) {
 
     m_drivebaseSubsystem = subsystem;
 
@@ -38,7 +38,7 @@ public class curveDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivebaseSubsystem.curvatureDrive(speedValue.get() * (1 - throttleSupplier.get() * 0.3), roationValue.get() * (1 - throttleSupplier.get() * 0.3), quickTurnValue.get());
+    //m_drivebaseSubsystem.arcadeDrive(speedValue.get() * (1 - throttleSupplier.get() * 0.3), roationValue.get() * (1 - throttleSupplier.get() * 0.3));
   }
 
   // Called once the command ends or is interrupted.
