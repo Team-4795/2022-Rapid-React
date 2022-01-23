@@ -36,6 +36,12 @@ public class Drivebase extends SubsystemBase {
   private final edu.wpi.first.math.kinematics.DifferentialDriveOdometry odometry;
 
   public Drivebase() {
+    leftLeader.restoreFactoryDefaults();
+    leftFollower.restoreFactoryDefaults();
+
+    rightLeader.restoreFactoryDefaults();
+    rightFollower.restoreFactoryDefaults();
+
     leftFollower.follow(leftLeader);
     rightFollower.follow(rightLeader);
 
