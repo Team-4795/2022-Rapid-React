@@ -121,8 +121,8 @@ public class Drivebase extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double leftDistance = getLeftWheelEncoder() / 10.0 * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
-    double rightDistance = getRightWheelEncoder() / 10.0 * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
+    double leftDistance = getLeftWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
+    double rightDistance = getRightWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
 
     odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
 
