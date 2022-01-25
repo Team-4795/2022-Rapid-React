@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class Solenoid extends SubsystemBase {
   /** new double solenoid */
-  private DoubleSolenoid mySolenoid = new DoubleSolenoid(null, 1,2); //forward channel, backward channel
+  private DoubleSolenoid mySolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0,1); //forward channel, backward channel
 
   private boolean isExtended = false;
   
