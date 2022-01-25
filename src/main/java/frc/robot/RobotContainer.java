@@ -44,7 +44,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
   
-    final JoystickButton buttonA = new JoystickButton(controller,12); //button A
+    final JoystickButton buttonA = new JoystickButton(controller,1); //this is either button A or B
 
       buttonA.whenPressed(new ParallelCommandGroup(
         new InstantCommand(() -> solenoid.run()),
