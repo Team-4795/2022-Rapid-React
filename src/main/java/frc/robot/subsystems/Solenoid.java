@@ -22,11 +22,6 @@ public class Solenoid extends SubsystemBase {
   public void retract() {
     mySolenoid.set(Value.kReverse);
   }
-
-  public void off(){
-    mySolenoid.set(Value.kOff);
-
-  }
   
   @Override
   public void periodic() {
