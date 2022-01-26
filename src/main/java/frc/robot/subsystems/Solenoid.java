@@ -11,37 +11,23 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class Solenoid extends SubsystemBase {
   /** new double solenoid */
-  private DoubleSolenoid mySolenoid = new DoubleSolenoid(null, 1,2); //forward channel, backward channel
-
-  private boolean isExtended = false;
+  private DoubleSolenoid mySolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0,1); //forward channel, backward channel
   
   public Solenoid() {}
   
-  public void run() { 
-    if (!isExtended) {
+  public void extend() { 
       mySolenoid.set(Value.kForward);
-    } else {
-      mySolenoid.set(Value.kReverse);
-    }
   }
   
-  public void off() {
-    if (mySolenoid.get() == DoubleSolenoid.Value.kForward) {
-      isExtended = true;
-    } else if (mySolenoid.get() == DoubleSolenoid.Value.kReverse) {
-      isExtended = false;
-    }
+  public void retract() {
+    mySolenoid.set(Value.kReverse);
+  }
+
+  public void off(){
     mySolenoid.set(Value.kOff);
-  }
 
-  public boolean getExtended() {
-    return isExtended;
   }
-
-  public void setExtended(boolean Extended) {
-    isExtended = Extended;
-  }
-
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

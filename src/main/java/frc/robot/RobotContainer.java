@@ -44,14 +44,21 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
   
-    final JoystickButton buttonA = new JoystickButton(controller,12); //button A
+    final JoystickButton buttonA = new JoystickButton(controller,0); //button A
+    final JoystickButton buttonB = new JoystickButton(controller,1); //button B
+
 
       buttonA.whenPressed(new ParallelCommandGroup(
-        new InstantCommand(() -> solenoid.run()),
+        new InstantCommand(() -> solenoid.extend()),
         new WaitCommand(1.0),
         new InstantCommand(() -> solenoid.off())
     ));
 
+    buttonB.whenPressed(new ParallelCommandGroup(
+      new InstantCommand(() -> solenoid.retract()),
+      new WaitCommand(1.0),
+      new InstantCommand(() -> solenoid.off())
+  ));
   }
 
   public Command getAutonomousCommand() {
