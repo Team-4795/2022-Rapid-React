@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 public final class Constants {
 
@@ -18,6 +19,24 @@ public final class Constants {
     public static final int RIGHT_DRIVE_GROUP_CURRENT_LIMIT = 60;
 
     public static final double GEARING = 10.0;
+    public static final double kTrackwidthMeters = 0.69;
+    public static final DifferentialDriveKinematics kDriveKinematics =
+        new DifferentialDriveKinematics(kTrackwidthMeters);
+
+    public static final int kEncoderCPR = 1024;//No idea
+    public static final double kWheelDiameterMeters = 0.15;//idk
+    public static final double kEncoderDistancePerPulse =
+        // Assumes the encoders are directly mounted on the wheel shafts
+        (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
+
+    // These are example values only DO NOT USE!
+    // These characterization values MUST be determined
+    public static final double ksVolts = 0.22;
+    public static final double kvVoltSecondsPerMeter = 1.98;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+
+    // Example value only - as above, this must be tuned!
+    public static final double kPDriveVel = 8.5;
   }
  
   public final static class VisionConstants {
@@ -41,5 +60,16 @@ public final class Constants {
     public static final int ROTATION_JOYSTICK = 2;
     public static final int THROTTLE_TRIGGER = 4;
     public static final int ROTATE_IN_PLACE_BUTTON = 6;
+
+
+    
   }
+  public static final class AutoConstants {
+    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+
+    // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
+}
 }
