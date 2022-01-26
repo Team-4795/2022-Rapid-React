@@ -26,7 +26,7 @@ public class RobotContainer {
   private final Intake intake = new Intake();
   private final Shooter shooter = new Shooter();
   private final Climber climber = new Climber();
-  private final Vision vision = new Vision();
+  // private final Vision vision = new Vision();
   private final Solenoid solenoid = new Solenoid();
   
   private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
@@ -44,19 +44,15 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
   
-    final JoystickButton buttonA = new JoystickButton(controller,0); //button A
-    final JoystickButton buttonB = new JoystickButton(controller,1); //button B
+    final JoystickButton buttonA = new JoystickButton(controller,1); //button A
+    final JoystickButton buttonB = new JoystickButton(controller,2); //button B
 
       buttonA.whenPressed(new ParallelCommandGroup(
-        new InstantCommand(() -> solenoid.extend()),
-        new WaitCommand(1.0),
-        new InstantCommand(() -> solenoid.off())
+        new InstantCommand(() -> solenoid.extend())
     ));
 
     buttonB.whenPressed(new ParallelCommandGroup(
-      new InstantCommand(() -> solenoid.retract()),
-      new WaitCommand(1.0),
-      new InstantCommand(() -> solenoid.off())
+      new InstantCommand(() -> solenoid.retract())
   ));
   }
 
