@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DrivebaseConstants;
 
 public class Drivebase extends SubsystemBase {
@@ -69,7 +70,7 @@ public class Drivebase extends SubsystemBase {
 
     odometry = new edu.wpi.first.math.kinematics.DifferentialDriveOdometry(gyro.getRotation2d());
 
-    diffDrive.setDeadband(0.02);
+    diffDrive.setDeadband(ControllerConstants.JOYSTICK_DEADBAND);
   }
 
   public void curvatureDrive(double speed, double rotation, boolean quickTurn) {
