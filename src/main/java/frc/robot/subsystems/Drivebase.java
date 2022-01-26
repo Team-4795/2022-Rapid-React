@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -79,7 +80,11 @@ public class Drivebase extends SubsystemBase {
   public void arcadeDrive(double speed, double rotation) {
     diffDrive.arcadeDrive(speed, rotation);
   }
-
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    leftLeader.setVoltage(leftVolts);
+    rightFollower.setVoltage(rightVolts);
+    diffDrive.feed();
+  }
   //ENCODER STUFF
   public double getLeftWheelEncoder() {
     return m_leftEncoder.getPosition();
@@ -112,6 +117,9 @@ public class Drivebase extends SubsystemBase {
   //ODOMETRY STUFF
   public Pose2d getPose() {
     return odometry.getPoseMeters();
+  }
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getVelocity(), m_rightEncoder.getVelocity());
   }
 
   public void resetOdometry(Pose2d pose) {
