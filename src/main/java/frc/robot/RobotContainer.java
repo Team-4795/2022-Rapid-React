@@ -47,7 +47,6 @@ public class RobotContainer {
     final JoystickButton buttonA = new JoystickButton(controller,0); //button A
     final JoystickButton buttonB = new JoystickButton(controller,1); //button B
 
-
       buttonA.whenPressed(new ParallelCommandGroup(
         new InstantCommand(() -> solenoid.extend()),
         new WaitCommand(1.0),
