@@ -19,7 +19,7 @@ public final class Constants {
     public static final int RIGHT_DRIVE_GROUP_CURRENT_LIMIT = 60;
 
     public static final double GEARING = 10.0;
-    public static final double kTrackwidthMeters = 0.69;
+    public static final double kTrackwidthMeters = 0.63;
     public static final DifferentialDriveKinematics kDriveKinematics =
         new DifferentialDriveKinematics(kTrackwidthMeters);
 
@@ -31,12 +31,12 @@ public final class Constants {
 
     // These are example values only DO NOT USE!
     // These characterization values MUST be determined
-    public static final double ksVolts = 0.22;
-    public static final double kvVoltSecondsPerMeter = 1.98;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+    public static final double ksVolts = 0.146;
+    public static final double kvVoltSecondsPerMeter = 1.26;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.165;
 
     // Example value only - as above, this must be tuned!
-    public static final double kPDriveVel = 8.5;
+    public static final double kPDriveVel = 1;
   }
  
   public final static class VisionConstants {
@@ -65,8 +65,8 @@ public final class Constants {
     
   }
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxSpeedMetersPerSecond = 0.5;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
 
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;

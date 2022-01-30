@@ -60,6 +60,9 @@ public class Drivebase extends SubsystemBase {
     m_leftEncoder = leftLeader.getEncoder();
     m_rightEncoder = rightLeader.getEncoder();
 
+    m_leftEncoder.setVelocityConversionFactor((1.0 / 60.0 / DrivebaseConstants.GEARING) * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI);
+    m_rightEncoder.setVelocityConversionFactor((1.0 / 60.0 / DrivebaseConstants.GEARING) * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI);
+
     resetEncoders();
 
     leftLeader.setSmartCurrentLimit(DrivebaseConstants.LEFT_DRIVE_GROUP_CURRENT_LIMIT);
@@ -84,7 +87,7 @@ public class Drivebase extends SubsystemBase {
   }
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     leftLeader.setVoltage(leftVolts);
-    rightFollower.setVoltage(rightVolts);
+    rightLeader.setVoltage(rightVolts);
     diffDrive.feed();
   }
   //ENCODER STUFF
@@ -136,8 +139,11 @@ public class Drivebase extends SubsystemBase {
 
     odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
 
+    SmartDashboard.putNumber("Left speed", m_leftEncoder.getVelocity());
+    SmartDashboard.putNumber("Right speed", m_rightEncoder.getVelocity());
     SmartDashboard.putNumber("Left distance", leftDistance);
     SmartDashboard.putNumber("Right distance", rightDistance);
+    SmartDashboard.putNumber("gyro", gyro.getRotation2d().getDegrees());
   }
   private final Field2d m_field2d = new Field2d();
   public void putTrajectory(Trajectory trajectory) {
