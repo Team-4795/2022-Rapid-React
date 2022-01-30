@@ -12,7 +12,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivebaseConstants;
@@ -136,5 +138,9 @@ public class Drivebase extends SubsystemBase {
 
     SmartDashboard.putNumber("Left distance", leftDistance);
     SmartDashboard.putNumber("Right distance", rightDistance);
+  }
+  private final Field2d m_field2d = new Field2d();
+  public void putTrajectory(Trajectory trajectory) {
+    m_field2d.getObject("traj").setTrajectory(trajectory);
   }
 }
