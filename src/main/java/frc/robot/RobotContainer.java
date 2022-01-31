@@ -37,7 +37,9 @@ import java.util.List;
 //import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants.ControllerConstants;
@@ -107,6 +109,12 @@ public class RobotContainer {
                     // RamseteCommand passes volts to the callback
                     drivebase::tankDriveVolts,
                     drivebase);
+                    // Create and push Field2d to SmartDashboard.
+                    Field2d m_field = new Field2d();
+                    SmartDashboard.putData(m_field);
+
+                    // Push the trajectory to Field2d.
+                    m_field.getObject("traj").setTrajectory(trajectory);
 
                 // Reset odometry to the starting pose of the trajectory.
                 drivebase.resetOdometry(trajectory.getInitialPose());
@@ -118,6 +126,7 @@ public class RobotContainer {
                     .andThen(ramseteCommand)
                     // Finally, we make sure that the robot stops
                     .andThen(new InstantCommand(() -> drivebase.tankDriveVolts(0, 0), drivebase));
+
             }catch (IOException ex) {
                 DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
              }
