@@ -87,7 +87,7 @@ public class RobotContainer {
 
 
 
-            String trajectoryJSON = "paths/Line.wpilib.json";
+            String trajectoryJSON = "paths/Circle.wpilib.json";
 
             try {
                   Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
