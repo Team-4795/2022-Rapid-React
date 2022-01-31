@@ -87,46 +87,41 @@ public class RobotContainer {
 
 
 
-        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(
-                new Translation2d(1, 0),
-                new Translation2d(2, 0)
-            ),
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 0, new Rotation2d(0)),
-            // Pass config
-            config
-        );
-        RamseteCommand ramseteCommand = new RamseteCommand(
-            exampleTrajectory,
-            drivebase::getPose,
-            new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-            new SimpleMotorFeedforward(
-                DrivebaseConstants.ksVolts,
-                DrivebaseConstants.kvVoltSecondsPerMeter,
-                DrivebaseConstants.kaVoltSecondsSquaredPerMeter),
-            DrivebaseConstants.kDriveKinematics,
-            drivebase::getWheelSpeeds,
-            new PIDController(DrivebaseConstants.kPDriveVel, 0, 0),
-            new PIDController(DrivebaseConstants.kPDriveVel, 0, 0),
-            // RamseteCommand passes volts to the callback
-            drivebase::tankDriveVolts,
-            drivebase);
+            String trajectoryJSON = "paths/Line.wpilib.json";
 
-        // Reset odometry to the starting pose of the trajectory.
-        drivebase.resetOdometry(exampleTrajectory.getInitialPose());
-        drivebase.putTrajectory(exampleTrajectory);
-        // Set up a sequence of commands
-        // First, we want to reset the drivetrain odometry
-        return new InstantCommand(() -> drivebase.resetOdometry(exampleTrajectory.getInitialPose()), drivebase)
-            // next, we run the actual ramsete command
-            .andThen(ramseteCommand)
-            // Finally, we make sure that the robot stops
-            .andThen(new InstantCommand(() -> drivebase.tankDriveVolts(0, 0), drivebase));
+            try {
+                  Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                 Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+                RamseteCommand ramseteCommand = new RamseteCommand(
+                    trajectory,
+                    drivebase::getPose,
+                    new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+                    new SimpleMotorFeedforward(
+                        DrivebaseConstants.ksVolts,
+                        DrivebaseConstants.kvVoltSecondsPerMeter,
+                        DrivebaseConstants.kaVoltSecondsSquaredPerMeter),
+                    DrivebaseConstants.kDriveKinematics,
+                    drivebase::getWheelSpeeds,
+                    new PIDController(DrivebaseConstants.kPDriveVel, 0, 0),
+                    new PIDController(DrivebaseConstants.kPDriveVel, 0, 0),
+                    // RamseteCommand passes volts to the callback
+                    drivebase::tankDriveVolts,
+                    drivebase);
 
+                // Reset odometry to the starting pose of the trajectory.
+                drivebase.resetOdometry(trajectory.getInitialPose());
+                drivebase.putTrajectory(trajectory);
+                // Set up a sequence of commands
+                // First, we want to reset the drivetrain odometry
+                return new InstantCommand(() -> drivebase.resetOdometry(trajectory.getInitialPose()), drivebase)
+                    // next, we run the actual ramsete command
+                    .andThen(ramseteCommand)
+                    // Finally, we make sure that the robot stops
+                    .andThen(new InstantCommand(() -> drivebase.tankDriveVolts(0, 0), drivebase));
+            }catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+             }
+             return null;
     }
 
     public Command getAutonomousCommand() {
