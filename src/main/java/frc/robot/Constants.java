@@ -57,7 +57,7 @@ public final class Constants {
     public static final double JOYSTICK_DEADBAND = 0.05;
 
     public static final int SPEED_JOYSTICK = 1;
-    public static final int ROTATION_JOYSTICK = 2;
+    public static final int ROTATION_JOYSTICK = 4;
     public static final int THROTTLE_TRIGGER = 4;
     public static final int ROTATE_IN_PLACE_BUTTON = 6;
 
