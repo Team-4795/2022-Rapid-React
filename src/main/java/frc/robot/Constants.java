@@ -36,7 +36,7 @@ public final class Constants {
     public static final double kaVoltSecondsSquaredPerMeter = 0.165;
 
     // Example value only - as above, this must be tuned!
-    public static final double kPDriveVel = 1;
+    public static final double kPDriveVel = 3;
   }
  
   public final static class VisionConstants {
@@ -65,8 +65,8 @@ public final class Constants {
     
   }
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 0.5;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+    public static final double kMaxSpeedMetersPerSecond = 10;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
 
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;
