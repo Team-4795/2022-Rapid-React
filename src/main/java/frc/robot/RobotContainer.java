@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -66,7 +67,74 @@ public class RobotContainer {
 
     }
 
-    public Command generateRamseteCommand() {
+    public Command pathOne() {
+        // Create a voltage constraint to ensure we don't accelerate too fast
+        var autoVoltageConstraint =
+            new DifferentialDriveVoltageConstraint(
+                new SimpleMotorFeedforward(
+                    DrivebaseConstants.ksVolts,
+                    DrivebaseConstants.kvVoltSecondsPerMeter,
+                    DrivebaseConstants.kaVoltSecondsSquaredPerMeter),
+                DrivebaseConstants.kDriveKinematics,
+                10);
+
+        // Create config for trajectory
+        TrajectoryConfig config =
+            new TrajectoryConfig(
+                AutoConstants.kMaxSpeedMetersPerSecond,
+                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(DrivebaseConstants.kDriveKinematics)
+            // Apply the voltage constraint
+            .addConstraint(autoVoltageConstraint);
+
+
+
+            String trajectoryJSON = "paths/OneBallPath.wpilib.json";
+
+            try {
+                  Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                 Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+                RamseteCommand ramseteCommand = new RamseteCommand(
+                    trajectory,
+                    drivebase::getPose,
+                    new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+                    new SimpleMotorFeedforward(
+                        DrivebaseConstants.ksVolts,
+                        DrivebaseConstants.kvVoltSecondsPerMeter,
+                        DrivebaseConstants.kaVoltSecondsSquaredPerMeter),
+                    DrivebaseConstants.kDriveKinematics,
+                    drivebase::getWheelSpeeds,
+                    new PIDController(DrivebaseConstants.kPDriveVel, 0, 0),
+                    new PIDController(DrivebaseConstants.kPDriveVel, 0, 0),
+                    // RamseteCommand passes volts to the callback
+                    drivebase::tankDriveVolts,
+                    drivebase);
+                    // Create and push Field2d to SmartDashboard.
+                    Field2d m_field = new Field2d();
+                    SmartDashboard.putData(m_field);
+
+                    // Push the trajectory to Field2d.
+                    m_field.getObject("traj").setTrajectory(trajectory);
+
+                // Reset odometry to the starting pose of the trajectory.
+                drivebase.resetOdometry(trajectory.getInitialPose());
+                drivebase.putTrajectory(trajectory);
+                // Set up a sequence of commands
+                // First, we want to reset the drivetrain odometry
+                return new InstantCommand(() -> drivebase.resetOdometry(trajectory.getInitialPose()), drivebase)
+                    // next, we run the actual ramsete command
+                    .andThen(ramseteCommand)
+                    // Finally, we make sure that the robot stops
+                    .andThen(new InstantCommand(() -> drivebase.tankDriveVolts(0, 0), drivebase));
+
+            }catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+             }
+             return null;
+    }
+
+    public Command pathTwo() {
         // Create a voltage constraint to ensure we don't accelerate too fast
         var autoVoltageConstraint =
             new DifferentialDriveVoltageConstraint(
@@ -134,7 +202,8 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return  generateRamseteCommand();
+        return new SequentialCommandGroup(pathOne(), pathTwo());
+        //return  generateRamseteCommand();
     }
 
     public void setRumble(double rumble) {
