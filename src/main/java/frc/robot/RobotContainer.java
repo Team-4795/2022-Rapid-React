@@ -136,7 +136,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return new SequentialCommandGroup(generatePath("paths/OneBallPath.wpilib.json"), new WaitCommand(3));
+        return new SequentialCommandGroup(generatePath("paths/Testing.wpilib.json"), new WaitCommand(3), generatePath("paths/Testing_0.wpilib.json"));
         //return  generateRamseteCommand();
     }
 

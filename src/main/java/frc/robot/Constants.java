@@ -23,14 +23,6 @@ public final class Constants {
     public static final DifferentialDriveKinematics kDriveKinematics =
         new DifferentialDriveKinematics(kTrackwidthMeters);
 
-    public static final int kEncoderCPR = 1024;//No idea
-
-    //public static final double kEncoderDistancePerPulse =
-        // Assumes the encoders are directly mounted on the wheel shafts
-        //(WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI) / (double) kEncoderCPR;
-
-    // These are example values only DO NOT USE!
-    // These characterization values MUST be determined
     public static final double ksVolts = 0.146;
     public static final double kvVoltSecondsPerMeter = 1.26;
     public static final double kaVoltSecondsSquaredPerMeter = 0.165;
