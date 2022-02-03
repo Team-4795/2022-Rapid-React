@@ -60,8 +60,8 @@ public class Drivebase extends SubsystemBase {
     m_leftEncoder = leftLeader.getEncoder();
     m_rightEncoder = rightLeader.getEncoder();
 
-    m_leftEncoder.setVelocityConversionFactor((1.0 / 60.0 / DrivebaseConstants.GEARING) * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI);
-    m_rightEncoder.setVelocityConversionFactor((1.0 / 60.0 / DrivebaseConstants.GEARING) * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI);
+    m_leftEncoder.setVelocityConversionFactor((1.0 / 60.0 / DrivebaseConstants.GEARING) * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI);
+    m_rightEncoder.setVelocityConversionFactor((1.0 / 60.0 / DrivebaseConstants.GEARING) * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI);
 
     resetEncoders();
 
@@ -134,8 +134,8 @@ public class Drivebase extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double leftDistance = getLeftWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
-    double rightDistance = getRightWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
+    double leftDistance = getLeftWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
+    double rightDistance = getRightWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
 
     odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
 

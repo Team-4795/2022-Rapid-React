@@ -14,7 +14,7 @@ public final class Constants {
     public static final int LEFT_FOLLOWER = 3;
     public static final int RIGHT_LEADER = 4;
     public static final int RIGHT_FOLLOWER = 5;
-    public static final double WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS = Units.inchesToMeters(6);
+    public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
     public static final int LEFT_DRIVE_GROUP_CURRENT_LIMIT = 60;
     public static final int RIGHT_DRIVE_GROUP_CURRENT_LIMIT = 60;
 
@@ -27,7 +27,6 @@ public final class Constants {
     public static final double kvVoltSecondsPerMeter = 1.26;
     public static final double kaVoltSecondsSquaredPerMeter = 0.165;
 
-    // Example value only - as above, this must be tuned!
     public static final double kPDriveVel = 3;
   }
  
@@ -63,5 +62,5 @@ public final class Constants {
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
-}
+  }
 }

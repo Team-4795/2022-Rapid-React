@@ -38,7 +38,7 @@ public class arcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivebaseSubsystem.arcadeDrive(speedValue.get() * (1 - throttleSupplier.get() * 0.3), rotaionValue.get() * (1 - throttleSupplier.get() * 0.3));
+    m_drivebaseSubsystem.arcadeDrive(speedValue.get(), rotaionValue.get());
   }
 
   // Called once the command ends or is interrupted.
