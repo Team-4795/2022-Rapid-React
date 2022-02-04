@@ -25,10 +25,10 @@ public class RobotContainer {
   public RobotContainer() {
     drivebase.setDefaultCommand(
       new curveDrive(drivebase,
-      () -> applyDeadband(-controller.getRawAxis(ControllerConstants.SPEED_JOYSTICK)),
-      () -> applyDeadband(controller.getRawAxis(ControllerConstants.ROTATION_JOYSTICK)),
-      () -> controller.getRawButton(ControllerConstants.ROTATE_IN_PLACE_BUTTON),
-      () -> applyDeadband(controller.getRawAxis(ControllerConstants.THROTTLE_TRIGGER)))
+      () -> applyDeadband(-controller.getLeftY()),
+      () -> applyDeadband(controller.getRightX()),
+      () -> controller.getRightBumper(),
+      () -> applyDeadband(controller.getRightTriggerAxis()))
     );
     //PDP.clearStickyFaults();
     configureButtonBindings();
