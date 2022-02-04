@@ -69,8 +69,6 @@ public class Drivebase extends SubsystemBase {
     gyro = new AHRS(SPI.Port.kMXP);
 
     odometry = new edu.wpi.first.math.kinematics.DifferentialDriveOdometry(gyro.getRotation2d());
-
-    diffDrive.setDeadband(ControllerConstants.JOYSTICK_DEADBAND);
   }
 
   public void curvatureDrive(double speed, double rotation, boolean quickTurn) {
