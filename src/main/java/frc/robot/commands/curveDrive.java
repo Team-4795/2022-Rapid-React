@@ -40,6 +40,7 @@ public class curveDrive extends CommandBase {
   @Override
   public void execute() {
     m_drivebaseSubsystem.curvatureDrive(speedValue.get() * (1 - throttleSupplier.get() * 0.3), rotationValue.get() * (1 - throttleSupplier.get() * 0.3), quickTurnValue.get());
+    
   }
 
   // Called once the command ends or is interrupted.

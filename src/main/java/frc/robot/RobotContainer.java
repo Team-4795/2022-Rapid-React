@@ -8,15 +8,18 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.curveDrive;
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.Climber;
 
 
 public class RobotContainer {
 
   private final Drivebase drivebase = new Drivebase();
+  private final Climber climber = new Climber();
   
   private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
 
@@ -24,11 +27,30 @@ public class RobotContainer {
 
   public RobotContainer() {
     drivebase.setDefaultCommand(new curveDrive(drivebase, () -> -controller.getRawAxis(ControllerConstants.SPEED_JOYSTICK), () -> controller.getRawAxis(ControllerConstants.ROTATION_JOYSTICK), () -> controller.getRawButton(ControllerConstants.ROTATE_IN_PLACE_BUTTON), () -> controller.getRawAxis(ControllerConstants.THROTTLE_TRIGGER)));
+
+
     //PDP.clearStickyFaults();
+
     configureButtonBindings();
+
   }
 
+
+
+
   private void configureButtonBindings() {
+  
+    final JoystickButton buttonX = new JoystickButton(controller,3); //button X
+    final JoystickButton buttonY = new JoystickButton(controller,4); //button Y
+
+    
+    buttonX.whenPressed(
+      new InstantCommand(() -> climber.extend())
+    );
+
+    buttonY.whenPressed(
+      new InstantCommand(() -> climber.retract())
+    );
 
   }
 

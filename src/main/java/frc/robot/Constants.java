@@ -39,5 +39,21 @@ public final class Constants {
     public static final int ROTATION_JOYSTICK = 2;
     public static final int THROTTLE_TRIGGER = 4;
     public static final int ROTATE_IN_PLACE_BUTTON = 6;
+    public static final int Xbutton = 40;
+    public static final int Ybutton = 60;
+  }
+
+  public final static class ClimberConstants {
+    public static final int climb_motor = 12;
+    public static final double spool_diameter = 1.375;
+    public static final double stage_length = 27.5;
+    public static final double safety_margin = 2;
+    public static final int hall_effect_port = 0;
+    public static final double physical_gear = 46/16;
+    public static final double versaplanetary = 7;
+    public static final double starting_hook_height = 35.125;
+    public static final double bar_height = 60.25;
+    
+
   }
 }
