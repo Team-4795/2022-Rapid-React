@@ -27,8 +27,6 @@ public class Drivebase extends SubsystemBase {
   private RelativeEncoder m_rightEncoder;
   private RelativeEncoder m_leftEncoder;
 
-  private double leftEncoderStart, rightEncoderStart;
-
   private AHRS gyro;
 
   private DifferentialDrive diffDrive = new DifferentialDrive(leftLeader, rightLeader);
@@ -36,6 +34,12 @@ public class Drivebase extends SubsystemBase {
   private final edu.wpi.first.math.kinematics.DifferentialDriveOdometry odometry;
 
   public Drivebase() {
+    leftLeader.restoreFactoryDefaults();
+    leftFollower.restoreFactoryDefaults();
+
+    rightLeader.restoreFactoryDefaults();
+    rightFollower.restoreFactoryDefaults();
+
     leftFollower.follow(leftLeader);
     rightFollower.follow(rightLeader);
 
@@ -63,12 +67,7 @@ public class Drivebase extends SubsystemBase {
 
     gyro = new AHRS(SPI.Port.kMXP);
 
-    leftEncoderStart = m_leftEncoder.getPosition();
-    rightEncoderStart = m_rightEncoder.getPosition();
-
     odometry = new edu.wpi.first.math.kinematics.DifferentialDriveOdometry(gyro.getRotation2d());
-
-    diffDrive.setDeadband(0.02);
   }
 
   public void curvatureDrive(double speed, double rotation, boolean quickTurn) {
@@ -81,16 +80,16 @@ public class Drivebase extends SubsystemBase {
 
   //ENCODER STUFF
   public double getLeftWheelEncoder() {
-    return m_leftEncoder.getPosition() - leftEncoderStart;
+    return m_leftEncoder.getPosition();
   }
 
   public double getRightWheelEncoder() {
-    return m_rightEncoder.getPosition() - rightEncoderStart;
+    return m_rightEncoder.getPosition();
   }
 
   public void resetEncoders() {
-    leftEncoderStart = m_leftEncoder.getPosition();
-    rightEncoderStart = m_rightEncoder.getPosition();
+    m_leftEncoder.setPosition(0);
+    m_rightEncoder.setPosition(0);
   }
 
   //GYRO STUFF
@@ -120,8 +119,8 @@ public class Drivebase extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double leftDistance = getLeftWheelEncoder() / 10.0 * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
-    double rightDistance = getRightWheelEncoder() / 10.0 * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
+    double leftDistance = getLeftWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
+    double rightDistance = getRightWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
 
     odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
 

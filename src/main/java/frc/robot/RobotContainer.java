@@ -26,9 +26,17 @@ public class RobotContainer {
   //private final PowerDistribution PDP = new PowerDistribution();
 
   public RobotContainer() {
+    
     drivebase.setDefaultCommand(new curveDrive(drivebase, () -> -controller.getRawAxis(ControllerConstants.SPEED_JOYSTICK), () -> controller.getRawAxis(ControllerConstants.ROTATION_JOYSTICK), () -> controller.getRawButton(ControllerConstants.ROTATE_IN_PLACE_BUTTON), () -> controller.getRawAxis(ControllerConstants.THROTTLE_TRIGGER)));
 
 
+    drivebase.setDefaultCommand(
+      new curveDrive(drivebase,
+      () -> applyDeadband(-controller.getLeftY()),
+      () -> applyDeadband(controller.getRightX()),
+      () -> controller.getRightBumper(),
+      () -> applyDeadband(controller.getRightTriggerAxis()))
+    );
     //PDP.clearStickyFaults();
 
     configureButtonBindings();
@@ -63,6 +71,14 @@ public class RobotContainer {
     controller.setRumble(RumbleType.kRightRumble, rumble);
   }
 
+  public double applyDeadband(double value) {
+    double deadband = ControllerConstants.JOYSTICK_DEADBAND;
 
+    if (Math.abs(value) < deadband) {
+      return 0;
+    } else {
+      return value;
+    }
+  }
  
 }
