@@ -51,10 +51,8 @@ public final class Constants {
     public static final int ROTATION_JOYSTICK = 4;
     public static final int THROTTLE_TRIGGER = 4;
     public static final int ROTATE_IN_PLACE_BUTTON = 6;
-
-
-    
   }
+
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 10;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
