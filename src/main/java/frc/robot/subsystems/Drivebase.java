@@ -60,6 +60,7 @@ public class Drivebase extends SubsystemBase {
     m_leftEncoder = leftLeader.getEncoder();
     m_rightEncoder = rightLeader.getEncoder();
 
+    //velocity calculation, geaing * wheel diameter, meters per second
     m_leftEncoder.setVelocityConversionFactor((1.0 / 60.0 / DrivebaseConstants.GEARING) * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI);
     m_rightEncoder.setVelocityConversionFactor((1.0 / 60.0 / DrivebaseConstants.GEARING) * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI);
 
