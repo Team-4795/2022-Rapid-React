@@ -16,11 +16,14 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -37,6 +40,7 @@ import frc.robot.subsystems.Drivebase;
 public class RobotContainer {
 
     private final Drivebase drivebase = new Drivebase();
+    private final Intake intake = new Intake();
 
     private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
 
@@ -49,7 +53,17 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
+      final JoystickButton buttonA = new JoystickButton(controller,0); //button A
+      final JoystickButton buttonB = new JoystickButton(controller,1); //button B
 
+      buttonA.whenPressed(new ParallelCommandGroup(
+        new InstantCommand(() -> intake.toggleIntake()),
+        new InstantCommand(() -> intake.setSpeed(.5))
+      ));
+    
+      buttonB.whenPressed(new ParallelCommandGroup(
+        new InstantCommand(() -> intake.setSpeed(0))
+      ));
     }
 
     public Command generatePath(String pathName) {

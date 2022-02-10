@@ -61,4 +61,12 @@ public final class Constants {
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
   }
+
+  public final static class IndexerConstants {
+    public static final int INDEXER_LOWER = 1; //PLACEHOLDER
+    public static final int INDEXER_UPPER = 2; //PLACEHOLDER
+    public static final double kP = 0; //PLACEHOLDER
+    public static final double kI = 0; //PLACEHOLDER
+    public static final double kD = 0; //PLACEHOLDER
+  }
 }

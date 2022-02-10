@@ -4,13 +4,42 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
+
+  private CANSparkMax roller = new CANSparkMax(123345, MotorType.kBrushless); //re-do id thing later
+  private DoubleSolenoid rollerSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0,1); 
+  private double speed = 0;
+  private boolean extended = false;
+
   public Intake() {}
+
+  public void toggleIntake(){
+    if (extended){
+      rollerSolenoid.set(Value.kReverse);
+      roller.set(0);
+    } else {
+      rollerSolenoid.set(Value.kForward);
+      roller.set(.5);
+    }
+    extended = !extended;
+  }
+
+  public void setSpeed(double targetSpeed){
+    speed = targetSpeed;
+    roller.set(speed);
+  }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    roller.set(speed);
+  } 
 }
