@@ -11,7 +11,10 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivebaseConstants;
@@ -57,6 +60,10 @@ public class Drivebase extends SubsystemBase {
     m_leftEncoder = leftLeader.getEncoder();
     m_rightEncoder = rightLeader.getEncoder();
 
+    //velocity calculation, geaing * wheel diameter, meters per second
+    m_leftEncoder.setVelocityConversionFactor((1.0 / 60.0 / DrivebaseConstants.GEARING) * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI);
+    m_rightEncoder.setVelocityConversionFactor((1.0 / 60.0 / DrivebaseConstants.GEARING) * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI);
+
     resetEncoders();
 
     leftLeader.setSmartCurrentLimit(DrivebaseConstants.LEFT_DRIVE_GROUP_CURRENT_LIMIT);
@@ -77,7 +84,11 @@ public class Drivebase extends SubsystemBase {
   public void arcadeDrive(double speed, double rotation) {
     diffDrive.arcadeDrive(speed, rotation);
   }
-
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    leftLeader.setVoltage(leftVolts);
+    rightLeader.setVoltage(rightVolts);
+    diffDrive.feed();
+  }
   //ENCODER STUFF
   public double getLeftWheelEncoder() {
     return m_leftEncoder.getPosition();
@@ -111,6 +122,9 @@ public class Drivebase extends SubsystemBase {
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getVelocity(), m_rightEncoder.getVelocity());
+  }
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
@@ -119,12 +133,19 @@ public class Drivebase extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double leftDistance = getLeftWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
-    double rightDistance = getRightWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS * Math.PI;
+    double leftDistance = getLeftWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
+    double rightDistance = getRightWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
 
     odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
 
+    SmartDashboard.putNumber("Left speed", m_leftEncoder.getVelocity());
+    SmartDashboard.putNumber("Right speed", m_rightEncoder.getVelocity());
     SmartDashboard.putNumber("Left distance", leftDistance);
     SmartDashboard.putNumber("Right distance", rightDistance);
+    SmartDashboard.putNumber("gyro", gyro.getRotation2d().getDegrees());
+  }
+  private final Field2d m_field2d = new Field2d();
+  public void putTrajectory(Trajectory trajectory) {
+    m_field2d.getObject("traj").setTrajectory(trajectory);
   }
 }

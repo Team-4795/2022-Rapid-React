@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 public final class Constants {
 
@@ -13,11 +14,20 @@ public final class Constants {
     public static final int LEFT_FOLLOWER = 3;
     public static final int RIGHT_LEADER = 4;
     public static final int RIGHT_FOLLOWER = 5;
-    public static final double WHEEEEEEEEEEEEEEEEEEEL_DIAMETER_METERS = Units.inchesToMeters(6);
+    public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
     public static final int LEFT_DRIVE_GROUP_CURRENT_LIMIT = 60;
     public static final int RIGHT_DRIVE_GROUP_CURRENT_LIMIT = 60;
 
     public static final double GEARING = 10.0;
+    public static final double kTrackwidthMeters = 0.63;
+    public static final DifferentialDriveKinematics kDriveKinematics =
+        new DifferentialDriveKinematics(kTrackwidthMeters);
+
+    public static final double ksVolts = 0.146;
+    public static final double kvVoltSecondsPerMeter = 1.26;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.165;
+
+    public static final double kPDriveVel = 3;
   }
  
   public final static class VisionConstants {
@@ -41,5 +51,14 @@ public final class Constants {
     public static final int ROTATION_JOYSTICK = 4;
     public static final int THROTTLE_TRIGGER = 4;
     public static final int ROTATE_IN_PLACE_BUTTON = 6;
+  }
+
+  public static final class AutoConstants {
+    public static final double kMaxSpeedMetersPerSecond = 10;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+
+    // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
   }
 }

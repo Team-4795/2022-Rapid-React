@@ -4,10 +4,30 @@
 
 package frc.robot;
 
-//import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.DrivebaseConstants;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.subsystems.Drivebase;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+
+import java.io.IOException;
+import java.nio.file.Path;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.curveDrive;
@@ -16,45 +36,74 @@ import frc.robot.subsystems.Drivebase;
 
 public class RobotContainer {
 
-  private final Drivebase drivebase = new Drivebase();
-  
-  private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
+    private final Drivebase drivebase = new Drivebase();
 
-  //private final PowerDistribution PDP = new PowerDistribution();
+    private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
 
-  public RobotContainer() {
-    drivebase.setDefaultCommand(
-      new curveDrive(drivebase,
-      () -> applyDeadband(-controller.getLeftY()),
-      () -> applyDeadband(controller.getRightX()),
-      () -> controller.getRightBumper(),
-      () -> applyDeadband(controller.getRightTriggerAxis()))
-    );
-    //PDP.clearStickyFaults();
-    configureButtonBindings();
-  }
+    //private final PowerDistribution PDP = new PowerDistribution();
 
-  private void configureButtonBindings() {
+    public RobotContainer() {
+      drivebase.setDefaultCommand(new curveDrive(drivebase, () -> -controller.getRawAxis(ControllerConstants.SPEED_JOYSTICK), () -> controller.getRawAxis(ControllerConstants.ROTATION_JOYSTICK), () -> controller.getRawButton(ControllerConstants.ROTATE_IN_PLACE_BUTTON), () -> controller.getRawAxis(ControllerConstants.THROTTLE_TRIGGER)));
 
-  }
-
-  public Command getAutonomousCommand() {
-    return null;
-  }
-
-  public void setRumble(double rumble) {
-    controller.setRumble(RumbleType.kLeftRumble, rumble);
-    controller.setRumble(RumbleType.kRightRumble, rumble);
-  }
-
-  public double applyDeadband(double value) {
-    double deadband = ControllerConstants.JOYSTICK_DEADBAND;
-
-    if (Math.abs(value) < deadband) {
-      return 0;
-    } else {
-      return value;
+      configureButtonBindings();
     }
-  }
- 
+
+    private void configureButtonBindings() {
+
+    }
+
+    public Command generatePath(String pathName) {
+      try {
+        Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(pathName);
+        Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        RamseteCommand ramseteCommand = new RamseteCommand(
+          trajectory,
+          drivebase::getPose,
+          new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+          new SimpleMotorFeedforward(
+            DrivebaseConstants.ksVolts,
+            DrivebaseConstants.kvVoltSecondsPerMeter,
+            DrivebaseConstants.kaVoltSecondsSquaredPerMeter),
+          DrivebaseConstants.kDriveKinematics,
+          drivebase::getWheelSpeeds,
+          new PIDController(DrivebaseConstants.kPDriveVel, 0, 0),
+          new PIDController(DrivebaseConstants.kPDriveVel, 0, 0),
+          // RamseteCommand passes volts to the callback
+          drivebase::tankDriveVolts,
+          drivebase);
+        // Create and push Field2d to SmartDashboard.
+        Field2d m_field = new Field2d();
+        SmartDashboard.putData(m_field);
+
+        // Push the trajectory to Field2d.
+        m_field.getObject("traj").setTrajectory(trajectory);
+
+        // Reset odometry to the starting pose of the trajectory.
+        drivebase.resetOdometry(trajectory.getInitialPose());
+        drivebase.putTrajectory(trajectory);
+        // Set up a sequence of commands
+        // First, we want to reset the drivetrain odometry
+        return new InstantCommand(() -> drivebase.resetOdometry(trajectory.getInitialPose()), drivebase)
+            // next, we run the actual ramsete command
+            .andThen(ramseteCommand)
+            // Finally, we make sure that the robot stops
+            .andThen(new InstantCommand(() -> drivebase.tankDriveVolts(0, 0), drivebase));
+      } catch (IOException ex) {
+        DriverStation.reportError("Unable to open trajectory: " + pathName, ex.getStackTrace());
+      }
+      return null;
+    }
+
+    public Command getAutonomousCommand() {
+      return new SequentialCommandGroup(
+        generatePath("paths/Forward.wpilib.json"),
+        new WaitCommand(3),
+        generatePath("paths/Reverse.wpilib.json")
+      );
+    }
+
+    public void setRumble(double rumble) {
+      controller.setRumble(RumbleType.kLeftRumble, rumble);
+      controller.setRumble(RumbleType.kRightRumble, rumble);
+    }
 }
