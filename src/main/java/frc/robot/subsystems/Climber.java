@@ -32,7 +32,7 @@ public class Climber extends SubsystemBase {
 
   }
   public void extend(){
-    double extend_rotations_needed = (ClimberConstants.stage_length/(ClimberConstants.spool_diameter*Math.PI+ClimberConstants.safety_margin))*(ClimberConstants.physical_gear*ClimberConstants.versaplanetary);
+    double extend_rotations_needed = (ClimberConstants.stage_length/(ClimberConstants.spool_diameter*Math.PI))*(ClimberConstants.physical_gear*ClimberConstants.versaplanetary)+ClimberConstants.safety_margin;
     double extension_length = (ClimberConstants.spool_diameter*Math.PI*(m_climb_Encoder.getPosition()/(ClimberConstants.physical_gear * ClimberConstants.versaplanetary)));
 
     if(m_climb_Encoder.getPosition()<extend_rotations_needed){
@@ -50,7 +50,7 @@ public class Climber extends SubsystemBase {
 
   }
   public void retract(){
-    double retract_rotations_needed = (ClimberConstants.stage_length/(ClimberConstants.spool_diameter*Math.PI-ClimberConstants.safety_margin))*(ClimberConstants.physical_gear*ClimberConstants.versaplanetary);
+    double retract_rotations_needed = (ClimberConstants.stage_length/(ClimberConstants.spool_diameter*Math.PI))*(ClimberConstants.physical_gear*ClimberConstants.versaplanetary)-ClimberConstants.safety_margin;
 
     if(m_climb_Encoder.getPosition()>retract_rotations_needed && limitSwitch.get()==false ) {
       climb_motor.set(-1.0);
