@@ -8,6 +8,10 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 public final class Constants {
+  public final static class ShooterConstants{
+    public static final int FLYWHEEL_MAIN_TALON = 6;
+    public static final int FLYWHEEL_TOP_TALON = 7;
+  }
 
   public final static class DrivebaseConstants {
     public static final int LEFT_LEADER = 2;

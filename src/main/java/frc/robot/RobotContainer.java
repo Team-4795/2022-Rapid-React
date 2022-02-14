@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DrivebaseConstants;
@@ -31,14 +32,14 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.curveDrive;
-import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.Shooter;
 
 
 public class RobotContainer {
 
-    private final Drivebase drivebase = new Drivebase();
+    private Drivebase drivebase;
+    private Shooter shooter;
     private final Intake intake = new Intake();
 
     private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
@@ -46,7 +47,20 @@ public class RobotContainer {
     //private final PowerDistribution PDP = new PowerDistribution();
 
     public RobotContainer() {
-      drivebase.setDefaultCommand(new curveDrive(drivebase, () -> -controller.getRawAxis(ControllerConstants.SPEED_JOYSTICK), () -> controller.getRawAxis(ControllerConstants.ROTATION_JOYSTICK), () -> controller.getRawButton(ControllerConstants.ROTATE_IN_PLACE_BUTTON), () -> controller.getRawAxis(ControllerConstants.THROTTLE_TRIGGER)));
+      drivebase = new Drivebase();
+      shooter = new Shooter();
+      // drivebase.setDefaultCommand(
+      // new curveDrive(drivebase,
+      //   () -> applyDeadband(-controller.getLeftY()),
+      //   () -> applyDeadband(controller.getRightX()),
+      //   () -> controller.getRightBumper(),
+      //   () -> applyDeadband(controller.getRightTriggerAxis())));
+
+      drivebase.setDefaultCommand(new curveDrive(drivebase,
+      () -> -controller.getRawAxis(ControllerConstants.SPEED_JOYSTICK),
+      () -> controller.getRawAxis(ControllerConstants.ROTATION_JOYSTICK),
+      () -> controller.getRawButton(ControllerConstants.ROTATE_IN_PLACE_BUTTON),
+      () -> controller.getRawAxis(ControllerConstants.THROTTLE_TRIGGER)));
 
       configureButtonBindings();
     }
@@ -63,6 +77,10 @@ public class RobotContainer {
       buttonB.whenPressed(new ParallelCommandGroup(
         new InstantCommand(() -> intake.setSpeed(0))
       ));
+
+      Joystick exampleStick = new Joystick(1); // Creates a joystick on port 1
+      JoystickButton exampleButton = new JoystickButton(exampleStick, 1); // Creates a new JoystickButton object for button 1 on exampleStick
+      exampleButton.whenPressed(new InstantCommand(() -> shooter.setShooterRPM(0, 0)));
     }
 
     public Command generatePath(String pathName) {
