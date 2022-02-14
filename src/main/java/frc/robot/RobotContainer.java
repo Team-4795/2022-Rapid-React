@@ -17,6 +17,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -40,7 +41,8 @@ public class RobotContainer {
 
     private Drivebase drivebase;
     private Shooter shooter;
-    private final Intake intake = new Intake();
+    private Intake intake;
+    private Indexer indexer;
 
     private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
 
@@ -49,12 +51,8 @@ public class RobotContainer {
     public RobotContainer() {
       drivebase = new Drivebase();
       shooter = new Shooter();
-      // drivebase.setDefaultCommand(
-      // new curveDrive(drivebase,
-      //   () -> applyDeadband(-controller.getLeftY()),
-      //   () -> applyDeadband(controller.getRightX()),
-      //   () -> controller.getRightBumper(),
-      //   () -> applyDeadband(controller.getRightTriggerAxis())));
+      intake = new Intake();
+      indexer = new Indexer();
 
       drivebase.setDefaultCommand(new curveDrive(drivebase,
       () -> -controller.getRawAxis(ControllerConstants.SPEED_JOYSTICK),
@@ -68,16 +66,32 @@ public class RobotContainer {
     private void configureButtonBindings() {
       final JoystickButton buttonA = new JoystickButton(controller,0); //button A
       final JoystickButton buttonB = new JoystickButton(controller,1); //button B
+      final JoystickButton buttonY = new JoystickButton(controller,3); //button Y CHECK BINDING FOR THIS, PROB NOT THREE
+      final JoystickButton buttonX = new JoystickButton(controller,4); //button X CHECK BINDING FOR THIS, PROB NOT THREE
 
+      //Extend and Spin Spinner of Intake
       buttonA.whenPressed(new ParallelCommandGroup(
         new InstantCommand(() -> intake.toggleIntake()),
         new InstantCommand(() -> intake.setSpeed(.5))
       ));
     
+      //Set Speed of Intake
       buttonB.whenPressed(new ParallelCommandGroup(
         new InstantCommand(() -> intake.setSpeed(0))
       ));
 
+      //Indexer and Shooter to Shoot Ball
+      buttonY.whenPressed(new ParallelCommandGroup(
+        new InstantCommand(() -> indexer.setIndexerSpeed(.5, .5)), // CHNAGE VALUES LATER
+        new InstantCommand(() -> shooter.setShooterSpeed(999, 999)) // CHANGE VALUES LATER
+      ));
+
+      //Intake and Store Ball
+      buttonX.whenPressed(new ParallelCommandGroup(
+        new InstantCommand(() -> intake.toggleIntake())
+      ));
+
+      //THESE ARE NO LONGER NEEDED
       Joystick exampleStick = new Joystick(1); // Creates a joystick on port 1
       JoystickButton exampleButton = new JoystickButton(exampleStick, 1); // Creates a new JoystickButton object for button 1 on exampleStick
       exampleButton.whenPressed(new InstantCommand(() -> shooter.setShooterRPM(0, 0)));
