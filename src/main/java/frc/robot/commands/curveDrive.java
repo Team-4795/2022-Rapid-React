@@ -19,7 +19,11 @@ public class curveDrive extends CommandBase {
   Supplier<Boolean> quickTurnValue;
   
   /** Creates a new curveDrive. */
-  public curveDrive(Drivebase subsystem, Supplier<Double> xaxisSpeedSupplier, Supplier<Double> zaxisRotateSupplier, Supplier<Boolean> quickTurnSupplier, Supplier<Double> m_throttleSupplier) {
+  public curveDrive(Drivebase subsystem,
+  Supplier<Double> xaxisSpeedSupplier,
+  Supplier<Double> zaxisRotateSupplier,
+  Supplier<Boolean> quickTurnSupplier,
+  Supplier<Double> m_throttleSupplier) {
 
     m_drivebaseSubsystem = subsystem;
 

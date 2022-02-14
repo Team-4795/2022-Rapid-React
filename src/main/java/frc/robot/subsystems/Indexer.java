@@ -39,7 +39,7 @@ public class Indexer extends SubsystemBase {
     return m_upperEncoder.getVelocity();
   }
 
-  public void SetIndexerSpeed(double upperSpeed, double lowerSpeed) {
+  public void setIndexerSpeed(double upperSpeed, double lowerSpeed) {
     targetVelocity = upperSpeed;
     lowerMotor.set(lowerSpeed);
   }
