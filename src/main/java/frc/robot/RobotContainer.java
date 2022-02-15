@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Indexer;
@@ -29,7 +28,7 @@ public class RobotContainer {
   private Intake intake;
   private Indexer indexer;
 
-  private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
+  private final Controller controller = new Controller(ControllerConstants.CONTROLLER_PORT);
 
   SendableChooser<Command> autoSelector = new SendableChooser<>();
 
