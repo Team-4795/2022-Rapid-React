@@ -87,9 +87,10 @@ public class RobotContainer {
         new InstantCommand(() -> shooter.setShooterRPM(5000, 6000)) // CHANGE VALUES LATER
       ));
 
-      //Intake and Store Ball
-      buttonX.whenPressed(new ParallelCommandGroup(
-        new InstantCommand(() -> intake.toggleIntake())
+      //Intake and Index Ball
+      buttonX.whileHeld(new ParallelCommandGroup(
+        new InstantCommand(() -> intake.toggleIntake()),
+        new InstantCommand(() -> indexer.setIndexerSpeed(.5, .5))
       ));
 
       //THESE ARE NO LONGER NEEDED
