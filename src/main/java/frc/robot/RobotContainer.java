@@ -22,17 +22,13 @@ import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.commands.TrajectorySequence;
 import frc.robot.commands.curveDrive;
 import frc.robot.subsystems.Shooter;
 
@@ -46,6 +42,8 @@ public class RobotContainer {
 
     private final XboxController controller = new XboxController(ControllerConstants.CONTROLLER_PORT);
 
+    SendableChooser<Command> autoSelector = new SendableChooser<>();
+
     //private final PowerDistribution PDP = new PowerDistribution();
 
     public RobotContainer() {
@@ -53,6 +51,9 @@ public class RobotContainer {
       shooter = new Shooter();
       intake = new Intake();
       indexer = new Indexer();
+
+      autoSelector.setDefaultOption("Test 1", new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json"));
+      autoSelector.addOption("Test 2", new TrajectorySequence(drivebase, "paths/OneBallPath.wpilib.json"));
 
       drivebase.setDefaultCommand(new curveDrive(drivebase,
       () -> -controller.getRawAxis(ControllerConstants.SPEED_JOYSTICK),
@@ -99,54 +100,8 @@ public class RobotContainer {
       exampleButton.whenPressed(new InstantCommand(() -> shooter.setShooterRPM(0, 0)));
     }
 
-    public Command generatePath(String pathName) {
-      try {
-        Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(pathName);
-        Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-        RamseteCommand ramseteCommand = new RamseteCommand(
-          trajectory,
-          drivebase::getPose,
-          new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-          new SimpleMotorFeedforward(
-            DrivebaseConstants.ksVolts,
-            DrivebaseConstants.kvVoltSecondsPerMeter,
-            DrivebaseConstants.kaVoltSecondsSquaredPerMeter),
-          DrivebaseConstants.kDriveKinematics,
-          drivebase::getWheelSpeeds,
-          new PIDController(DrivebaseConstants.kPDriveVel, 0, 0),
-          new PIDController(DrivebaseConstants.kPDriveVel, 0, 0),
-          // RamseteCommand passes volts to the callback
-          drivebase::tankDriveVolts,
-          drivebase);
-        // Create and push Field2d to SmartDashboard.
-        Field2d m_field = new Field2d();
-        SmartDashboard.putData(m_field);
-
-        // Push the trajectory to Field2d.
-        m_field.getObject("traj").setTrajectory(trajectory);
-
-        // Reset odometry to the starting pose of the trajectory.
-        drivebase.resetOdometry(trajectory.getInitialPose());
-        drivebase.putTrajectory(trajectory);
-        // Set up a sequence of commands
-        // First, we want to reset the drivetrain odometry
-        return new InstantCommand(() -> drivebase.resetOdometry(trajectory.getInitialPose()), drivebase)
-            // next, we run the actual ramsete command
-            .andThen(ramseteCommand)
-            // Finally, we make sure that the robot stops
-            .andThen(new InstantCommand(() -> drivebase.tankDriveVolts(0, 0), drivebase));
-      } catch (IOException ex) {
-        DriverStation.reportError("Unable to open trajectory: " + pathName, ex.getStackTrace());
-      }
-      return null;
-    }
-
     public Command getAutonomousCommand() {
-      return new SequentialCommandGroup(
-        generatePath("paths/Forward.wpilib.json"),
-        new WaitCommand(3),
-        generatePath("paths/Reverse.wpilib.json")
-      );
+      return autoSelector.getSelected();
     }
 
     public void setRumble(double rumble) {
