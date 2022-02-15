@@ -81,9 +81,10 @@ public class RobotContainer {
       ));
 
       //Indexer and Shooter to Shoot Ball
-      buttonY.whenPressed(new ParallelCommandGroup(
-        new InstantCommand(() -> indexer.setIndexerSpeed(.5, .5)), // CHNAGE VALUES LATER
-        new InstantCommand(() -> shooter.setShooterSpeed(999, 999)) // CHANGE VALUES LATER
+      buttonY.whileHeld(new SequentialCommandGroup(
+        new InstantCommand(() -> indexer.setIndexerSpeed(.5, .5)), // CHANGE VALUES LATER
+        new WaitCommand(3),
+        new InstantCommand(() -> shooter.setShooterRPM(5000, 6000)) // CHANGE VALUES LATER
       ));
 
       //Intake and Store Ball
