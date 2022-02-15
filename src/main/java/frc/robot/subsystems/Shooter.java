@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -30,8 +29,6 @@ public class Shooter extends SubsystemBase {
     FlywheelTop.configVoltageCompSaturation(12);
     FlywheelTop.enableVoltageCompensation(true);
 
-    FlywheelTop.setNeutralMode(NeutralMode.Coast);
-    FlywheelTop.setNeutralMode(NeutralMode.Coast);
 
     FlywheelMain.setInverted(true);
     FlywheelTop.setInverted(true);
