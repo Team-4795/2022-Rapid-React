@@ -29,6 +29,8 @@ public class Shooter extends SubsystemBase {
     FlywheelTop.configVoltageCompSaturation(12);
     FlywheelTop.enableVoltageCompensation(true);
 
+    FlywheelTop.setNeutralMode(NeutralMode.Coast);
+    FlywheelTop.setNeutralMode(NeutralMode.Coast);
 
     FlywheelMain.setInverted(true);
     FlywheelTop.setInverted(true);
