@@ -33,6 +33,10 @@ public final class Constants {
 
     public static final double kPDriveVel = 3;
   }
+
+  public final static class IntakeConstants {
+    public static final int ROLLER = 1; // PLACEHOLDER
+  }
  
   public final static class VisionConstants {
     public static final String CAMERA_NAME = "mmal_service_16.1";
