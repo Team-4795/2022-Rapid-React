@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
-  private CANSparkMax roller = new CANSparkMax(IntakeConstants.ROLLER, MotorType.kBrushless);
+  private CANSparkMax roller = new CANSparkMax(IntakeConstants.ROLLER, MotorType.kBrushed);
   private DoubleSolenoid rollerSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1); 
   private double speed = 0;
   private boolean extended = false;
