@@ -58,11 +58,12 @@ public class RobotContainer {
     final JoystickButton buttonY = new JoystickButton(controller,3); //button Y CHECK BINDING FOR THIS, PROB NOT THREE
     final JoystickButton buttonX = new JoystickButton(controller,4); //button X CHECK BINDING FOR THIS, PROB NOT THREE
 
-    // //Extend and Spin Spinner of Intake
-    // buttonA.whenHeld(new ParallelCommandGroup(
-    //   new InstantCommand(() -> intake.intakeDown()),
-    //   new RunCommand(() -> intake.setSpeed(.5))
-    // ));
+    //Run all motors (Precent Out)
+    buttonA.whenHeld(new ParallelCommandGroup(
+      new RunCommand(() -> intake.setSpeed(.5)),
+      new RunCommand(() -> indexer.setIndexerSpeed(.5, .5)),
+      new RunCommand(() -> shooter.setShooterSpeed(.1, .1))
+    ));
   
     //Set Speed of Intake
     buttonB.whenPressed(new ParallelCommandGroup(

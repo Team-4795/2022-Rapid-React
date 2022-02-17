@@ -84,7 +84,6 @@ public class TrajectorySequence extends SequentialCommandGroup {
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory: " + pathName, ex.getStackTrace());
     }
-
     return null;
   }
 }

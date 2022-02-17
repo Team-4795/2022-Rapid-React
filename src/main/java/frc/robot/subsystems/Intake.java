@@ -14,10 +14,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
-  private CANSparkMax roller = new CANSparkMax(IntakeConstants.ROLLER, MotorType.kBrushed);
+  private CANSparkMax leftRoller = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushed);
+  private CANSparkMax rightRoller = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushed);
   private DoubleSolenoid rollerSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1); 
   private double speed = 0;
-  private boolean extended = false;
 
   public Intake() {}
 
@@ -42,11 +42,11 @@ public class Intake extends SubsystemBase {
 
   public void setSpeed(double targetSpeed) {
     speed = targetSpeed;
-    roller.set(speed);
+    leftRoller.set(speed);
+    rightRoller.set(speed);
   }
 
   @Override
   public void periodic() {
-    // roller.set(speed);
   } 
 }

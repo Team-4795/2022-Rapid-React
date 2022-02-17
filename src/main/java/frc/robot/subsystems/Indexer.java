@@ -5,8 +5,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.sensors.ColorSensor;
-import frc.robot.sensors.ColorSensorV2;
+// import frc.robot.sensors.ColorSensor;
+// import frc.robot.sensors.ColorSensorV2;
 import frc.robot.Constants.IndexerConstants;
 
 import com.revrobotics.CANSparkMax;
@@ -16,8 +16,8 @@ import com.revrobotics.CANSparkMax.IdleMode;
 public class Indexer extends SubsystemBase {
   private CANSparkMax upperMotor = new CANSparkMax(IndexerConstants.INDEXER_UPPER, MotorType.kBrushless);
   private CANSparkMax lowerMotor = new CANSparkMax(IndexerConstants.INDEXER_LOWER, MotorType.kBrushed);
-  private ColorSensorV2 colorSensorV2 = new ColorSensorV2();
-  private ColorSensor colorSensorV3 = new ColorSensor();
+  // private ColorSensorV2 colorSensorV2 = new ColorSensorV2();
+  // private ColorSensor colorSensorV3 = new ColorSensor();
 
   public Indexer() {  
     upperMotor.restoreFactoryDefaults();
