@@ -35,7 +35,8 @@ public final class Constants {
   }
 
   public final static class IntakeConstants {
-    public static final int ROLLER = 1; // PLACEHOLDER
+    public static final int LEFT_MOTOR = 12; 
+    public static final int RIGHT_MOTOR = 13; 
   }
  
   public final static class VisionConstants {
@@ -71,8 +72,8 @@ public final class Constants {
   }
 
   public final static class IndexerConstants {
-    public static final int INDEXER_LOWER = 1; //PLACEHOLDER
-    public static final int INDEXER_UPPER = 2; //PLACEHOLDER
+    public static final int INDEXER_LOWER = 10; //PLACEHOLDER
+    public static final int INDEXER_UPPER = 9; //PLACEHOLDER
     public static final double kP = 0; //PLACEHOLDER
     public static final double kI = 0; //PLACEHOLDER
     public static final double kD = 0; //PLACEHOLDER
