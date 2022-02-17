@@ -30,7 +30,7 @@ public class Shooter extends SubsystemBase {
     FlywheelMain.setInverted(true);
     FlywheelTop.setInverted(true);
 
-    FlywheelTop.setNeutralMode(NeutralMode.Coast);
+    FlywheelMain.setNeutralMode(NeutralMode.Coast);
     FlywheelTop.setNeutralMode(NeutralMode.Coast);
     
     FlywheelMain.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
