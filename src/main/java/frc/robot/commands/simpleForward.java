@@ -5,11 +5,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drivebase;
 
 public class simpleForward extends CommandBase {
+
+  private final Drivebase m_drivebaseSubsystem;
   /** Creates a new simpleForward. */
-  public simpleForward() {
+  public simpleForward(Drivebase subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
+
+    m_drivebaseSubsystem = subsystem;
+    addRequirements(m_drivebaseSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -18,7 +24,9 @@ public class simpleForward extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_drivebaseSubsystem.tankDriveVolts(20, 20); //TUNE LATER
+  }
 
   // Called once the command ends or is interrupted.
   @Override
