@@ -14,8 +14,8 @@ public final class Constants {
   }
 
   public final static class DrivebaseConstants {
-    public static final int LEFT_LEADER = 2;
-    public static final int LEFT_FOLLOWER = 3;
+    public static final int LEFT_LEADER = 6;
+    public static final int LEFT_FOLLOWER = 7;
     public static final int RIGHT_LEADER = 4;
     public static final int RIGHT_FOLLOWER = 5;
     public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
@@ -35,7 +35,7 @@ public final class Constants {
   }
 
   public final static class IntakeConstants {
-    public static final int ROLLER = 1; // PLACEHOLDER
+    public static final int ROLLER = 2; // PLACEHOLDER
   }
  
   public final static class VisionConstants {
@@ -71,8 +71,8 @@ public final class Constants {
   }
 
   public final static class IndexerConstants {
-    public static final int INDEXER_LOWER = 1; //PLACEHOLDER
-    public static final int INDEXER_UPPER = 2; //PLACEHOLDER
+    public static final int INDEXER_LOWER = 8; //PLACEHOLDER
+    public static final int INDEXER_UPPER = 3; //PLACEHOLDER
     public static final double kP = 0; //PLACEHOLDER
     public static final double kI = 0; //PLACEHOLDER
     public static final double kD = 0; //PLACEHOLDER
