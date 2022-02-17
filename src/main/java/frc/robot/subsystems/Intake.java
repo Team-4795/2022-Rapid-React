@@ -21,15 +21,23 @@ public class Intake extends SubsystemBase {
 
   public Intake() {}
 
-  public void toggleIntake() {
-    if (extended) {
-      rollerSolenoid.set(Value.kReverse);
-      roller.set(0);
-    } else {
-      rollerSolenoid.set(Value.kForward);
-      roller.set(.5);
-    }
-    extended = !extended;
+  // public void toggleIntake() {
+  //   if (extended) {
+  //     rollerSolenoid.set(Value.kReverse);
+  //     //roller.set(0);
+  //   } else {
+  //     rollerSolenoid.set(Value.kForward);
+  //     //roller.set(.5);
+  //   }
+  //   extended = !extended;
+  // }
+
+  public void intakeUp() {
+    rollerSolenoid.set(Value.kForward);
+  }
+
+  public void intakeDown() {
+    rollerSolenoid.set(Value.kReverse);
   }
 
   public void setSpeed(double targetSpeed) {
@@ -39,6 +47,6 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    roller.set(speed);
+    // roller.set(speed);
   } 
 }

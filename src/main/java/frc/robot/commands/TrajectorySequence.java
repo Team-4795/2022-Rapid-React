@@ -29,8 +29,15 @@ public class TrajectorySequence extends SequentialCommandGroup {
 
     for (String pathLocation : paths) {
       Command path = generatePath(pathLocation);
+      if (path == null) {
+        addCommands(forward);
+        return;
+      }
 
-      if(path != null) addCommands(path);
+      if (path == null) {
+        addCommands(forward);
+        return;
+      }
     }
   }
 

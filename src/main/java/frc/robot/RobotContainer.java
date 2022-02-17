@@ -12,6 +12,8 @@ import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -56,11 +58,11 @@ public class RobotContainer {
     final JoystickButton buttonY = new JoystickButton(controller,3); //button Y CHECK BINDING FOR THIS, PROB NOT THREE
     final JoystickButton buttonX = new JoystickButton(controller,4); //button X CHECK BINDING FOR THIS, PROB NOT THREE
 
-    //Extend and Spin Spinner of Intake
-    buttonA.whenPressed(new ParallelCommandGroup(
-      new InstantCommand(() -> intake.toggleIntake()),
-      new InstantCommand(() -> intake.setSpeed(.5))
-    ));
+    // //Extend and Spin Spinner of Intake
+    // buttonA.whenHeld(new ParallelCommandGroup(
+    //   new InstantCommand(() -> intake.intakeDown()),
+    //   new RunCommand(() -> intake.setSpeed(.5))
+    // ));
   
     //Set Speed of Intake
     buttonB.whenPressed(new ParallelCommandGroup(
@@ -69,15 +71,22 @@ public class RobotContainer {
 
     //Indexer and Shooter to Shoot Ball
     buttonY.whileHeld(new SequentialCommandGroup(
-      new InstantCommand(() -> indexer.setIndexerSpeed(.5, .5)), // CHANGE VALUES LATER
-      new WaitCommand(3),
-      new InstantCommand(() -> shooter.setShooterRPM(5000, 6000)) // CHANGE VALUES LATER
+      new ParallelRaceGroup (
+        // new RunCommand(() -> shooter.setShooterRPM(5000, 6000)), // CHANGE VALUES LATER
+        new RunCommand(() -> shooter.setShooterSpeed(.3, .3)),
+        new WaitCommand(3)
+      ),
+      new ParallelCommandGroup(
+        // new RunCommand(() -> shooter.setShooterRPM(5000, 6000)),
+        new RunCommand(() -> shooter.setShooterSpeed(.3, .3)),
+        new RunCommand(() -> indexer.setIndexerSpeed(.5, .5)) // CHANGE VALUES LATER
+      )
     ));
 
     //Intake and Index Ball
-    buttonX.whileHeld(new ParallelCommandGroup(
-      new InstantCommand(() -> intake.toggleIntake()),
-      new InstantCommand(() -> indexer.setIndexerSpeed(.5, .5))
+    buttonX.whenHeld(new ParallelCommandGroup(
+      new InstantCommand(() -> intake.intakeDown()),
+      new RunCommand(() -> indexer.setIndexerSpeed(.5, .5))
     ));
 
     //THESE ARE NO LONGER NEEDED
