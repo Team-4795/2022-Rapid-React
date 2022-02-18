@@ -62,12 +62,13 @@ public class RobotContainer {
     buttonA.whenHeld(new ParallelCommandGroup(
       new RunCommand(() -> intake.setSpeed(.5)),
       new RunCommand(() -> indexer.setIndexerSpeed(.5, .5)),
-      new RunCommand(() -> shooter.setShooterSpeed(.1, .1))
+      new RunCommand(() -> shooter.setShooterSpeed(.1, .1)),
+      new RunCommand(() -> drivebase.tankDriveVolts(0, 0))
     ));
   
     //Set Speed of Intake
     buttonB.whenPressed(new ParallelCommandGroup(
-      new InstantCommand(() -> intake.setSpeed(0))
+      new InstantCommand(() -> intake.setSpeed(.8))
     ));
 
     //Indexer and Shooter to Shoot Ball
@@ -89,11 +90,6 @@ public class RobotContainer {
       new InstantCommand(() -> intake.intakeDown()),
       new RunCommand(() -> indexer.setIndexerSpeed(.5, .5))
     ));
-
-    //THESE ARE NO LONGER NEEDED
-    Joystick exampleStick = new Joystick(1); // Creates a joystick on port 1
-    JoystickButton exampleButton = new JoystickButton(exampleStick, 1); // Creates a new JoystickButton object for button 1 on exampleStick
-    exampleButton.whenPressed(new InstantCommand(() -> shooter.setShooterRPM(0, 0)));
   }
 
   public Command getAutonomousCommand() {
