@@ -96,12 +96,14 @@ public class BallManager extends CommandBase {
           break;
       }
 
+      if (upperSpeed == 0 && lowerColor != Colors.Other) lowerSpeed = 0;
+
       intake.setSpeed(intakeSpeed);
       indexer.setIndexerSpeed(upperSpeed, lowerSpeed);
     } else {
       intake.setSpeed(0);
 
-      if(shooter.getShooterMainRPM() > 4000) {
+      if (shooter.getShooterMainRPM() > 4000) {
         indexer.setIndexerSpeed(0.5, 0.5);
       } else {
         indexer.setIndexerSpeed(0, 0);
