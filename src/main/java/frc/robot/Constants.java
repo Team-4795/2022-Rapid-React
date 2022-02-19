@@ -66,7 +66,7 @@ public final class Constants {
   }
 
   public final static class IndexerConstants {
-    public static final int INDEXER_LOWER = 10; //PLACEHOLDER
-    public static final int INDEXER_UPPER = 9; //PLACEHOLDER
+    public static final int INDEXER_LOWER = 10;
+    public static final int INDEXER_UPPER = 9;
   }
 }

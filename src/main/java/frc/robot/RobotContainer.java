@@ -10,6 +10,7 @@ import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -21,14 +22,15 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.commands.TrajectorySequence;
 import frc.robot.commands.CurvatureDrive;
+import frc.robot.commands.BallManager;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
 public class RobotContainer {
   private final Drivebase drivebase;
-  private final Shooter shooter;
   private final Intake intake;
   private final Indexer indexer;
+  private final Shooter shooter;
   private final Climber climber;
   private final Vision vision;
 
@@ -50,8 +52,9 @@ public class RobotContainer {
       () -> -controller.getRightX(),
       () -> controller.getRightTriggerAxis()
     ));
-    indexer.setDefaultCommand(new RunCommand(() -> indexer.setIndexerSpeed(0, 0), indexer));
     shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterSpeed(0, 0), shooter));
+
+    CommandScheduler.getInstance().schedule(new BallManager(intake, indexer, shooter));
 
     autoSelector.setDefaultOption("Test 1", new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json"));
     autoSelector.addOption("Test 2", new TrajectorySequence(drivebase, "paths/OneBallPath.wpilib.json"));
@@ -93,7 +96,7 @@ public class RobotContainer {
 
     //Intake and Index Ball
     buttonX.whenHeld(new ParallelCommandGroup(
-      new InstantCommand(() -> intake.intakeDown()),
+      new InstantCommand(() -> intake.toggle()),
       new RunCommand(() -> indexer.setIndexerSpeed(.5, .5))
     ));
 

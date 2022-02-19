@@ -26,6 +26,24 @@ public class ColorSensorV2 {
     // SmartDashboard.putBoolean("V2 COMMAND WRITE", !trans);
   }
 
+  public Colors getBallColor() {
+    Colors ballColor = Colors.Other;
+
+    if (getProximity() < 20) {
+      ballColor = Colors.Other;
+    } else if (getBlue() > getRed()) {
+      ballColor = Colors.Blue;
+    } else if (getRed() > getBlue()) {
+      ballColor = Colors.Red;
+    }
+
+    SmartDashboard.putNumber("Red", getRed());
+    SmartDashboard.putNumber("Blue", getBlue());
+    SmartDashboard.putString("Detected Color: ", ballColor == Colors.Red ? "red" : "blue");
+
+    return ballColor;
+  }
+
   public int getVal(int addr) {
     ByteBuffer buf = ByteBuffer.allocate(2);
     boolean trans = sensor.read(0x80 | 0x20 | addr, 2, buf);

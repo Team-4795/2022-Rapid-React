@@ -17,40 +17,22 @@ public class ColorSensor {
     m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
   }
 
-  public String getBallColor() {
-    Color detectedColor = getColor();
-    String ballColor = "other";
+  public Colors getBallColor() {
+    Color detectedColor = m_colorSensor.getColor();
+    Colors ballColor = Colors.Other;
 
-    if (getIR() < 20) {
-      ballColor = "other";
+    if (m_colorSensor.getIR() < 20) {
+      ballColor = Colors.Other;
     } else if (detectedColor.blue > detectedColor.red) {
-      ballColor = "blue";
+      ballColor = Colors.Blue;
     } else if (detectedColor.red > detectedColor.blue) {
-      ballColor = "red";
-    } else {
-      ballColor = "other";
+      ballColor = Colors.Red;
     }
 
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putString("Detected Color: ", ballColor);
+    SmartDashboard.putString("Detected Color: ", ballColor == Colors.Red ? "red" : "blue");
 
     return ballColor;
-  }
-
-  public double getIR() {
-    return m_colorSensor.getIR();
-  }
-
-  public double getProxy() {
-    return m_colorSensor.getProximity();
-  }
-
-  public Color getColor(){
-    return m_colorSensor.getColor();
-  }
-
-  public void init() {
-    m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
   }
 }
