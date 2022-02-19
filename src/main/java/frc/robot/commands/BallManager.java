@@ -103,7 +103,7 @@ public class BallManager extends CommandBase {
     } else {
       intake.setSpeed(0);
 
-      if (shooter.getShooterMainRPM() > 4000) {
+      if (shooter.getShooterMainRPM() > 4800) {
         indexer.setIndexerSpeed(0.5, 0.5);
       } else {
         indexer.setIndexerSpeed(0, 0);
