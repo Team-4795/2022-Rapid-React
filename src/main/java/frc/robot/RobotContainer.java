@@ -72,15 +72,13 @@ public class RobotContainer {
     ));
 
     //Indexer and Shooter to Shoot Ball
-    buttonY.whileHeld(new SequentialCommandGroup(
-      new ParallelRaceGroup (
-        // new RunCommand(() -> shooter.setShooterRPM(5000, 6000)), // CHANGE VALUES LATER
-        new RunCommand(() -> shooter.setShooterSpeed(.3, .3)),
-        new WaitCommand(3)
-      ),
-      new ParallelCommandGroup(
-        // new RunCommand(() -> shooter.setShooterRPM(5000, 6000)),
-        new RunCommand(() -> shooter.setShooterSpeed(.3, .3)),
+    buttonY.whileHeld(new ParallelCommandGroup(
+      // new RunCommand(() -> shooter.setShooterRPM(5000, 6000))
+      new RunCommand(() -> shooter.setShooterSpeed(.5, .5)),
+
+      new SequentialCommandGroup(
+        // new RunCommand(() -> shooter.setShooterRPM(5000, 6000))
+        new WaitCommand(3),
         new RunCommand(() -> indexer.setIndexerSpeed(.5, .5)) // CHANGE VALUES LATER
       )
     ));
