@@ -24,8 +24,7 @@ public final class Constants {
 
     public static final double GEARING = 10.0;
     public static final double kTrackwidthMeters = 0.63;
-    public static final DifferentialDriveKinematics kDriveKinematics =
-        new DifferentialDriveKinematics(kTrackwidthMeters);
+    public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
     public static final double ksVolts = 0.146;
     public static final double kvVoltSecondsPerMeter = 1.26;
@@ -55,11 +54,6 @@ public final class Constants {
     public static final int CONTROLLER_PORT = 0;
 
     public static final double JOYSTICK_DEADBAND = 0.05;
-
-    public static final int SPEED_JOYSTICK = 1;
-    public static final int ROTATION_JOYSTICK = 4;
-    public static final int THROTTLE_TRIGGER = 4;
-    public static final int ROTATE_IN_PLACE_BUTTON = 6;
   }
 
   public static final class AutoConstants {
@@ -74,8 +68,5 @@ public final class Constants {
   public final static class IndexerConstants {
     public static final int INDEXER_LOWER = 10; //PLACEHOLDER
     public static final int INDEXER_UPPER = 9; //PLACEHOLDER
-    public static final double kP = 0; //PLACEHOLDER
-    public static final double kI = 0; //PLACEHOLDER
-    public static final double kD = 0; //PLACEHOLDER
   }
 }
