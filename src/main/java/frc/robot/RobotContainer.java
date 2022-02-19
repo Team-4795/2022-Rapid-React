@@ -34,7 +34,7 @@ public class RobotContainer {
 
   private final Controller controller = new Controller(ControllerConstants.CONTROLLER_PORT);
 
-  SendableChooser<Command> autoSelector = new SendableChooser<>();
+  private final SendableChooser<Command> autoSelector = new SendableChooser<>();
 
   public RobotContainer() {
     drivebase = new Drivebase();
@@ -64,6 +64,7 @@ public class RobotContainer {
     final JoystickButton buttonB = new JoystickButton(controller, Controller.Button.kB.value);
     final JoystickButton buttonY = new JoystickButton(controller, Controller.Button.kY.value);
     final JoystickButton buttonX = new JoystickButton(controller, Controller.Button.kX.value);
+    final JoystickButton rightBumper = new JoystickButton(controller, Controller.Button.kRightBumper.value);
 
     //Run all motors (Precent Out)
     buttonA.whenHeld(new ParallelCommandGroup(
@@ -95,6 +96,8 @@ public class RobotContainer {
       new InstantCommand(() -> intake.intakeDown()),
       new RunCommand(() -> indexer.setIndexerSpeed(.5, .5))
     ));
+
+    rightBumper.whenPressed(drivebase::reverse);
   }
 
   public Command getAutonomousCommand() {

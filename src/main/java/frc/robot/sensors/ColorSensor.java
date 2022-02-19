@@ -24,11 +24,11 @@ public class ColorSensor {
     if (getIR() < 20) {
       ballColor = "other";
     } else if (detectedColor.blue > detectedColor.red) {
-        ballColor = "blue";
+      ballColor = "blue";
     } else if (detectedColor.red > detectedColor.blue) {
-        ballColor = "red";
+      ballColor = "red";
     } else {
-        ballColor = "other";
+      ballColor = "other";
     }
 
     SmartDashboard.putNumber("Red", detectedColor.red);
