@@ -28,8 +28,8 @@ public class Shooter extends SubsystemBase {
     FlywheelTop.configVoltageCompSaturation(12);
     FlywheelTop.enableVoltageCompensation(true);
 
-    FlywheelMain.setInverted(true);
-    FlywheelTop.setInverted(false);
+    FlywheelMain.setInverted(false);
+    FlywheelTop.setInverted(true);
 
     FlywheelMain.setNeutralMode(NeutralMode.Coast);
     FlywheelTop.setNeutralMode(NeutralMode.Coast);
@@ -46,7 +46,7 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterSpeed(double speedMain, double speedTop) {
     FlywheelMain.set(ControlMode.PercentOutput, speedMain);
-    FlywheelTop.set(ControlMode.PercentOutput, speedTop);
+    //FlywheelTop.set(ControlMode.PercentOutput, speedTop);
   }
 
   public void setShooterRPM(double speedMain, double speedTop) {

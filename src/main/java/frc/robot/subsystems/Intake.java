@@ -19,7 +19,11 @@ public class Intake extends SubsystemBase {
   private DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
   private boolean extended = false;
 
-  public Intake() {}
+  public Intake() {
+    leftRoller.setInverted(true);
+    rightRoller.setInverted(true);
+
+  }
 
   public void toggle() {
     if (extended) {
