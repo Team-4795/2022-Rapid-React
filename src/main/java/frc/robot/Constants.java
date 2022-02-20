@@ -18,12 +18,13 @@ public final class Constants {
     public static final int LEFT_FOLLOWER = 3;
     public static final int RIGHT_LEADER = 4;
     public static final int RIGHT_FOLLOWER = 5;
-    public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
+
     public static final int LEFT_DRIVE_GROUP_CURRENT_LIMIT = 60;
     public static final int RIGHT_DRIVE_GROUP_CURRENT_LIMIT = 60;
 
     public static final double GEARING = 10.0;
     public static final double kTrackwidthMeters = 0.63;
+    public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
     public static final double ksVolts = 0.146;
@@ -36,6 +37,13 @@ public final class Constants {
   public final static class IntakeConstants {
     public static final int LEFT_MOTOR = 12; 
     public static final int RIGHT_MOTOR = 13; 
+  }
+  
+  public final static class IndexerConstants {
+    public static final int INDEXER_LOWER = 10;
+    public static final int INDEXER_UPPER = 9;
+
+    public static final int CURRENT_LIMIT = 30;
   }
  
   public final static class VisionConstants {
@@ -59,10 +67,5 @@ public final class Constants {
   public static final class AutoConstants {
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
-  }
-
-  public final static class IndexerConstants {
-    public static final int INDEXER_LOWER = 10;
-    public static final int INDEXER_UPPER = 9;
   }
 }

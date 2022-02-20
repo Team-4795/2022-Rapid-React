@@ -20,6 +20,9 @@ public class Intake extends SubsystemBase {
   private boolean extended = false;
 
   public Intake() {
+    leftRoller.restoreFactoryDefaults();
+    rightRoller.restoreFactoryDefaults();
+
     leftRoller.setInverted(true);
     rightRoller.setInverted(true);
   }

@@ -20,7 +20,7 @@ public class Indexer extends SubsystemBase {
   private ColorSensorV2 upperColorSensor = new ColorSensorV2();
   private ColorSensor lowerColorSensor = new ColorSensor();
 
-  public Indexer() {  
+  public Indexer() {
     upperMotor.restoreFactoryDefaults();
     lowerMotor.restoreFactoryDefaults();
 
@@ -32,6 +32,8 @@ public class Indexer extends SubsystemBase {
 
     upperMotor.enableVoltageCompensation(12);
     lowerMotor.enableVoltageCompensation(12);
+
+    upperMotor.setSmartCurrentLimit(IndexerConstants.CURRENT_LIMIT);
   }
 
   public void setIndexerSpeed(double upperSpeed, double lowerSpeed) {

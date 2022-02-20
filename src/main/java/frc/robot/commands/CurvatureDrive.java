@@ -70,7 +70,7 @@ public class CurvatureDrive extends CommandBase {
 
       rotation *= Math.max(throttle, 0.4) * transitionRamp * 0.4;
 
-      if(rotation > 0) rotation = Math.copySign(Math.abs(rotation) * (1.0 - minSpeed) + minSpeed, rotation);
+      if(Math.abs(rotation) > 0) rotation = Math.copySign(Math.abs(rotation) * (1.0 - minSpeed) + minSpeed, rotation);
 
       drivebase.curvatureDrive(speed, rotation, true);
     } else {
