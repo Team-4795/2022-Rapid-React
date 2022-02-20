@@ -14,7 +14,7 @@ public class ColorSensor {
   private ColorSensorV3 m_colorSensor;
 
   public ColorSensor() {
-    m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+    m_colorSensor = new ColorSensorV3(I2C.Port.kMXP);
   }
 
   public Colors getBallColor() {
@@ -31,6 +31,7 @@ public class ColorSensor {
         ballColor = Colors.Red;
       }
 
+      SmartDashboard.putNumber("IR v3", m_colorSensor.getIR());
       SmartDashboard.putNumber("Red v3", detectedColor.red);
       SmartDashboard.putNumber("Blue v3", detectedColor.blue);
       SmartDashboard.putString("Detected Color v3: ", ballColor == Colors.Red ? "red" : "blue");
@@ -39,5 +40,9 @@ public class ColorSensor {
     }
 
     return ballColor;
+  }
+
+  public int getIR() {
+    return m_colorSensor.getIR();
   }
 }

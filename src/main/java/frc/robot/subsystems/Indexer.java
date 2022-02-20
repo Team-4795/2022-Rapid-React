@@ -6,8 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.sensors.Colors;
+import frc.robot.sensors.Breakbeam;
 import frc.robot.sensors.ColorSensor;
-import frc.robot.sensors.ColorSensorV2;
 import frc.robot.Constants.IndexerConstants;
 
 import com.revrobotics.CANSparkMax;
@@ -17,8 +17,8 @@ import com.revrobotics.CANSparkMax.IdleMode;
 public class Indexer extends SubsystemBase {
   private CANSparkMax upperMotor = new CANSparkMax(IndexerConstants.INDEXER_UPPER, MotorType.kBrushless);
   private CANSparkMax lowerMotor = new CANSparkMax(IndexerConstants.INDEXER_LOWER, MotorType.kBrushed);
-  private ColorSensorV2 upperColorSensor = new ColorSensorV2();
-  private ColorSensor lowerColorSensor = new ColorSensor();
+  private ColorSensor colorSensor = new ColorSensor();
+  private Breakbeam breakbeam = new Breakbeam();
 
   public Indexer() {
     upperMotor.restoreFactoryDefaults();
@@ -42,10 +42,14 @@ public class Indexer extends SubsystemBase {
   }
 
   public Colors getUpperColor() {
-    return upperColorSensor.getBallColor();
+    return colorSensor.getBallColor();
   }
 
-  public Colors getLowerColor() {
-    return lowerColorSensor.getBallColor();
+  public boolean hasUpperBall() {
+    return colorSensor.getIR() > 20;
+  }
+
+  public boolean hasLowerBall() {
+    return breakbeam.isBroken();
   }
 }
