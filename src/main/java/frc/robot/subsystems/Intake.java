@@ -22,7 +22,6 @@ public class Intake extends SubsystemBase {
   public Intake() {
     leftRoller.setInverted(true);
     rightRoller.setInverted(true);
-
   }
 
   public void toggle() {

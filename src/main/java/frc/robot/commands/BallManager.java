@@ -8,25 +8,23 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Indexer;
 import frc.robot.sensors.Colors;
 
 public class BallManager extends CommandBase {
   private final Intake intake;
   private final Indexer indexer;
-  private final Shooter shooter;
   private final Alliance alliance = DriverStation.getAlliance();
   private boolean ejectBall = false;
   private boolean ejectUpper = false;
   private long ejectionStart = 0;
 
-  public BallManager(Intake intake, Indexer indexer, Shooter shooter) {
-    this.intake = intake;
-    this.indexer = indexer;
-    this.shooter = shooter;
-    
-    addRequirements(intake, indexer);
+  public BallManager(Superstructure superstructure) {
+    this.intake = superstructure.intake;
+    this.indexer = superstructure.indexer;
+
+    addRequirements(superstructure);
   }
 
   private void eject(boolean ejectUpper) {
@@ -105,12 +103,6 @@ public class BallManager extends CommandBase {
       indexer.setIndexerSpeed(upperSpeed, lowerSpeed);
     } else {
       intake.setSpeed(0);
-
-      if (shooter.getShooterMainRPM() > 4800) {
-        indexer.setIndexerSpeed(0.5, 0.5);
-      } else {
-        indexer.setIndexerSpeed(0, 0);
-      }
     }
   }
 

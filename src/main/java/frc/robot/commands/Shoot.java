@@ -7,38 +7,47 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
 public class Shoot extends CommandBase {
   private final Drivebase drivebase;
+  private final Superstructure superstructure;
   private final Shooter shooter;
   private final Vision vision;
 
-  public Shoot(Drivebase drivebase, Shooter shooter, Vision vision) {
+  public Shoot(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision) {
     this.drivebase = drivebase;
+    this.superstructure = superstructure;
     this.shooter = shooter;
     this.vision = vision;
 
-    addRequirements(drivebase, shooter);
+    addRequirements(drivebase, shooter, vision);
   }
 
   @Override
   public void execute() {
-    if(!vision.hasTarget()) return;
+    if(vision.hasTarget()) {
+      double angle = vision.getTargetAngle();
+      double turnSpeed = -angle / 400.0;
+      
+      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.035), turnSpeed), -0.15, 0.15);
 
-    double angle = vision.getTargetAngle();
-    double turnSpeed = -angle / 400.0;
-    
-    turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.035), turnSpeed), -0.15, 0.15);
-
-    if(Math.abs(angle) > 2) {
-      drivebase.curvatureDrive(0, turnSpeed, true);
-    } else {
-      drivebase.curvatureDrive(0, 0, false);
+      if(Math.abs(angle) > 2) {
+        drivebase.curvatureDrive(0, turnSpeed, true);
+      } else {
+        drivebase.curvatureDrive(0, 0, false);
+      }
     }
 
     shooter.setShooterRPM(5000, 4000);
+
+    if (shooter.getShooterMainRPM() > 4800) {
+      superstructure.indexer.setIndexerSpeed(0.5, 0.5);
+    } else {
+      superstructure.indexer.setIndexerSpeed(0, 0);
+    }
   }
 
   @Override
