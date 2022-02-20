@@ -60,9 +60,9 @@ public class RobotContainer {
 
     //Run all motors (Precent Out)
     buttonA.whenHeld(new ParallelCommandGroup(
-      new RunCommand(() -> intake.setSpeed(.5)),
-      new RunCommand(() -> indexer.setIndexerSpeed(.5, .5)),
-      new RunCommand(() -> shooter.setShooterSpeed(.1, .1)),
+      new RunCommand(() -> intake.setSpeed(-1)),
+      new RunCommand(() -> indexer.setIndexerSpeed(-.5, -1)),
+      new RunCommand(() -> shooter.setShooterSpeed(.01, .01)),
       new RunCommand(() -> drivebase.tankDriveVolts(0, 0))
     ));
   

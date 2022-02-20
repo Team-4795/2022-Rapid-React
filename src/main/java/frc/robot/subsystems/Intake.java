@@ -18,7 +18,11 @@ public class Intake extends SubsystemBase {
   private CANSparkMax rightRoller = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushed);
   private DoubleSolenoid rollerSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1); 
 
-  public Intake() {}
+  public Intake() {
+    leftRoller.setInverted(true);
+    rightRoller.setInverted(true);
+
+  }
 
   public void intakeUp() {
     rollerSolenoid.set(Value.kForward);

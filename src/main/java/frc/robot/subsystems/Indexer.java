@@ -26,6 +26,9 @@ public class Indexer extends SubsystemBase {
     upperMotor.setIdleMode(IdleMode.kBrake);
     lowerMotor.setIdleMode(IdleMode.kBrake);
 
+    lowerMotor.setInverted(true);
+    upperMotor.setInverted(true);
+
     upperMotor.enableVoltageCompensation(12);
     lowerMotor.enableVoltageCompensation(12);
   }
