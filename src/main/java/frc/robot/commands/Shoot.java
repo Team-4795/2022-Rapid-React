@@ -23,12 +23,15 @@ public class Shoot extends CommandBase {
     this.shooter = shooter;
     this.vision = vision;
 
-    addRequirements(drivebase, shooter, vision);
+    addRequirements(drivebase, superstructure, shooter, vision);
   }
 
   @Override
   public void execute() {
+    double distance = 0;
+
     if(vision.hasTarget()) {
+      distance = vision.getTargetDistance();
       double angle = vision.getTargetAngle();
       double turnSpeed = -angle / 400.0;
       
@@ -41,7 +44,20 @@ public class Shoot extends CommandBase {
       }
     }
 
-    shooter.setShooterRPM(5000, 4000);
+    double mainRPM, topRPM;
+
+    if(distance > 12) {
+      mainRPM = 6000;
+      topRPM = 6000;
+    } else if(distance > 5) {
+      mainRPM = 5500;
+      topRPM = 4000;
+    } else {
+      mainRPM = 5000;
+      topRPM = 2000;
+    }
+
+    shooter.setShooterRPM(mainRPM, topRPM);
 
     if (shooter.getShooterMainRPM() > 4800) {
       superstructure.indexer.setIndexerSpeed(0.5, 0.5);
