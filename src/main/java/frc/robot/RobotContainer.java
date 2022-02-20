@@ -47,6 +47,7 @@ public class RobotContainer {
     ));
     superstructure.setDefaultCommand(new BallManager(superstructure));
     shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterSpeed(0, 0), shooter));
+    climber.setDefaultCommand(new RunCommand(climber::retract, climber));
 
     autoSelector.setDefaultOption("Test 1", new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json"));
     autoSelector.addOption("Test 2", new TrajectorySequence(drivebase, "paths/OneBallPath.wpilib.json"));
@@ -57,10 +58,12 @@ public class RobotContainer {
   private void configureButtonBindings() {
     final JoystickButton buttonA = new JoystickButton(controller, Controller.Button.kA.value);
     final JoystickButton buttonB = new JoystickButton(controller, Controller.Button.kB.value);
+    final JoystickButton buttonX = new JoystickButton(controller, Controller.Button.kX.value);
     final JoystickButton rightBumper = new JoystickButton(controller, Controller.Button.kRightBumper.value);
 
     buttonA.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
     buttonB.whenPressed(superstructure.intake::toggle);
+    buttonX.whileHeld(new RunCommand(climber::extend, climber));
     rightBumper.whenPressed(drivebase::reverse);
   }
 

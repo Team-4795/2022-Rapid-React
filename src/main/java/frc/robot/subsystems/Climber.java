@@ -9,6 +9,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Climber extends SubsystemBase {
   public Climber() {}
 
+  public void extend() {}
+
+  public void retract() {}
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
