@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.commands.TrajectorySequence;
 import frc.robot.commands.CurvatureDrive;
+import frc.robot.commands.Shoot;
 import frc.robot.commands.BallManager;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
@@ -78,9 +79,7 @@ public class RobotContainer {
     ));
   
     //Set Speed of Intake
-    buttonB.whenPressed(new ParallelCommandGroup(
-      new InstantCommand(() -> intake.setSpeed(.8))
-    ));
+    buttonB.whileHeld(new Shoot(drivebase, shooter, vision));
 
     //Indexer and Shooter to Shoot Ball
     buttonY.whileHeld(new ParallelCommandGroup(
