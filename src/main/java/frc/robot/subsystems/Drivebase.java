@@ -45,7 +45,6 @@ public class Drivebase extends SubsystemBase {
   public Drivebase() {
     leftLeader.restoreFactoryDefaults();
     leftFollower.restoreFactoryDefaults();
-
     rightLeader.restoreFactoryDefaults();
     rightFollower.restoreFactoryDefaults();
 
@@ -59,7 +58,6 @@ public class Drivebase extends SubsystemBase {
 
     leftLeader.setInverted(true);
     leftFollower.setInverted(true);
-
     rightLeader.setInverted(false);
     rightFollower.setInverted(false);
 

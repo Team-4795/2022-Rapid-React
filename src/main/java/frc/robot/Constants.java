@@ -8,7 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 public final class Constants {
-  public final static class ShooterConstants{
+  public final static class ShooterConstants {
     public static final int FLYWHEEL_MAIN_TALON = 6;
     public static final int FLYWHEEL_TOP_TALON = 7;
   }
@@ -57,10 +57,6 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 10;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-
-    // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
   }

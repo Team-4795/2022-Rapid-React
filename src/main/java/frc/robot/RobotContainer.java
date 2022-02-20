@@ -24,7 +24,7 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
   private final Drivebase drivebase;
   private final Superstructure superstructure;
-  public final Shooter shooter;
+  private final Shooter shooter;
   private final Climber climber;
   private final Vision vision;
 

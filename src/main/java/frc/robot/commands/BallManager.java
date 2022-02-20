@@ -103,6 +103,7 @@ public class BallManager extends CommandBase {
       indexer.setIndexerSpeed(upperSpeed, lowerSpeed);
     } else {
       intake.setSpeed(0);
+      indexer.setIndexerSpeed(0, 0);
     }
   }
 
