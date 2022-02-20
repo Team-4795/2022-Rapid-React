@@ -96,7 +96,10 @@ public class BallManager extends CommandBase {
           break;
       }
 
-      if (upperSpeed == 0 && lowerColor != Colors.Other) lowerSpeed = 0;
+      if (upperSpeed == 0 && lowerColor != Colors.Other) {
+        intakeSpeed = -0.5;
+        lowerSpeed = 0;
+      }
 
       intake.setSpeed(intakeSpeed);
       indexer.setIndexerSpeed(upperSpeed, lowerSpeed);
