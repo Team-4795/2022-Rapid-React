@@ -48,6 +48,7 @@ public class RobotContainer {
     superstructure.setDefaultCommand(new BallManager(superstructure));
     shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterSpeed(0, 0), shooter));
     climber.setDefaultCommand(new RunCommand(climber::retract, climber));
+    vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
 
     autoSelector.setDefaultOption("Test 1", new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json"));
     autoSelector.addOption("Test 2", new TrajectorySequence(drivebase, "paths/OneBallPath.wpilib.json"));

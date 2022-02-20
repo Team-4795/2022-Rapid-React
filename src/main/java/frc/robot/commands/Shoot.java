@@ -30,6 +30,8 @@ public class Shoot extends CommandBase {
   public void execute() {
     double distance = 0;
 
+    vision.enableLED();
+
     if(vision.hasTarget()) {
       distance = vision.getTargetDistance();
       double angle = vision.getTargetAngle();
@@ -59,7 +61,7 @@ public class Shoot extends CommandBase {
 
     shooter.setShooterRPM(mainRPM, topRPM);
 
-    if (shooter.getShooterMainRPM() > 4800) {
+    if (shooter.getShooterMainRPM() > mainRPM * 0.95) {
       superstructure.indexer.setIndexerSpeed(0.5, 0.5);
     } else {
       superstructure.indexer.setIndexerSpeed(0, 0);
