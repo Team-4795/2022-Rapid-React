@@ -39,6 +39,9 @@ public class Drivebase extends SubsystemBase {
 
   private final Field2d m_field2d = new Field2d();
 
+  private double movementSpeed = 0;
+  private double direction = 1;
+
   public Drivebase() {
     leftLeader.restoreFactoryDefaults();
     leftFollower.restoreFactoryDefaults();
@@ -81,7 +84,9 @@ public class Drivebase extends SubsystemBase {
   }
 
   public void curvatureDrive(double speed, double rotation, boolean quickTurn) {
-    diffDrive.curvatureDrive(speed, rotation, quickTurn);
+    movementSpeed = Math.max(Math.abs(speed), Math.abs(rotation));
+
+    diffDrive.curvatureDrive(speed * direction, rotation, quickTurn);
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
@@ -90,7 +95,6 @@ public class Drivebase extends SubsystemBase {
     diffDrive.feed();
   }
 
-  // ENCODER STUFF
   public double getLeftWheelEncoder() {
     return m_leftEncoder.getPosition();
   }
@@ -104,7 +108,6 @@ public class Drivebase extends SubsystemBase {
     m_rightEncoder.setPosition(0);
   }
 
-  // GYRO STUFF
   public void zeroHeading() {
     gyro.reset();
   }
@@ -117,9 +120,10 @@ public class Drivebase extends SubsystemBase {
     return gyro.getRate();
   }
 
-  public void reverse() {}
+  public void reverse() {
+    if(Math.abs(movementSpeed) < 0.3) direction *= -1;
+  }
 
-  // ODOMETRY STUFF
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }

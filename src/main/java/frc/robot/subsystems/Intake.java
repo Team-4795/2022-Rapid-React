@@ -16,7 +16,8 @@ import frc.robot.Constants.IntakeConstants;
 public class Intake extends SubsystemBase {
   private CANSparkMax leftRoller = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushed);
   private CANSparkMax rightRoller = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushed);
-  private DoubleSolenoid rollerSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1); 
+  private DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+  private boolean extended = false;
 
   public Intake() {
     leftRoller.setInverted(true);
@@ -24,20 +25,21 @@ public class Intake extends SubsystemBase {
 
   }
 
-  public void intakeUp() {
-    rollerSolenoid.set(Value.kForward);
+  public void toggle() {
+    if (extended) {
+      solenoid.set(Value.kReverse);
+    } else {
+      solenoid.set(Value.kForward);
+    }
+    extended = !extended;
   }
 
-  public void intakeDown() {
-    rollerSolenoid.set(Value.kReverse);
+  public void setSpeed(double speed) {
+    leftRoller.set(speed);
+    rightRoller.set(speed);
   }
 
-  public void setSpeed(double targetSpeed) {
-    leftRoller.set(targetSpeed);
-    rightRoller.set(targetSpeed);
+  public boolean isExtended() {
+    return extended;
   }
-
-  @Override
-  public void periodic() {
-  } 
 }

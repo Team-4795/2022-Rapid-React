@@ -77,10 +77,10 @@ public class TrajectorySequence extends SequentialCommandGroup {
       // Set up a sequence of commands
       // First, we want to reset the drivetrain odometry
       return new InstantCommand(() -> drivebase.resetOdometry(trajectory.getInitialPose()), drivebase)
-          // next, we run the actual ramsete command
-          .andThen(ramseteCommand)
-          // Finally, we make sure that the robot stops
-          .andThen(new InstantCommand(() -> drivebase.tankDriveVolts(0, 0), drivebase));
+        // next, we run the actual ramsete command
+        .andThen(ramseteCommand)
+        // Finally, we make sure that the robot stops
+        .andThen(new InstantCommand(() -> drivebase.tankDriveVolts(0, 0), drivebase));
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory: " + pathName, ex.getStackTrace());
     }
