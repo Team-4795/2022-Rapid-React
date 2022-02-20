@@ -18,20 +18,25 @@ public class ColorSensor {
   }
 
   public Colors getBallColor() {
-    Color detectedColor = m_colorSensor.getColor();
     Colors ballColor = Colors.Other;
 
-    if (m_colorSensor.getIR() < 20) {
-      ballColor = Colors.Other;
-    } else if (detectedColor.blue > detectedColor.red) {
-      ballColor = Colors.Blue;
-    } else if (detectedColor.red > detectedColor.blue) {
-      ballColor = Colors.Red;
-    }
+    try {
+      Color detectedColor = m_colorSensor.getColor();
 
-    SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putString("Detected Color: ", ballColor == Colors.Red ? "red" : "blue");
+      if (m_colorSensor.getIR() < 20) {
+        ballColor = Colors.Other;
+      } else if (detectedColor.blue > detectedColor.red) {
+        ballColor = Colors.Blue;
+      } else if (detectedColor.red > detectedColor.blue) {
+        ballColor = Colors.Red;
+      }
+
+      SmartDashboard.putNumber("Red v3", detectedColor.red);
+      SmartDashboard.putNumber("Blue v3", detectedColor.blue);
+      SmartDashboard.putString("Detected Color v3: ", ballColor == Colors.Red ? "red" : "blue");
+    } catch (Exception exception) {
+      SmartDashboard.putString("Detected Color v3: ", "error");
+    }
 
     return ballColor;
   }

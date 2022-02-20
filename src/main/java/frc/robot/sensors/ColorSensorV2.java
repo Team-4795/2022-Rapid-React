@@ -29,17 +29,21 @@ public class ColorSensorV2 {
   public Colors getBallColor() {
     Colors ballColor = Colors.Other;
 
-    if (getProximity() < 20) {
-      ballColor = Colors.Other;
-    } else if (getBlue() > getRed()) {
-      ballColor = Colors.Blue;
-    } else if (getRed() > getBlue()) {
-      ballColor = Colors.Red;
-    }
+    try {
+      if (getProximity() < 20) {
+        ballColor = Colors.Other;
+      } else if (getBlue() > getRed()) {
+        ballColor = Colors.Blue;
+      } else if (getRed() > getBlue()) {
+        ballColor = Colors.Red;
+      }
 
-    SmartDashboard.putNumber("Red", getRed());
-    SmartDashboard.putNumber("Blue", getBlue());
-    SmartDashboard.putString("Detected Color: ", ballColor == Colors.Red ? "red" : "blue");
+      SmartDashboard.putNumber("Red v2", getRed());
+      SmartDashboard.putNumber("Blue v2", getBlue());
+      SmartDashboard.putString("Detected Color v2: ", ballColor == Colors.Red ? "red" : "blue");
+    } catch (Exception exception) {
+      SmartDashboard.putString("Detected Color v2: ", "error");
+    }
 
     return ballColor;
   }
