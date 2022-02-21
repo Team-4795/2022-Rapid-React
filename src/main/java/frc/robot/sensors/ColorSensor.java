@@ -42,7 +42,8 @@ public class ColorSensor {
     return ballColor;
   }
 
-  public int getIR() {
-    return m_colorSensor.getIR();
+  public int getProximity() {
+    SmartDashboard.putNumber("Prox v3", m_colorSensor.getProximity());
+    return m_colorSensor.getProximity();
   }
 }

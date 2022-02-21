@@ -24,7 +24,7 @@ public class BallManager extends CommandBase {
   public void execute() {
     if (intake.isExtended()) {
       double intakeSpeed = 1;
-      double upperSpeed = 0.5;
+      double upperSpeed = 0.25;
       double lowerSpeed = 1;
 
       if (indexer.hasUpperBall()) {
