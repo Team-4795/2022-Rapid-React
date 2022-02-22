@@ -23,7 +23,7 @@ public class ColorSensor {
     try {
       Color detectedColor = m_colorSensor.getColor();
 
-      if (m_colorSensor.getIR() < 20) {
+      if (getProximity() > 150) {
         ballColor = Colors.Other;
       } else if (detectedColor.blue > detectedColor.red) {
         ballColor = Colors.Blue;
@@ -31,19 +31,18 @@ public class ColorSensor {
         ballColor = Colors.Red;
       }
 
-      SmartDashboard.putNumber("IR v3", m_colorSensor.getIR());
-      SmartDashboard.putNumber("Red v3", detectedColor.red);
-      SmartDashboard.putNumber("Blue v3", detectedColor.blue);
-      SmartDashboard.putString("Detected Color v3: ", ballColor == Colors.Red ? "red" : "blue");
+      SmartDashboard.putNumber("Red", detectedColor.red);
+      SmartDashboard.putNumber("Blue", detectedColor.blue);
+      SmartDashboard.putString("Detected Color: ", ballColor == Colors.Red ? "red" : "blue");
     } catch (Exception exception) {
-      SmartDashboard.putString("Detected Color v3: ", "error");
+      SmartDashboard.putString("Detected Color: ", "error");
     }
 
     return ballColor;
   }
 
   public int getProximity() {
-    SmartDashboard.putNumber("Prox v3", m_colorSensor.getProximity());
+    SmartDashboard.putNumber("Prox", m_colorSensor.getProximity());
     return m_colorSensor.getProximity();
   }
 }

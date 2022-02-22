@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.sensors.Colors;
 import frc.robot.sensors.Breakbeam;
@@ -51,7 +50,6 @@ public class Indexer extends SubsystemBase {
   }
 
   public boolean hasLowerBall() {
-    SmartDashboard.putBoolean("beam", breakbeam.isBroken());
     return breakbeam.isBroken();
   }
 }

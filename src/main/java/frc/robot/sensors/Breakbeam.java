@@ -5,15 +5,17 @@
 package frc.robot.sensors;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Breakbeam {
-  private DigitalInput initialConveyorSensor;
+  private DigitalInput sensor;
 
   public Breakbeam() {
-    initialConveyorSensor = new DigitalInput(1);
+    sensor = new DigitalInput(1);
   }
 
   public boolean isBroken() {
-    return !initialConveyorSensor.get();
+    SmartDashboard.putBoolean("beam", !sensor.get());
+    return !sensor.get();
   }
 }

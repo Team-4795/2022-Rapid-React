@@ -37,16 +37,16 @@ public class Shooter extends SubsystemBase {
     FlywheelMain.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
     FlywheelTop.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
     
-    FlywheelMain.config_kF(0, 0, 0);
-    FlywheelMain.config_kP(0, 0, 0);
+    FlywheelMain.config_kF(0, 0.0512, 0);
+    FlywheelMain.config_kP(0, 0.04, 0);
 
-    FlywheelTop.config_kF(0, 0, 0);
-    FlywheelTop.config_kP(0, 0, 0);
+    FlywheelTop.config_kF(0, 0.0512, 0);
+    FlywheelTop.config_kP(0, 0.04, 0);
   }
 
   public void setShooterSpeed(double speedMain, double speedTop) {
     FlywheelMain.set(ControlMode.PercentOutput, speedMain);
-    //FlywheelTop.set(ControlMode.PercentOutput, speedTop);
+    FlywheelTop.set(ControlMode.PercentOutput, speedTop);
   }
 
   public void setShooterRPM(double speedMain, double speedTop) {
