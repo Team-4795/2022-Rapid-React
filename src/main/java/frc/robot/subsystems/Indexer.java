@@ -5,7 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.sensors.Colors;
+import frc.robot.sensors.ColorSensor.Colors;
 import frc.robot.sensors.Breakbeam;
 import frc.robot.sensors.ColorSensor;
 import frc.robot.Constants.IndexerConstants;

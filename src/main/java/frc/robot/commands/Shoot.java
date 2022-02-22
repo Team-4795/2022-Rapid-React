@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
-import frc.robot.sensors.Colors;
+import frc.robot.sensors.ColorSensor.Colors;
 
 enum Stage {
   Hold, Shoot, Feed

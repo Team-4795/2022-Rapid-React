@@ -11,6 +11,10 @@ import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.ColorSensorV3;
 
 public class ColorSensor {
+  public static enum Colors {
+    Red, Blue, Other
+  }
+
   private ColorSensorV3 m_colorSensor;
 
   public ColorSensor() {

@@ -9,9 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Climber extends SubsystemBase {
   public Climber() {}
 
-  public void extend() {}
-
-  public void retract() {}
+  public void toggle() {}
 
   @Override
   public void periodic() {
