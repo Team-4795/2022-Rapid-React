@@ -14,12 +14,18 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 import frc.robot.sensors.Colors;
 
+enum Stage {
+  Hold, Shoot, Feed
+}
+
 public class Shoot extends CommandBase {
   private final Drivebase drivebase;
   private final Superstructure superstructure;
   private final Shooter shooter;
   private final Vision vision;
   private final Alliance alliance = DriverStation.getAlliance();
+  private Stage stage;
+  private double mainRPM, topRPM, upperIndexer, lowerIndexer;
 
   public Shoot(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision) {
     this.drivebase = drivebase;
@@ -31,11 +37,15 @@ public class Shoot extends CommandBase {
   }
 
   @Override
+  public void initialize() {
+    stage = Stage.Hold;
+    vision.enableLED();
+  }
+
+  @Override
   public void execute() {
     double distance = 0;
     Colors upperColor = superstructure.indexer.getUpperColor();
-
-    vision.enableLED();
 
     if(vision.hasTarget()) {
       distance = vision.getTargetDistance();
@@ -51,36 +61,53 @@ public class Shoot extends CommandBase {
       }
     }
 
-    double mainRPM, topRPM;
+    switch (stage) {
+      case Hold:
+        upperIndexer = 0;
+        lowerIndexer = 0;
 
-    if(distance > 12) {
-      mainRPM = 6000;
-      topRPM = 6000;
-    } else if(distance > 5) {
-      mainRPM = 5500;
-      topRPM = 4000;
-    } else {
-      mainRPM = 5000;
-      topRPM = 2000;
+        if(distance > 12) {
+          mainRPM = 6000;
+          topRPM = 6000;
+        } else if(distance > 5) {
+          mainRPM = 5500;
+          topRPM = 4000;
+        } else {
+          mainRPM = 5000;
+          topRPM = 2000;
+        }
+    
+        if(upperColor == Colors.Red && alliance == Alliance.Blue) {
+          mainRPM = 1000;
+          topRPM = 5000;
+        }
+    
+        if(upperColor == Colors.Blue && alliance == Alliance.Red) {
+          mainRPM = 1000;
+          topRPM = 5000;
+        }
+
+        if (Math.abs(shooter.getShooterMainRPM() - mainRPM) < mainRPM * 0.05) stage = Stage.Shoot;
+
+        break;
+      case Shoot:
+        upperIndexer = 0.5;
+        lowerIndexer = 0;
+
+        if (upperColor == Colors.Other) stage = Stage.Feed;
+
+        break;
+      case Feed:
+        upperIndexer = 0.25;
+        lowerIndexer = 1;
+
+        if (upperColor != Colors.Other) stage = Stage.Hold;
+
+        break;
     }
 
-    if(upperColor == Colors.Red && alliance == Alliance.Blue) {
-      mainRPM = 1000;
-      topRPM = 5000;
-    }
-
-    if(upperColor == Colors.Blue && alliance == Alliance.Red) {
-      mainRPM = 1000;
-      topRPM = 5000;
-    }
-
+    superstructure.indexer.setIndexerSpeed(upperIndexer, lowerIndexer);
     shooter.setShooterRPM(mainRPM, topRPM);
-
-    if (Math.abs(shooter.getShooterMainRPM() - mainRPM) < mainRPM * 0.05) {
-      superstructure.indexer.setIndexerSpeed(0.5, 0.5);
-    } else {
-      superstructure.indexer.setIndexerSpeed(0, 0);
-    }
   }
 
   @Override
