@@ -53,8 +53,18 @@ public class Shooter extends SubsystemBase {
     // 2048 ticks per revolution, ticks per .10 second, 1 / 2048 * 60
     double speed_FalconUnits1 = speedMain / (600.0) * 2048.0;
     double speed_FalconUnits2 = speedTop / (600.0) * 2048.0;
-    FlywheelMain.set(TalonFXControlMode.Velocity, speed_FalconUnits1);
-    FlywheelTop.set(TalonFXControlMode.Velocity, speed_FalconUnits2);
+
+    if (getShooterMainRPM() < speedMain) {
+      FlywheelMain.set(TalonFXControlMode.Velocity, speed_FalconUnits1);
+    } else {
+      FlywheelMain.set(ControlMode.PercentOutput, 0);
+    }
+
+    if (getShooterTopRPM() < speedTop) {
+      FlywheelTop.set(TalonFXControlMode.Velocity, speed_FalconUnits2);
+    } else {
+      FlywheelTop.set(ControlMode.PercentOutput, 0);
+    }
   }
 
   public double getShooterMainRPM() {
