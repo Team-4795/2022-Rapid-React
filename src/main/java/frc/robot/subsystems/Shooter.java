@@ -54,13 +54,13 @@ public class Shooter extends SubsystemBase {
     double speed_FalconUnits1 = speedMain / (600.0) * 2048.0;
     double speed_FalconUnits2 = speedTop / (600.0) * 2048.0;
 
-    if (getShooterMainRPM() < speedMain) {
+    if (getShooterMainRPM() < speedMain * 1.1) {
       FlywheelMain.set(TalonFXControlMode.Velocity, speed_FalconUnits1);
     } else {
       FlywheelMain.set(ControlMode.PercentOutput, 0);
     }
 
-    if (getShooterTopRPM() < speedTop) {
+    if (getShooterTopRPM() < speedTop * 1.1) {
       FlywheelTop.set(TalonFXControlMode.Velocity, speed_FalconUnits2);
     } else {
       FlywheelTop.set(ControlMode.PercentOutput, 0);
