@@ -21,16 +21,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.Shooter;
 import frc.robot.Constants.AutoConstants;
 
 public class TrajectorySequence extends SequentialCommandGroup {
   private final Drivebase drivebase;
+  private final Shooter shooter;
   private final simpleForward simpleForward;
 
-  public TrajectorySequence(Drivebase drivetrain, String ... paths) {
+  public TrajectorySequence(Drivebase drivetrain, Shooter shooterSub, String location, String ... paths) {
     drivebase = drivetrain;
+    shooter = shooterSub;
     simpleForward = new simpleForward(drivetrain);
 
+    //null checker
     for (String pathLocation : paths) {
       Command path = generatePath(pathLocation);
       if (path == null) {
@@ -39,10 +43,33 @@ public class TrajectorySequence extends SequentialCommandGroup {
       }
     }
 
-    for (String pathLocation : paths) {
-      Command path = generatePath(pathLocation);
-      addCommands(path);
+    //two ball auto
+    if (location == "twoBall") {
+      for (String pathLocation : paths) {
+        Command path = generatePath(pathLocation);
+        addCommands(path);
+      }
     }
+
+    //three ball auto
+    if (location == "threeBall") {
+      for (String pathLocation : paths) {
+        Command path = generatePath(pathLocation);
+        addCommands(path);
+      }
+    }
+
+    // for (String pathLocation : paths) {
+    //   if (location == "twoBall") {
+    //     Command path = generatePath(pathLocation);
+    //     addCommands(path);
+    //   }
+
+    //   if (location == "threeBall") {
+    //     Command path = generatePath(pathLocation);
+    //     addCommands(path);
+    //   }
+    // }
   }
 
   private Command generatePath(String pathName) {
