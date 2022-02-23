@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -23,8 +24,13 @@ public class Intake extends SubsystemBase {
     leftRoller.restoreFactoryDefaults();
     rightRoller.restoreFactoryDefaults();
 
-    leftRoller.setInverted(true);
-    rightRoller.setInverted(true);
+    leftRoller.setInverted(false);
+    rightRoller.setInverted(false);
+
+    leftRoller.setIdleMode(IdleMode.kCoast);
+    rightRoller.setIdleMode(IdleMode.kCoast);
+    
+    solenoid.set(Value.kReverse);
   }
 
   public void toggle() {
