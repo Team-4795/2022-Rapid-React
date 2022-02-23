@@ -7,8 +7,11 @@ package frc.robot;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -27,6 +30,7 @@ public class RobotContainer {
   private final Shooter shooter;
   private final Climber climber;
   private final Vision vision;
+  private final Intake intake;
 
   private final Controller controller = new Controller(ControllerConstants.CONTROLLER_PORT);
 
@@ -38,6 +42,7 @@ public class RobotContainer {
     shooter = new Shooter();
     climber = new Climber();
     vision = new Vision();
+    intake = new Intake();
 
     drivebase.setDefaultCommand(new CurvatureDrive(
       drivebase,
@@ -49,9 +54,13 @@ public class RobotContainer {
     shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterSpeed(0, 0), shooter));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
 
-    autoSelector.setDefaultOption("Test 1", new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json"));
-    autoSelector.addOption("Test 2", new TrajectorySequence(drivebase, "paths/OneBallPath.wpilib.json"));
+    autoSelector.setDefaultOption("Bue Hanger 2", new SequentialCommandGroup(new TrajectorySequence(drivebase, "paths/BlueHanger2.wpilib.json"), new InstantCommand(intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
+    autoSelector.addOption("Bue Terminal 2", new SequentialCommandGroup(new TrajectorySequence(drivebase, "paths/BlueTerminal2.wpilib.json"), new InstantCommand(intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
+    autoSelector.setDefaultOption("Red Hanger 2", new SequentialCommandGroup(new TrajectorySequence(drivebase, "paths/RedHanger2.wpilib.json"), new InstantCommand(intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
+    autoSelector.addOption("Red Terminal 2", new SequentialCommandGroup(new TrajectorySequence(drivebase, "paths/RedTerminal2.wpilib.json"), new InstantCommand(intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
 
+    autoSelector.addOption("Bue Terminal 3", new SequentialCommandGroup(new Shoot(drivebase, superstructure, shooter, vision), new TrajectorySequence(drivebase, "paths/BlueTerminal3.wpilib.json"), new InstantCommand(intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
+    autoSelector.addOption("Red Terminal 3", new SequentialCommandGroup(new Shoot(drivebase, superstructure, shooter, vision), new TrajectorySequence(drivebase, "paths/RedTerminal3.wpilib.json"), new InstantCommand(intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
     configureButtonBindings();
   }
 
