@@ -51,12 +51,12 @@ public class RobotContainer {
     shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterSpeed(0, 0), shooter));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
 
-    autoSelector.setDefaultOption("Bue Hanger 2", new SequentialCommandGroup(new TrajectorySequence(drivebase, "paths/BlueHanger2.wpilib.json"), new InstantCommand(superstructure.intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
-    autoSelector.addOption("Bue Terminal 2", new SequentialCommandGroup(new TrajectorySequence(drivebase, "paths/BlueTerminal2.wpilib.json"), new InstantCommand(superstructure.intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
-    autoSelector.setDefaultOption("Red Hanger 2", new SequentialCommandGroup(new TrajectorySequence(drivebase, "paths/RedHanger2.wpilib.json"), new InstantCommand(superstructure.intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
+    autoSelector.setDefaultOption("Blue Hanger 2", new SequentialCommandGroup(new TrajectorySequence(drivebase, "paths/BlueHanger2.wpilib.json"), new InstantCommand(superstructure.intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
+    autoSelector.addOption("Blue Terminal 2", new SequentialCommandGroup(new TrajectorySequence(drivebase, "paths/BlueTerminal2.wpilib.json"), new InstantCommand(superstructure.intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
+    autoSelector.addOption("Red Hanger 2", new SequentialCommandGroup(new TrajectorySequence(drivebase, "paths/RedHanger2.wpilib.json"), new InstantCommand(superstructure.intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
     autoSelector.addOption("Red Terminal 2", new SequentialCommandGroup(new TrajectorySequence(drivebase, "paths/RedTerminal2.wpilib.json"), new InstantCommand(superstructure.intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
 
-    autoSelector.addOption("Bue Terminal 3", new SequentialCommandGroup(new Shoot(drivebase, superstructure, shooter, vision), new TrajectorySequence(drivebase, "paths/BlueTerminal3.wpilib.json"), new InstantCommand(superstructure.intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
+    autoSelector.addOption("Blue Terminal 3", new SequentialCommandGroup(new Shoot(drivebase, superstructure, shooter, vision), new TrajectorySequence(drivebase, "paths/BlueTerminal3.wpilib.json"), new InstantCommand(superstructure.intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
     autoSelector.addOption("Red Terminal 3", new SequentialCommandGroup(new Shoot(drivebase, superstructure, shooter, vision), new TrajectorySequence(drivebase, "paths/RedTerminal3.wpilib.json"), new InstantCommand(superstructure.intake::toggle), new Shoot(drivebase, superstructure, shooter, vision)));
 
     configureButtonBindings();
@@ -70,7 +70,7 @@ public class RobotContainer {
 
     buttonA.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
     buttonB.whenPressed(superstructure.intake::toggle);
-    buttonX.whenPressed(new RunCommand(climber::toggle, climber));
+    buttonX.whenPressed(climber::toggle);
     rightBumper.whenPressed(drivebase::reverse);
   }
 

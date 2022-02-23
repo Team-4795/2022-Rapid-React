@@ -78,13 +78,13 @@ public class Shoot extends CommandBase {
         }
     
         if(upperColor == Colors.Red && alliance == Alliance.Blue) {
-          mainRPM = 1000;
-          topRPM = 5000;
+          mainRPM = 500;
+          topRPM = 500;
         }
     
         if(upperColor == Colors.Blue && alliance == Alliance.Red) {
-          mainRPM = 1000;
-          topRPM = 5000;
+          mainRPM = 500;
+          topRPM = 500;
         }
 
         if (Math.abs(shooter.getShooterMainRPM() - mainRPM) < mainRPM * 0.05) stage = Stage.Shoot;
