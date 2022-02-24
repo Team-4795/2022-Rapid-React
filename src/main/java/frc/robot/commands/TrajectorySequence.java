@@ -12,9 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,18 +23,13 @@ import frc.robot.Constants.AutoConstants;
 
 public class TrajectorySequence extends SequentialCommandGroup {
   private final Drivebase drivebase;
-  private final simpleForward simpleForward;
 
   public TrajectorySequence(Drivebase drivetrain, String ... paths) {
     drivebase = drivetrain;
-    simpleForward = new simpleForward(drivetrain);
 
     for (String pathLocation : paths) {
       Command path = generatePath(pathLocation);
-      if (path == null) {
-        addCommands(new ParallelRaceGroup(simpleForward, new WaitCommand(3)));
-        return;
-      }
+      if (path == null) return;
     }
 
     for (String pathLocation : paths) {
