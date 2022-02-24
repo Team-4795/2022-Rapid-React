@@ -67,14 +67,14 @@ public class Shoot extends CommandBase {
         lowerIndexer = 0;
 
         if(distance > 12) {
-          mainRPM = 6000;
-          topRPM = 6000;
+          mainRPM = 600;
+          topRPM = 600;
         } else if(distance > 5) {
-          mainRPM = 5500;
-          topRPM = 4000;
+          mainRPM = 550;
+          topRPM = 400;
         } else {
-          mainRPM = 5000;
-          topRPM = 2000;
+          mainRPM = 1000;
+          topRPM = 1000;
         }
     
         if(upperColor == Color.Red && alliance == Alliance.Blue) {

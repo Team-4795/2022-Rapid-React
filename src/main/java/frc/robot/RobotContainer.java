@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.TrajectorySequence;
 import frc.robot.commands.CurvatureDrive;
 import frc.robot.commands.Shoot;
@@ -46,7 +47,7 @@ public class RobotContainer {
     drivebase.setDefaultCommand(new CurvatureDrive(
       drivebase,
       () -> -controller.getLeftY(),
-      () -> -controller.getRightX(),
+      () -> controller.getRightX(),
       () -> controller.getRightTriggerAxis()
     ));
     superstructure.setDefaultCommand(new BallManager(superstructure));
@@ -84,8 +85,10 @@ public class RobotContainer {
       new Shoot(drivebase, superstructure, shooter, vision)));
 
     autoSelector.addOption("Backup", new ParallelRaceGroup(
-      new RunCommand(() -> drivebase.curvatureDrive(-0.5, 0, false), drivebase),
+      new RunCommand(() -> drivebase.curvatureDrive(-0.35, 0, false), drivebase),
       new WaitCommand(3)));
+    
+    SmartDashboard.putData(autoSelector);
 
     configureButtonBindings();
   }
