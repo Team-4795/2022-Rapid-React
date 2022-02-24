@@ -21,19 +21,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivebaseConstants;
 
 public class Drivebase extends SubsystemBase {
+  private final CANSparkMax leftLeader = new CANSparkMax(DrivebaseConstants.LEFT_LEADER, MotorType.kBrushless);
+  private final CANSparkMax leftFollower = new CANSparkMax(DrivebaseConstants.LEFT_FOLLOWER, MotorType.kBrushless);
 
-  private CANSparkMax leftLeader = new CANSparkMax(DrivebaseConstants.LEFT_LEADER, MotorType.kBrushless);
-  private CANSparkMax leftFollower = new CANSparkMax(DrivebaseConstants.LEFT_FOLLOWER, MotorType.kBrushless);
+  private final CANSparkMax rightLeader = new CANSparkMax(DrivebaseConstants.RIGHT_LEADER, MotorType.kBrushless);
+  private final CANSparkMax rightFollower = new CANSparkMax(DrivebaseConstants.RIGHT_FOLLOWER, MotorType.kBrushless);
 
-  private CANSparkMax rightLeader = new CANSparkMax(DrivebaseConstants.RIGHT_LEADER, MotorType.kBrushless);
-  private CANSparkMax rightFollower = new CANSparkMax(DrivebaseConstants.RIGHT_FOLLOWER, MotorType.kBrushless);
+  private final RelativeEncoder m_rightEncoder;
+  private final RelativeEncoder m_leftEncoder;
 
-  private RelativeEncoder m_rightEncoder;
-  private RelativeEncoder m_leftEncoder;
+  private final AHRS gyro;
 
-  private AHRS gyro;
-
-  private DifferentialDrive diffDrive = new DifferentialDrive(leftLeader, rightLeader);
+  private final DifferentialDrive diffDrive = new DifferentialDrive(leftLeader, rightLeader);
 
   private final DifferentialDriveOdometry odometry;
 

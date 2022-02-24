@@ -15,9 +15,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
-  private CANSparkMax leftRoller = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushed);
-  private CANSparkMax rightRoller = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushed);
-  private DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+  private final CANSparkMax leftRoller = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushed);
+  private final CANSparkMax rightRoller = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushed);
+  private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.FORWARD_CHANNEL, IntakeConstants.REVERSE_CHANNEL);
   private boolean extended = false;
 
   public Intake() {

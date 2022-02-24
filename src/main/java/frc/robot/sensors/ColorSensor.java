@@ -6,12 +6,11 @@ package frc.robot.sensors;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 
 import com.revrobotics.ColorSensorV3;
 
 public class ColorSensor {
-  public static enum Colors {
+  public static enum Color {
     Red, Blue, Other
   }
 
@@ -21,23 +20,23 @@ public class ColorSensor {
     m_colorSensor = new ColorSensorV3(I2C.Port.kMXP);
   }
 
-  public Colors getBallColor() {
-    Colors ballColor = Colors.Other;
+  public Color getBallColor() {
+    Color ballColor = Color.Other;
 
     try {
-      Color detectedColor = m_colorSensor.getColor();
+      var detectedColor = m_colorSensor.getColor();
 
       if (getProximity() > 150) {
-        ballColor = Colors.Other;
+        ballColor = Color.Other;
       } else if (detectedColor.blue > detectedColor.red) {
-        ballColor = Colors.Blue;
+        ballColor = Color.Blue;
       } else if (detectedColor.red > detectedColor.blue) {
-        ballColor = Colors.Red;
+        ballColor = Color.Red;
       }
 
       SmartDashboard.putNumber("Red", detectedColor.red);
       SmartDashboard.putNumber("Blue", detectedColor.blue);
-      SmartDashboard.putString("Detected Color: ", ballColor == Colors.Red ? "red" : "blue");
+      SmartDashboard.putString("Detected Color: ", ballColor == Color.Red ? "red" : "blue");
     } catch (Exception exception) {
       SmartDashboard.putString("Detected Color: ", "error");
     }

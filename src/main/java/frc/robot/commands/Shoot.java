@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
-import frc.robot.sensors.ColorSensor.Colors;
+import frc.robot.sensors.ColorSensor.Color;
 
 enum Stage {
   Hold, Shoot, Feed
@@ -45,7 +45,7 @@ public class Shoot extends CommandBase {
   @Override
   public void execute() {
     double distance = 0;
-    Colors upperColor = superstructure.indexer.getUpperColor();
+    Color upperColor = superstructure.indexer.getUpperColor();
 
     if(vision.hasTarget()) {
       distance = vision.getTargetDistance();
@@ -77,12 +77,12 @@ public class Shoot extends CommandBase {
           topRPM = 2000;
         }
     
-        if(upperColor == Colors.Red && alliance == Alliance.Blue) {
+        if(upperColor == Color.Red && alliance == Alliance.Blue) {
           mainRPM = 500;
           topRPM = 500;
         }
     
-        if(upperColor == Colors.Blue && alliance == Alliance.Red) {
+        if(upperColor == Color.Blue && alliance == Alliance.Red) {
           mainRPM = 500;
           topRPM = 500;
         }
@@ -94,14 +94,14 @@ public class Shoot extends CommandBase {
         upperIndexer = 0.5;
         lowerIndexer = 0;
 
-        if (upperColor == Colors.Other) stage = Stage.Feed;
+        if (upperColor == Color.Other) stage = Stage.Feed;
 
         break;
       case Feed:
         upperIndexer = 0.25;
         lowerIndexer = 1;
 
-        if (upperColor != Colors.Other) stage = Stage.Hold;
+        if (upperColor != Color.Other) stage = Stage.Hold;
 
         break;
     }

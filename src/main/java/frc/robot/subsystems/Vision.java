@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 
 public class Vision extends SubsystemBase {
-  private PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_NAME);
+  private final PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_NAME);
 
   private boolean hasTarget = false;
   private double targetDistance = 0;

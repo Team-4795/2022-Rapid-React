@@ -35,13 +35,17 @@ public final class Constants {
   }
   
   public final static class IntakeConstants {
-    public static final int LEFT_MOTOR = 12; 
-    public static final int RIGHT_MOTOR = 13; 
+    public static final int LEFT_MOTOR = 12;
+    public static final int RIGHT_MOTOR = 13;
+
+    public static final int FORWARD_CHANNEL = 0;
+    public static final int REVERSE_CHANNEL = 1;
   }
   
   public final static class IndexerConstants {
     public static final int INDEXER_LOWER = 10;
     public static final int INDEXER_UPPER = 9;
+    public static final int BREAK_BEAM_PORT = 1;
 
     public static final int CURRENT_LIMIT = 30;
   }
