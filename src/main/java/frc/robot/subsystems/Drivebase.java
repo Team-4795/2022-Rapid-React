@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -20,26 +21,29 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivebaseConstants;
 
 public class Drivebase extends SubsystemBase {
+  private final CANSparkMax leftLeader = new CANSparkMax(DrivebaseConstants.LEFT_LEADER, MotorType.kBrushless);
+  private final CANSparkMax leftFollower = new CANSparkMax(DrivebaseConstants.LEFT_FOLLOWER, MotorType.kBrushless);
 
-  private CANSparkMax leftLeader = new CANSparkMax(DrivebaseConstants.LEFT_LEADER, MotorType.kBrushless);
-  private CANSparkMax leftFollower = new CANSparkMax(DrivebaseConstants.LEFT_FOLLOWER, MotorType.kBrushless);
+  private final CANSparkMax rightLeader = new CANSparkMax(DrivebaseConstants.RIGHT_LEADER, MotorType.kBrushless);
+  private final CANSparkMax rightFollower = new CANSparkMax(DrivebaseConstants.RIGHT_FOLLOWER, MotorType.kBrushless);
 
-  private CANSparkMax rightLeader = new CANSparkMax(DrivebaseConstants.RIGHT_LEADER, MotorType.kBrushless);
-  private CANSparkMax rightFollower = new CANSparkMax(DrivebaseConstants.RIGHT_FOLLOWER, MotorType.kBrushless);
+  private final RelativeEncoder m_rightEncoder;
+  private final RelativeEncoder m_leftEncoder;
 
-  private RelativeEncoder m_rightEncoder;
-  private RelativeEncoder m_leftEncoder;
+  private final AHRS gyro;
 
-  private AHRS gyro;
+  private final DifferentialDrive diffDrive = new DifferentialDrive(leftLeader, rightLeader);
 
-  private DifferentialDrive diffDrive = new DifferentialDrive(leftLeader, rightLeader);
+  private final DifferentialDriveOdometry odometry;
 
-  private final edu.wpi.first.math.kinematics.DifferentialDriveOdometry odometry;
+  private final Field2d m_field2d = new Field2d();
+
+  private double movementSpeed = 0;
+  private double direction = 1;
 
   public Drivebase() {
     leftLeader.restoreFactoryDefaults();
     leftFollower.restoreFactoryDefaults();
-
     rightLeader.restoreFactoryDefaults();
     rightFollower.restoreFactoryDefaults();
 
@@ -53,14 +57,13 @@ public class Drivebase extends SubsystemBase {
 
     leftLeader.setInverted(true);
     leftFollower.setInverted(true);
-
     rightLeader.setInverted(false);
     rightFollower.setInverted(false);
 
     m_leftEncoder = leftLeader.getEncoder();
     m_rightEncoder = rightLeader.getEncoder();
 
-    //velocity calculation, geaing * wheel diameter, meters per second
+    // velocity calculation, geaing * wheel diameter, meters per second
     m_leftEncoder.setVelocityConversionFactor((1.0 / 60.0 / DrivebaseConstants.GEARING) * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI);
     m_rightEncoder.setVelocityConversionFactor((1.0 / 60.0 / DrivebaseConstants.GEARING) * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI);
 
@@ -74,22 +77,21 @@ public class Drivebase extends SubsystemBase {
 
     gyro = new AHRS(SPI.Port.kMXP);
 
-    odometry = new edu.wpi.first.math.kinematics.DifferentialDriveOdometry(gyro.getRotation2d());
+    odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
   }
 
   public void curvatureDrive(double speed, double rotation, boolean quickTurn) {
-    diffDrive.curvatureDrive(speed, rotation, quickTurn);
+    movementSpeed = Math.max(Math.abs(speed), Math.abs(rotation));
+
+    diffDrive.curvatureDrive(speed * direction, rotation, quickTurn);
   }
 
-  public void arcadeDrive(double speed, double rotation) {
-    diffDrive.arcadeDrive(speed, rotation);
-  }
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     leftLeader.setVoltage(leftVolts);
     rightLeader.setVoltage(rightVolts);
     diffDrive.feed();
   }
-  //ENCODER STUFF
+
   public double getLeftWheelEncoder() {
     return m_leftEncoder.getPosition();
   }
@@ -103,7 +105,6 @@ public class Drivebase extends SubsystemBase {
     m_rightEncoder.setPosition(0);
   }
 
-  //GYRO STUFF
   public void zeroHeading() {
     gyro.reset();
   }
@@ -116,12 +117,14 @@ public class Drivebase extends SubsystemBase {
     return gyro.getRate();
   }
 
-  public void reverse() {}
+  public void reverse() {
+    if(Math.abs(movementSpeed) < 0.3) direction *= -1;
+  }
 
-  //ODOMETRY STUFF
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }
+
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(m_leftEncoder.getVelocity(), m_rightEncoder.getVelocity());
   }
@@ -129,6 +132,10 @@ public class Drivebase extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
     odometry.resetPosition(pose, gyro.getRotation2d());
+  }
+
+  public void putTrajectory(Trajectory trajectory) {
+    m_field2d.getObject("traj").setTrajectory(trajectory);
   }
 
   @Override
@@ -143,9 +150,5 @@ public class Drivebase extends SubsystemBase {
     SmartDashboard.putNumber("Left distance", leftDistance);
     SmartDashboard.putNumber("Right distance", rightDistance);
     SmartDashboard.putNumber("gyro", gyro.getRotation2d().getDegrees());
-  }
-  private final Field2d m_field2d = new Field2d();
-  public void putTrajectory(Trajectory trajectory) {
-    m_field2d.getObject("traj").setTrajectory(trajectory);
   }
 }

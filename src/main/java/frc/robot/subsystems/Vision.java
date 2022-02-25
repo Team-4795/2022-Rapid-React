@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
+import org.photonvision.common.hardware.VisionLEDMode;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 
 public class Vision extends SubsystemBase {
-  private PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_NAME);
+  private final PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_NAME);
 
   private boolean hasTarget = false;
   private double targetDistance = 0;
@@ -29,6 +30,14 @@ public class Vision extends SubsystemBase {
 
   public double getTargetAngle() {
     return targetAngle;
+  }
+
+  public void enableLED() {
+    camera.setLED(VisionLEDMode.kOn);
+  }
+
+  public void disableLED() {
+    camera.setLED(VisionLEDMode.kOff);
   }
 
   @Override

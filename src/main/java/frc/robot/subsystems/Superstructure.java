@@ -6,13 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Climber extends SubsystemBase {
-  public Climber() {}
-
-  public void toggle() {}
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+public class Superstructure extends SubsystemBase {
+  public final Intake intake = new Intake();
+  public final Indexer indexer = new Indexer();
 }
