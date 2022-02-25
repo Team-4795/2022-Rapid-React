@@ -42,7 +42,7 @@ public class Indexer extends SubsystemBase {
   }
 
   public Color getUpperColor() {
-    return colorSensor.getBallColor();
+    return colorSensor.getColor();
   }
 
   public boolean hasUpperBall() {

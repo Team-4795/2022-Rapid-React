@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class BreakBeam {
-  private DigitalInput sensor;
+  private final DigitalInput sensor;
 
   public BreakBeam(int port) {
     sensor = new DigitalInput(port);

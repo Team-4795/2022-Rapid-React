@@ -14,19 +14,19 @@ public class ColorSensor {
     Red, Blue, Other
   }
 
-  private ColorSensorV3 m_colorSensor;
+  private final ColorSensorV3 colorSensor;
 
   public ColorSensor() {
-    m_colorSensor = new ColorSensorV3(I2C.Port.kMXP);
+    colorSensor = new ColorSensorV3(I2C.Port.kMXP);
   }
 
-  public Color getBallColor() {
+  public Color getColor() {
     Color ballColor = Color.Other;
 
     try {
-      var detectedColor = m_colorSensor.getColor();
+      var detectedColor = colorSensor.getColor();
 
-      if (getProximity() > 150) {
+      if (getProximity() < 150) {
         ballColor = Color.Other;
       } else if (detectedColor.blue > detectedColor.red) {
         ballColor = Color.Blue;
@@ -45,7 +45,7 @@ public class ColorSensor {
   }
 
   public int getProximity() {
-    SmartDashboard.putNumber("Prox", m_colorSensor.getProximity());
-    return m_colorSensor.getProximity();
+    SmartDashboard.putNumber("Prox", colorSensor.getProximity());
+    return colorSensor.getProximity();
   }
 }
