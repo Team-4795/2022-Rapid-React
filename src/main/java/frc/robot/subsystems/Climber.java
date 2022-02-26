@@ -6,22 +6,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
-  PowerDistribution examplePD = new PowerDistribution(1, ModuleType.kRev);
   public Climber() {}
 
   public void toggle() {}
 
   @Override
   public void periodic() {
-    double current = examplePD.getTotalCurrent();
-    double power = examplePD.getTotalPower();
-
-    SmartDashboard.putNumber("Current", current);
-    SmartDashboard.putNumber("Power", power);
     // This method will be called once per scheduler run
   }
 }
