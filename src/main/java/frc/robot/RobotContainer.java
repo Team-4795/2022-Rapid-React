@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -51,7 +52,7 @@ public class RobotContainer {
       () -> controller.getRightTriggerAxis()
     ));
     superstructure.setDefaultCommand(new BallManager(superstructure));
-    shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterSpeed(0, 0), shooter));
+    shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterPower(0, 0), shooter));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
 
     autoSelector.setDefaultOption("Blue Hanger 2", new SequentialCommandGroup(
@@ -97,11 +98,19 @@ public class RobotContainer {
     final JoystickButton buttonA = new JoystickButton(controller, Controller.Button.kA.value);
     final JoystickButton buttonB = new JoystickButton(controller, Controller.Button.kB.value);
     final JoystickButton buttonX = new JoystickButton(controller, Controller.Button.kX.value);
+    final JoystickButton buttonY = new JoystickButton(controller, Controller.Button.kY.value);
     final JoystickButton rightBumper = new JoystickButton(controller, Controller.Button.kRightBumper.value);
 
     buttonA.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
     buttonB.whenPressed(superstructure.intake::toggle);
     buttonX.whenPressed(climber::toggle);
+    buttonY.whileHeld(new ParallelCommandGroup(
+      new RunCommand(() -> shooter.setShooterPower(0.3, 0.3), shooter),
+      new SequentialCommandGroup(
+        new WaitCommand(2),
+        new RunCommand(() -> superstructure.indexer.setIndexerSpeed(0.5, 1), superstructure)
+      )
+    ));
     rightBumper.whenPressed(drivebase::reverse);
   }
 

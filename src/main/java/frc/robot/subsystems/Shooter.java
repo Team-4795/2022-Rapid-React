@@ -44,7 +44,7 @@ public class Shooter extends SubsystemBase {
     FlywheelTop.config_kP(0, 0.04, 0);
   }
 
-  public void setShooterSpeed(double speedMain, double speedTop) {
+  public void setShooterPower(double speedMain, double speedTop) {
     FlywheelMain.set(ControlMode.PercentOutput, speedMain);
     FlywheelTop.set(ControlMode.PercentOutput, speedTop);
   }
