@@ -39,9 +39,9 @@ public class Shoot extends CommandBase {
     this.shooter = shooter;
     this.vision = vision;
 
-    presets.add(new Preset(400, 2600, 0));
+    presets.add(new Preset(400, 2800, 0));
     presets.add(new Preset(400, 3000, 5));
-    presets.add(new Preset(600, 3200, 8));
+    presets.add(new Preset(1000, 3200, 8));
     presets.add(new Preset(3500, 1200, 15));
 
     addRequirements(drivebase, superstructure, shooter, vision);
@@ -63,7 +63,7 @@ public class Shoot extends CommandBase {
       double distance = vision.getTargetDistance();
       double angle = vision.getTargetAngle();
       double driveSpeed = 0;
-      double turnSpeed = angle / 100.0;
+      double turnSpeed = angle / 50.0;
 
       for (Preset p : presets) if (Math.abs(distance - p.distance) < Math.abs(distance - preset.distance)) preset = p;
 
@@ -72,10 +72,10 @@ public class Shoot extends CommandBase {
       SmartDashboard.putNumber("distance", distance);
       SmartDashboard.putNumber("preset", preset.distance);
 
-      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.1), turnSpeed), -0.2, 0.2);
+      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.25, 0.25);
 
-      driveSpeed = MathUtil.clamp((distance - preset.distance) / 10.0, -0.2, 0.2);
-      driveSpeed = Math.copySign(Math.max(Math.abs(driveSpeed), 0.1), driveSpeed);
+      driveSpeed = MathUtil.clamp((distance - preset.distance) / 10.0, -0.25, 0.25);
+      driveSpeed = Math.copySign(Math.max(Math.abs(driveSpeed), 0.15), driveSpeed);
 
       drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.5 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.5);
     } else {
