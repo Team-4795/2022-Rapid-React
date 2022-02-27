@@ -50,10 +50,10 @@ public class Drivebase extends SubsystemBase {
     leftFollower.follow(leftLeader);
     rightFollower.follow(rightLeader);
 
-    leftLeader.setIdleMode(IdleMode.kBrake);
-    leftFollower.setIdleMode(IdleMode.kBrake);
-    rightLeader.setIdleMode(IdleMode.kBrake);
-    rightFollower.setIdleMode(IdleMode.kBrake);
+    leftLeader.setIdleMode(IdleMode.kCoast);
+    leftFollower.setIdleMode(IdleMode.kCoast);
+    rightLeader.setIdleMode(IdleMode.kCoast);
+    rightFollower.setIdleMode(IdleMode.kCoast);
 
     leftLeader.setInverted(true);
     leftFollower.setInverted(true);
@@ -84,6 +84,14 @@ public class Drivebase extends SubsystemBase {
     movementSpeed = Math.max(Math.abs(speed), Math.abs(rotation));
 
     diffDrive.curvatureDrive(speed * direction, rotation, quickTurn);
+  }
+
+  public void setDirection(double d) {
+    direction = d;
+  }
+
+  public double getDirection() {
+    return direction;
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
@@ -118,7 +126,7 @@ public class Drivebase extends SubsystemBase {
   }
 
   public void reverse() {
-    if(Math.abs(movementSpeed) < 0.3) direction *= -1;
+    if(Math.abs(movementSpeed) < 0.5) direction *= -1;
   }
 
   public Pose2d getPose() {

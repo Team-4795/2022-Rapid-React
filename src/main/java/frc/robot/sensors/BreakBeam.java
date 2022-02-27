@@ -16,6 +16,6 @@ public class BreakBeam {
 
   public boolean isBroken() {
     SmartDashboard.putBoolean("beam", !sensor.get());
-    return !sensor.get();
+    return false;
   }
 }
