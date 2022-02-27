@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
-  PowerDistribution examplePD = new PowerDistribution(1, ModuleType.kRev);
+  private PowerDistribution PD = new PowerDistribution(1, ModuleType.kRev);
 
   private RobotContainer robotContainer;
 
@@ -31,11 +31,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    double current = examplePD.getTotalCurrent();
-    double power = examplePD.getTotalPower();
 
-    SmartDashboard.putNumber("Current", current);
-    SmartDashboard.putNumber("Voltage", power);
+    SmartDashboard.putNumber("Current", PD.getTotalCurrent());
+    SmartDashboard.putNumber("Voltage", PD.getTotalPower());
   }
 
   @Override

@@ -34,7 +34,8 @@ public class RobotContainer {
   private final Climber climber;
   private final Vision vision;
 
-  private final Controller controller = new Controller(ControllerConstants.CONTROLLER_PORT);
+  private final Controller driverController = new Controller(ControllerConstants.DRIVER);
+  private final Controller operatorController = new Controller(ControllerConstants.OPERATOR);
 
   private final SendableChooser<Command> autoSelector = new SendableChooser<>();
 
@@ -47,9 +48,9 @@ public class RobotContainer {
 
     drivebase.setDefaultCommand(new CurvatureDrive(
       drivebase,
-      () -> -controller.getLeftY(),
-      () -> controller.getRightX(),
-      () -> controller.getRightTriggerAxis()
+      () -> -driverController.getLeftY(),
+      () -> driverController.getRightX(),
+      () -> driverController.getRightTriggerAxis()
     ));
     superstructure.setDefaultCommand(new BallManager(superstructure));
     shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterPower(0, 0), shooter));
@@ -95,23 +96,28 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    final JoystickButton buttonA = new JoystickButton(controller, Controller.Button.kA.value);
-    final JoystickButton buttonB = new JoystickButton(controller, Controller.Button.kB.value);
-    final JoystickButton buttonX = new JoystickButton(controller, Controller.Button.kX.value);
-    final JoystickButton buttonY = new JoystickButton(controller, Controller.Button.kY.value);
-    final JoystickButton rightBumper = new JoystickButton(controller, Controller.Button.kRightBumper.value);
+    final JoystickButton reverseButton = new JoystickButton(driverController, Controller.Button.kRightBumper.value);
+    final JoystickButton shootButton = new JoystickButton(driverController, Controller.Button.kA.value);
+    final JoystickButton intakeButton = new JoystickButton(driverController, Controller.Button.kB.value);
+    final JoystickButton climbButton = new JoystickButton(driverController, Controller.Button.kX.value);
+    final JoystickButton lowGoalButton = new JoystickButton(driverController, Controller.Button.kY.value);
+    final JoystickButton unjamButton = new JoystickButton(operatorController, Controller.Button.kA.value);
 
-    buttonA.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
-    buttonB.whenPressed(superstructure.intake::toggle);
-    buttonX.whenPressed(climber::toggle);
-    buttonY.whileHeld(new ParallelCommandGroup(
+    reverseButton.whenPressed(drivebase::reverse);
+    shootButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
+    intakeButton.whenPressed(superstructure.intake::toggle);
+    climbButton.whenPressed(climber::toggle);
+    lowGoalButton.whileHeld(new ParallelCommandGroup(
       new RunCommand(() -> shooter.setShooterPower(0.3, 0.3), shooter),
       new SequentialCommandGroup(
         new WaitCommand(2),
         new RunCommand(() -> superstructure.indexer.setIndexerSpeed(0.5, 1), superstructure)
       )
     ));
-    rightBumper.whenPressed(drivebase::reverse);
+    unjamButton.whileHeld(new RunCommand(() -> {
+      superstructure.indexer.setIndexerSpeed(-0.3, -0.3);
+      shooter.setShooterPower(-0.3, 0);
+    }, superstructure, shooter));
   }
 
   public Command getAutonomousCommand() {
@@ -119,7 +125,7 @@ public class RobotContainer {
   }
 
   public void setRumble(double rumble) {
-    controller.setRumble(RumbleType.kLeftRumble, rumble);
-    controller.setRumble(RumbleType.kRightRumble, rumble);
+    driverController.setRumble(RumbleType.kLeftRumble, rumble);
+    driverController.setRumble(RumbleType.kRightRumble, rumble);
   }
 }

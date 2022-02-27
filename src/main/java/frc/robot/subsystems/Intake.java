@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
     rightRoller.restoreFactoryDefaults();
 
     leftRoller.setInverted(false);
-    rightRoller.setInverted(false);
+    rightRoller.setInverted(true);
 
     leftRoller.setIdleMode(IdleMode.kCoast);
     rightRoller.setIdleMode(IdleMode.kCoast);

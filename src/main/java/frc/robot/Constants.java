@@ -8,11 +8,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 public final class Constants {
-  public final static class ShooterConstants {
-    public static final int FLYWHEEL_MAIN_TALON = 6;
-    public static final int FLYWHEEL_TOP_TALON = 7;
-  }
-
   public final static class DrivebaseConstants {
     public static final int LEFT_LEADER = 2;
     public static final int LEFT_FOLLOWER = 3;
@@ -38,7 +33,7 @@ public final class Constants {
     public static final int LEFT_MOTOR = 12;
     public static final int RIGHT_MOTOR = 13;
 
-    public static final int FORWARD_CHANNEL = 0;
+    public static final int FORWARD_CHANNEL = 14;
     public static final int REVERSE_CHANNEL = 1;
   }
   
@@ -49,21 +44,23 @@ public final class Constants {
 
     public static final int CURRENT_LIMIT = 30;
   }
+
+  public final static class ShooterConstants {
+    public static final int FLYWHEEL_MAIN_TALON = 6;
+    public static final int FLYWHEEL_TOP_TALON = 7;
+  }
  
   public final static class VisionConstants {
     public static final String CAMERA_NAME = "mmal_service_16.1";
 
-    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(17);
     public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(103.5);
-    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(15);
-  }
-
-  public final static class GyroConstants {
-    public static final int I2C_PORT = 1;
+    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(45);
   }
 
   public final class ControllerConstants {
-    public static final int CONTROLLER_PORT = 0;
+    public static final int DRIVER = 0;
+    public static final int OPERATOR = 1;
 
     public static final double JOYSTICK_DEADBAND = 0.05;
   }

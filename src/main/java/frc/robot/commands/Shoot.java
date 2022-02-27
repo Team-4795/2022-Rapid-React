@@ -50,9 +50,9 @@ public class Shoot extends CommandBase {
     if(vision.hasTarget()) {
       distance = vision.getTargetDistance();
       double angle = vision.getTargetAngle();
-      double turnSpeed = -angle / 400.0;
+      double turnSpeed = angle / 100.0;
       
-      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.035), turnSpeed), -0.15, 0.15);
+      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.1), turnSpeed), -0.2, 0.2);
 
       if(Math.abs(angle) > 2) {
         drivebase.curvatureDrive(0, turnSpeed, true);
@@ -66,25 +66,28 @@ public class Shoot extends CommandBase {
         upperIndexer = 0;
         lowerIndexer = 0;
 
-        if(distance > 12) {
-          mainRPM = 600;
-          topRPM = 600;
-        } else if(distance > 5) {
-          mainRPM = 550;
+        if (distance > 12) {
+          mainRPM = 3200;
+          topRPM = 500;
+        } else if (distance > 8) {
+          mainRPM = 3000;
           topRPM = 400;
+        } else if (distance > 4) {
+          mainRPM = 2800;
+          topRPM = 0;
         } else {
+          mainRPM = 2600;
+          topRPM = 400;
+        }
+    
+        if (upperColor == Color.Red && alliance == Alliance.Blue) {
           mainRPM = 1000;
           topRPM = 1000;
         }
     
-        if(upperColor == Color.Red && alliance == Alliance.Blue) {
-          mainRPM = 500;
-          topRPM = 500;
-        }
-    
-        if(upperColor == Color.Blue && alliance == Alliance.Red) {
-          mainRPM = 500;
-          topRPM = 500;
+        if (upperColor == Color.Blue && alliance == Alliance.Red) {
+          mainRPM = 1000;
+          topRPM = 1000;
         }
 
         if (Math.abs(shooter.getShooterMainRPM() - mainRPM) < mainRPM * 0.05) stage = Stage.Shoot;
