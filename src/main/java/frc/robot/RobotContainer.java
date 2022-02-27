@@ -99,6 +99,7 @@ public class RobotContainer {
     final JoystickButton reverseButton = new JoystickButton(driverController, Controller.Button.kRightBumper.value);
     final JoystickButton shootButton = new JoystickButton(driverController, Controller.Button.kA.value);
     final JoystickButton intakeButton = new JoystickButton(driverController, Controller.Button.kB.value);
+    final JoystickButton intakeOverride = new JoystickButton(operatorController, Controller.Button.kB.value);
     final JoystickButton climbButton = new JoystickButton(driverController, Controller.Button.kX.value);
     final JoystickButton lowGoalButton = new JoystickButton(driverController, Controller.Button.kY.value);
     final JoystickButton unjamButton = new JoystickButton(operatorController, Controller.Button.kA.value);
@@ -106,6 +107,9 @@ public class RobotContainer {
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
     intakeButton.whenPressed(superstructure.intake::toggle);
+    intakeOverride.whenPressed(() -> {
+      if (superstructure.intake.isExtended()) superstructure.intake.toggle();
+    });
     climbButton.whenPressed(climber::toggle);
     lowGoalButton.whileHeld(new ParallelCommandGroup(
       new RunCommand(() -> shooter.setShooterPower(0.3, 0.3), shooter),
