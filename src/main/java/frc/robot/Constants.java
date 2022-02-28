@@ -9,7 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 public final class Constants {
-  public final static class DrivebaseConstants {
+  public static final class DrivebaseConstants {
     public static final int LEFT_LEADER = 2;
     public static final int LEFT_FOLLOWER = 3;
     public static final int RIGHT_LEADER = 4;
@@ -32,7 +32,7 @@ public final class Constants {
     public static final double kPDriveVel = 3;
   }
   
-  public final static class IntakeConstants {
+  public static final class IntakeConstants {
     public static final int LEFT_MOTOR = 12;
     public static final int RIGHT_MOTOR = 13;
 
@@ -40,7 +40,7 @@ public final class Constants {
     public static final int REVERSE_CHANNEL = 1;
   }
   
-  public final static class IndexerConstants {
+  public static final class IndexerConstants {
     public static final int INDEXER_LOWER = 10;
     public static final int INDEXER_UPPER = 9;
     public static final int BREAK_BEAM_PORT = 1;
@@ -48,12 +48,12 @@ public final class Constants {
     public static final int CURRENT_LIMIT = 30;
   }
 
-  public final static class ShooterConstants {
+  public static final class ShooterConstants {
     public static final int FLYWHEEL_MAIN_TALON = 6;
     public static final int FLYWHEEL_TOP_TALON = 7;
   }
  
-  public final static class VisionConstants {
+  public static final class VisionConstants {
     public static final String CAMERA_NAME = "mmal_service_16.1";
 
     public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(27.5);
@@ -61,7 +61,7 @@ public final class Constants {
     public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(35);
   }
 
-  public final class ControllerConstants {
+  public static final class ControllerConstants {
     public static final int DRIVER = 0;
     public static final int OPERATOR = 1;
 
@@ -73,7 +73,7 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
 
-  public static class Preset {
+  public static final class Preset {
     public double distance;
     public double topRPM;
     public double mainRPM;
