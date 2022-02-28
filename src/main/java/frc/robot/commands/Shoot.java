@@ -58,6 +58,7 @@ public class Shoot extends CommandBase {
   @Override
   public void execute() {
     Color upperColor = superstructure.indexer.getUpperColor();
+    boolean isAligned = true;
 
     if(vision.hasTarget()) {
       double distance = vision.getTargetDistance();
@@ -77,7 +78,9 @@ public class Shoot extends CommandBase {
       driveSpeed = MathUtil.clamp((distance - preset.distance) / 10.0, -0.25, 0.25);
       driveSpeed = Math.copySign(Math.max(Math.abs(driveSpeed), 0.15), driveSpeed);
 
-      drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.5 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.5);
+      if (Math.abs(angle) > 2 || Math.abs(distance - preset.distance) > 0.25) isAligned = false;
+
+      drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.25 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.25);
     } else {
       drivebase.curvatureDrive(0, 0, false);
     }
@@ -100,7 +103,7 @@ public class Shoot extends CommandBase {
           topRPM = 1000;
         }
 
-        if (Math.abs(shooter.getShooterMainRPM() - mainRPM) < mainRPM * 0.05) stage = Stage.Shoot;
+        if (Math.abs(shooter.getMainRPM() - mainRPM) < mainRPM * 0.05 && isAligned) stage = Stage.Shoot;
 
         break;
       case Shoot:

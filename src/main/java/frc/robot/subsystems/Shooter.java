@@ -54,30 +54,30 @@ public class Shooter extends SubsystemBase {
     double speed_FalconUnits1 = speedMain / (600.0) * 2048.0;
     double speed_FalconUnits2 = speedTop / (600.0) * 2048.0;
 
-    if (getShooterMainRPM() < speedMain * 1.1) {
+    if (getMainRPM() < speedMain * 1.1) {
       FlywheelMain.set(TalonFXControlMode.Velocity, speed_FalconUnits1);
     } else {
       FlywheelMain.set(ControlMode.PercentOutput, 0);
     }
 
-    if (getShooterTopRPM() < speedTop * 1.1) {
+    if (getTopRPM() < speedTop * 1.1) {
       FlywheelTop.set(TalonFXControlMode.Velocity, speed_FalconUnits2);
     } else {
       FlywheelTop.set(ControlMode.PercentOutput, 0);
     }
   }
 
-  public double getShooterMainRPM() {
+  public double getMainRPM() {
     return (FlywheelMain.getSelectedSensorVelocity()) / 2048.0 * 600;
   }
 
-  public double getShooterTopRPM() {
+  public double getTopRPM() {
     return (FlywheelTop.getSelectedSensorVelocity()) / 2048.0 * 600;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("shooter Main RPM", getShooterMainRPM());
-    SmartDashboard.putNumber("shooter Top RPM", getShooterTopRPM());
+    SmartDashboard.putNumber("shooter Main RPM", getMainRPM());
+    SmartDashboard.putNumber("shooter Top RPM", getTopRPM());
   }
 }
