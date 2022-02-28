@@ -53,9 +53,9 @@ public final class Constants {
   public final static class VisionConstants {
     public static final String CAMERA_NAME = "mmal_service_16.1";
 
-    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(17);
+    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(27.5);
     public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(103.5);
-    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(45);
+    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(35);
   }
 
   public final class ControllerConstants {
@@ -68,5 +68,17 @@ public final class Constants {
   public static final class AutoConstants {
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
+  }
+
+  public static class Preset {
+    public double distance;
+    public double topRPM;
+    public double mainRPM;
+
+    public Preset(double t, double m, double d) {
+      distance = d;
+      topRPM = t;
+      mainRPM = m;
+    }
   }
 }
