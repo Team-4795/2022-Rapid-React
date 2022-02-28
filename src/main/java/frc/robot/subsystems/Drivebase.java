@@ -50,10 +50,10 @@ public class Drivebase extends SubsystemBase {
     leftFollower.follow(leftLeader);
     rightFollower.follow(rightLeader);
 
-    leftLeader.setIdleMode(IdleMode.kCoast);
-    leftFollower.setIdleMode(IdleMode.kCoast);
-    rightLeader.setIdleMode(IdleMode.kCoast);
-    rightFollower.setIdleMode(IdleMode.kCoast);
+    leftLeader.setIdleMode(DrivebaseConstants.IDLE_MODE);
+    leftFollower.setIdleMode(DrivebaseConstants.IDLE_MODE);
+    rightLeader.setIdleMode(DrivebaseConstants.IDLE_MODE);
+    rightFollower.setIdleMode(DrivebaseConstants.IDLE_MODE);
 
     leftLeader.setInverted(true);
     leftFollower.setInverted(true);
@@ -78,6 +78,13 @@ public class Drivebase extends SubsystemBase {
     gyro = new AHRS(SPI.Port.kMXP);
 
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
+  }
+
+  public void setIdleMode(IdleMode mode) {
+    leftLeader.setIdleMode(mode);
+    leftFollower.setIdleMode(mode);
+    rightLeader.setIdleMode(mode);
+    rightFollower.setIdleMode(mode);
   }
 
   public void curvatureDrive(double speed, double rotation, boolean quickTurn) {

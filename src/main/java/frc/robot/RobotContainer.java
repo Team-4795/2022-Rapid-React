@@ -10,16 +10,11 @@ import frc.robot.subsystems.Drivebase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.TrajectorySequence;
 import frc.robot.commands.CurvatureDrive;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.BallManager;
@@ -33,11 +28,10 @@ public class RobotContainer {
   private final Shooter shooter;
   private final Climber climber;
   private final Vision vision;
+  private final AutoSelector autoSelector;
 
   private final Controller driverController = new Controller(ControllerConstants.DRIVER);
   private final Controller operatorController = new Controller(ControllerConstants.OPERATOR);
-
-  private final SendableChooser<Command> autoSelector = new SendableChooser<>();
 
   public RobotContainer() {
     drivebase = new Drivebase();
@@ -45,6 +39,7 @@ public class RobotContainer {
     shooter = new Shooter();
     climber = new Climber();
     vision = new Vision();
+    autoSelector = new AutoSelector(drivebase, superstructure, shooter, vision);
 
     drivebase.setDefaultCommand(new CurvatureDrive(
       drivebase,
@@ -55,42 +50,6 @@ public class RobotContainer {
     superstructure.setDefaultCommand(new BallManager(superstructure));
     shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterPower(0, 0), shooter));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
-
-    autoSelector.setDefaultOption("Blue Hanger 2", new SequentialCommandGroup(
-      new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/BlueHanger2.wpilib.json"),
-      new Shoot(drivebase, superstructure, shooter, vision)
-      ));
-    autoSelector.addOption("Blue Terminal 2", new SequentialCommandGroup(
-      new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/BlueTerminal2.wpilib.json"),
-      new Shoot(drivebase, superstructure, shooter, vision)
-      ));
-    autoSelector.addOption("Blue Terminal 3", new SequentialCommandGroup(
-      new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(3)),
-      new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/BlueTerminal3.wpilib.json"),
-      new Shoot(drivebase, superstructure, shooter, vision)));
-
-    autoSelector.addOption("Red Hanger 2", new SequentialCommandGroup(
-      new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/RedHanger2.wpilib.json"),
-      new Shoot(drivebase, superstructure, shooter, vision)));
-    autoSelector.addOption("Red Terminal 2", new SequentialCommandGroup(
-      new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/RedTerminal2.wpilib.json"),
-      new Shoot(drivebase, superstructure, shooter, vision)));
-    autoSelector.addOption("Red Terminal 3", new SequentialCommandGroup(
-      new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(3)),
-      new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/RedTerminal3.wpilib.json"),
-      new Shoot(drivebase, superstructure, shooter, vision)));
-
-    autoSelector.addOption("Backup", new ParallelRaceGroup(
-      new RunCommand(() -> drivebase.curvatureDrive(-0.35, 0, false), drivebase),
-      new WaitCommand(3)));
-    
-    SmartDashboard.putData(autoSelector);
 
     configureButtonBindings();
   }

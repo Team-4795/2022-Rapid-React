@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
@@ -16,6 +17,8 @@ public final class Constants {
 
     public static final int LEFT_DRIVE_GROUP_CURRENT_LIMIT = 60;
     public static final int RIGHT_DRIVE_GROUP_CURRENT_LIMIT = 60;
+
+    public static final IdleMode IDLE_MODE = IdleMode.kCoast;
 
     public static final double GEARING = 10.0;
     public static final double kTrackwidthMeters = 0.63;

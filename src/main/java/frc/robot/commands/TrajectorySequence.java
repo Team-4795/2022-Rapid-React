@@ -3,6 +3,8 @@ package frc.robot.commands;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -70,10 +72,12 @@ public class TrajectorySequence extends SequentialCommandGroup {
       // Set up a sequence of commands
       // First, we want to reset the drivetrain odometry
       return new InstantCommand(() -> drivebase.resetOdometry(trajectory.getInitialPose()), drivebase)
+        .andThen(new InstantCommand(() -> drivebase.setIdleMode(IdleMode.kBrake), drivebase))
         // next, we run the actual ramsete command
         .andThen(ramseteCommand)
         // Finally, we make sure that the robot stops
-        .andThen(new InstantCommand(() -> drivebase.tankDriveVolts(0, 0), drivebase));
+        .andThen(new InstantCommand(() -> drivebase.tankDriveVolts(0, 0), drivebase))
+        .andThen(new InstantCommand(() -> drivebase.setIdleMode(DrivebaseConstants.IDLE_MODE), drivebase));
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory: " + pathName, ex.getStackTrace());
     }

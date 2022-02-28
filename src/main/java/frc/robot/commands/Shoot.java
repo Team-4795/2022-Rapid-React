@@ -39,7 +39,7 @@ public class Shoot extends CommandBase {
     this.shooter = shooter;
     this.vision = vision;
 
-    presets.add(new Preset(400, 2800, 0));
+    presets.add(new Preset(300, 2800, 0));
     presets.add(new Preset(400, 3000, 5));
     presets.add(new Preset(1000, 3200, 8));
     presets.add(new Preset(3500, 1200, 15));
