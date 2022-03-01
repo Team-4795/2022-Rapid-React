@@ -20,6 +20,10 @@ public class Vision extends SubsystemBase {
   private double targetDistance = 0;
   private double targetAngle = 0;
 
+  public Vision() {
+    camera.setDriverMode(false);
+  }
+
   public boolean hasTarget() {
     return hasTarget;
   }
