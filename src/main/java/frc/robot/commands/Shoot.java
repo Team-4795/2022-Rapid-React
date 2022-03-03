@@ -33,8 +33,8 @@ public class Shoot extends CommandBase {
     presets.add(new Preset(300, 2800, 0));
     presets.add(new Preset(400, 3000, 5));
     presets.add(new Preset(1000, 3200, 8));
-    presets.add(new Preset(2500, 2000, 12));
-    presets.add(new Preset(3500, 1200, 15));
+    presets.add(new Preset(3500, 1200, 12));
+    presets.add(new Preset(4000, 1200, 15));
 
     addRequirements(drivebase, superstructure, shooter, vision);
   }
@@ -68,9 +68,9 @@ public class Shoot extends CommandBase {
       driveSpeed = MathUtil.clamp((distance - preset.distance) / 10.0, -0.25, 0.25);
       driveSpeed = Math.copySign(Math.max(Math.abs(driveSpeed), 0.15), driveSpeed);
 
-      if (Math.abs(angle) > 2 || Math.abs(distance - preset.distance) > 0.25) isAligned = false;
+      // if (Math.abs(angle) > 2 || Math.abs(distance - preset.distance) > 0.25) isAligned = false;
 
-      drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.25 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.25);
+      // drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.25 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.25);
     } else {
       drivebase.curvatureDrive(0, 0, false);
     }
@@ -78,7 +78,7 @@ public class Shoot extends CommandBase {
     double upperIndexer = 0;
     double lowerIndexer = 0;
 
-    if (Math.abs(shooter.getMainRPM() - preset.mainRPM) < preset.mainRPM * 0.05 && isAligned) {
+    if (Math.abs(shooter.getMainRPM() - preset.mainRPM) < preset.mainRPM * 0.05 && isAligned && Math.abs(shooter.getTopRPM() - preset.topRPM) < preset.topRPM * 0.05) {
       upperIndexer = 0.5;
 
       if (!superstructure.indexer.hasUpperBall()) lowerIndexer = 1;
