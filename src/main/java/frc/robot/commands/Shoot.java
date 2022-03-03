@@ -15,17 +15,12 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 import frc.robot.Constants.Preset;
 
-enum Stage {
-  Hold, First, Second
-}
-
 public class Shoot extends CommandBase {
   private final Drivebase drivebase;
   private final Superstructure superstructure;
   private final Shooter shooter;
   private final Vision vision;
-  private Stage stage;
-  private double mainRPM, topRPM, upperIndexer, lowerIndexer, initialDirection;
+  private double initialDirection;
   private ArrayList<Preset> presets = new ArrayList<>();
   private Preset preset;
 
@@ -38,6 +33,7 @@ public class Shoot extends CommandBase {
     presets.add(new Preset(300, 2800, 0));
     presets.add(new Preset(400, 3000, 5));
     presets.add(new Preset(1000, 3200, 8));
+    presets.add(new Preset(2500, 2000, 12));
     presets.add(new Preset(3500, 1200, 15));
 
     addRequirements(drivebase, superstructure, shooter, vision);
@@ -45,7 +41,6 @@ public class Shoot extends CommandBase {
 
   @Override
   public void initialize() {
-    stage = Stage.Hold;
     preset = presets.get(0);
     initialDirection = drivebase.getDirection();
     vision.enableLED();
@@ -80,33 +75,17 @@ public class Shoot extends CommandBase {
       drivebase.curvatureDrive(0, 0, false);
     }
 
-    switch (stage) {
-      case Hold:
-        upperIndexer = 0;
-        lowerIndexer = 0;
+    double upperIndexer = 0;
+    double lowerIndexer = 0;
 
-        mainRPM = preset.mainRPM;
-        topRPM = preset.topRPM;
+    if (Math.abs(shooter.getMainRPM() - preset.mainRPM) < preset.mainRPM * 0.05 && isAligned) {
+      upperIndexer = 0.5;
 
-        if (Math.abs(shooter.getMainRPM() - mainRPM) < mainRPM * 0.05 && isAligned) stage = Stage.First;
-
-        break;
-      case First:
-        upperIndexer = 0.5;
-        lowerIndexer = 0;
-
-        if (!superstructure.indexer.hasUpperBall()) stage = Stage.Second;
-
-        break;
-      case Second:
-        upperIndexer = 0.5;
-        lowerIndexer = 1;
-
-        break;
+      if (!superstructure.indexer.hasUpperBall()) lowerIndexer = 1;
     }
 
     superstructure.indexer.setIndexerSpeed(upperIndexer, lowerIndexer);
-    shooter.setShooterRPM(mainRPM, topRPM);
+    shooter.setShooterRPM(preset.mainRPM, preset.topRPM);
   }
 
   @Override
