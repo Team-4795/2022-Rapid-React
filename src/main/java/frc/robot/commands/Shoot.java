@@ -7,8 +7,6 @@ package frc.robot.commands;
 import java.util.ArrayList;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivebase;
@@ -16,10 +14,9 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 import frc.robot.Constants.Preset;
-import frc.robot.sensors.ColorSensor.Color;
 
 enum Stage {
-  Hold, Shoot, Feed
+  Hold, First, Second
 }
 
 public class Shoot extends CommandBase {
@@ -27,7 +24,6 @@ public class Shoot extends CommandBase {
   private final Superstructure superstructure;
   private final Shooter shooter;
   private final Vision vision;
-  private final Alliance alliance = DriverStation.getAlliance();
   private Stage stage;
   private double mainRPM, topRPM, upperIndexer, lowerIndexer, initialDirection;
   private ArrayList<Preset> presets = new ArrayList<>();
@@ -57,7 +53,6 @@ public class Shoot extends CommandBase {
 
   @Override
   public void execute() {
-    Color upperColor = superstructure.indexer.getUpperColor();
     boolean isAligned = true;
 
     if(vision.hasTarget()) {
@@ -92,32 +87,20 @@ public class Shoot extends CommandBase {
 
         mainRPM = preset.mainRPM;
         topRPM = preset.topRPM;
-    
-        if (upperColor == Color.Red && alliance == Alliance.Blue) {
-          mainRPM = 1000;
-          topRPM = 1000;
-        }
-    
-        if (upperColor == Color.Blue && alliance == Alliance.Red) {
-          mainRPM = 1000;
-          topRPM = 1000;
-        }
 
-        if (Math.abs(shooter.getMainRPM() - mainRPM) < mainRPM * 0.05 && isAligned) stage = Stage.Shoot;
+        if (Math.abs(shooter.getMainRPM() - mainRPM) < mainRPM * 0.05 && isAligned) stage = Stage.First;
 
         break;
-      case Shoot:
+      case First:
         upperIndexer = 0.5;
         lowerIndexer = 0;
 
-        if (upperColor == Color.Other) stage = Stage.Feed;
+        if (!superstructure.indexer.hasUpperBall()) stage = Stage.Second;
 
         break;
-      case Feed:
-        upperIndexer = 0.25;
+      case Second:
+        upperIndexer = 0.5;
         lowerIndexer = 1;
-
-        if (upperColor != Color.Other) stage = Stage.Hold;
 
         break;
     }

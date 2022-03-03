@@ -41,15 +41,15 @@ public class Indexer extends SubsystemBase {
     lowerMotor.set(lowerSpeed);
   }
 
-  public Color getUpperColor() {
+  public Color getLowerColor() {
     return colorSensor.getColor();
   }
 
   public boolean hasUpperBall() {
-    return colorSensor.getProximity() > 500;
+    return breakBeam.isBroken();
   }
 
   public boolean hasLowerBall() {
-    return breakBeam.isBroken();
+    return colorSensor.getProximity() > 500;
   }
 }
