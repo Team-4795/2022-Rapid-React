@@ -69,12 +69,12 @@ public class Shoot extends CommandBase {
 
       turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.25, 0.25);
 
-      driveSpeed = MathUtil.clamp((distance - preset.distance) / 10.0, -0.25, 0.25);
+      driveSpeed = MathUtil.clamp((distance - preset.distance) / 5.0, -0.35, 0.35);
       driveSpeed = Math.copySign(Math.max(Math.abs(driveSpeed), 0.15), driveSpeed);
 
-      // if (Math.abs(angle) > 2 || Math.abs(distance - preset.distance) > 0.25) isAligned = false;
+      if (Math.abs(angle) > 2 || Math.abs(distance - preset.distance) > 0.25) isAligned = false;
 
-      // drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.25 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.25);
+      drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.25 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.25);
     } else {
       drivebase.curvatureDrive(0, 0, false);
     }
