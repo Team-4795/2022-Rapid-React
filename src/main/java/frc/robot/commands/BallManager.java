@@ -28,12 +28,7 @@ public class BallManager extends CommandBase {
   public void execute() {
     Color lowerColor = indexer.getLowerColor();
 
-    if ((lowerColor == Color.Red && alliance == Alliance.Blue) || (lowerColor == Color.Blue && alliance == Alliance.Red)) {
-      intake.setSpeed(0);
-      indexer.setIndexerSpeed(0, -1);
-
-      if (intake.isExtended()) intake.toggle();
-    } else if (intake.isExtended()) {
+    if (intake.isExtended()) {
       double intakeSpeed = 1;
       double upperSpeed = 0.25;
       double lowerSpeed = 1;
