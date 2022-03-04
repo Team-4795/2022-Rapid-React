@@ -43,6 +43,8 @@ public final class Constants {
     public static final int ROTATE_IN_PLACE_BUTTON = 6;
     public static final int Xbutton = 40;
     public static final int Ybutton = 60;
+
+    public static final int CLIMBER_JOYSTICK = 0;
   }
 
   public final static class ClimberConstants {

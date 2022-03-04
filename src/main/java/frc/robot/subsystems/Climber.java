@@ -31,48 +31,56 @@ public class Climber extends SubsystemBase {
     climb_motor.setInverted(true);
 
   }
+
+    public void set(double speed) {
+      climb_motor.set(speed);
+    }
+
   public void extend(){
     double extend_rotations_needed = (ClimberConstants.stage_length/(ClimberConstants.spool_diameter*Math.PI))*(ClimberConstants.physical_gear*ClimberConstants.versaplanetary)+ClimberConstants.safety_margin;
     double extension_length = (ClimberConstants.spool_diameter*Math.PI*(m_climb_Encoder.getPosition()/(ClimberConstants.physical_gear * ClimberConstants.versaplanetary)));
 
-    if(m_climb_Encoder.getPosition()<extend_rotations_needed){
-      climb_motor.set(1.0);
+    if(m_climb_Encoder.getPosition()<130 && m_climb_Encoder.getPosition()>=0)
+    {
+      climb_motor.set(0.5);
 
     }else{
       climb_motor.set(0.0);
+    }
 
-    if(ClimberConstants.starting_hook_height+extension_length > ClimberConstants.bar_height){
-      SmartDashboard.putBoolean("Can climb?", true);
-    } else{SmartDashboard.putBoolean("Can climb", false);
-  }
+  //  if(ClimberConstants.starting_hook_height+extension_length > ClimberConstants.bar_height){
+  //    SmartDashboard.putBoolean("Can climb?", true);
+  //  } else{SmartDashboard.putBoolean("Can climb", false);
+  
     }
 
 
-  }
+  
   public void retract(){
     double retract_rotations_needed = (ClimberConstants.stage_length/(ClimberConstants.spool_diameter*Math.PI))*(ClimberConstants.physical_gear*ClimberConstants.versaplanetary)-ClimberConstants.safety_margin;
 
-    if(m_climb_Encoder.getPosition()>retract_rotations_needed && limitSwitch.get()==false ) {
-      climb_motor.set(-1.0);
+   // if(m_climb_Encoder.getPosition()>retract_rotations_needed && limitSwitch.get()==false ) {
+   //   climb_motor.set(-1.0);
 
-    } else {
-      climb_motor.set(0.0);
+  //  } else {
+  //    climb_motor.set(0.0);
+  if (m_climb_Encoder.getPosition()>5 && m_climb_Encoder.getPosition()<= 140)
 
+  {
+    climb_motor.set(-0.5);
+
+  }else{
+    climb_motor.set(0.0);
 
     }
   
   }
 
-    
-
-
-
-
-
-  
-
+   
   @Override
-  public void periodic() { 
+  public void periodic() {
+    SmartDashboard.putNumber("Climber Rotations",m_climb_Encoder.getPosition());
+
     // This method will be called once per scheduler run
   }
 }

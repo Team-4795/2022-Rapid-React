@@ -39,6 +39,8 @@ public class RobotContainer {
     );
     //PDP.clearStickyFaults();
 
+    climber.setDefaultCommand(new InstantCommand(() -> climber.set(controller.getRawAxis(ControllerConstants.CLIMBER_JOYSTICK))));
+
     configureButtonBindings();
 
   }
