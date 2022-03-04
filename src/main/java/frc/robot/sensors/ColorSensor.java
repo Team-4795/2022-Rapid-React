@@ -27,7 +27,7 @@ public class ColorSensor {
 
     var detectedColor = colorSensor.getColor();
 
-    if (getProximity() < 300) {
+    if (getProximity() < 150) {
       ballColor = Color.Other;
     } else if (detectedColor.blue > detectedColor.red) {
       ballColor = Color.Blue;
@@ -35,7 +35,7 @@ public class ColorSensor {
       ballColor = Color.Red;
     }
 
-    SmartDashboard.putString("Detected Color: ", ballColor == Color.Red ? "red" : "blue");
+    SmartDashboard.putString("Detected Color: ", ballColor == Color.Red ? "red" : (ballColor == Color.Blue ? "blue" : "other"));
 
     return ballColor;
   }
