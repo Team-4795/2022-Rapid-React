@@ -4,10 +4,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.BallManager;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TrajectorySequence;
 import frc.robot.subsystems.Drivebase;
@@ -51,8 +53,11 @@ public class AutoSelector {
 
     chooser.addOption("Forwards Backwards", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/TwoBallPart1.wpilib.json", "paths/TwoBallPart1.wpilib.json"),
-      new Shoot(drivebase, superstructure, shooter, vision)));
+      new ParallelRaceGroup(
+        new BallManager(superstructure),
+        new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json")),
+      new Shoot(drivebase, superstructure, shooter, vision))
+    );
 
     chooser.addOption("Backup", new ParallelRaceGroup(
       new RunCommand(() -> drivebase.curvatureDrive(-0.35, 0, false), drivebase),

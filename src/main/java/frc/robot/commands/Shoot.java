@@ -70,7 +70,7 @@ public class Shoot extends CommandBase {
       driveSpeed = MathUtil.clamp((distance - preset.distance) / 5.0, -0.35, 0.35);
       driveSpeed = Math.copySign(Math.max(Math.abs(driveSpeed), 0.15), driveSpeed);
 
-      // if (Math.abs(angle) > 2 || Math.abs(distance - preset.distance) > 0.25) isAligned = false;
+      if (Math.abs(angle) > 2 || Math.abs(distance - preset.distance) > 0.25) isAligned = false;
 
       drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.25 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.25);
     } else {
