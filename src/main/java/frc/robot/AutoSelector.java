@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -21,35 +20,53 @@ public class AutoSelector {
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   public AutoSelector(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision) {
-    chooser.setDefaultOption("Blue Hanger 2", new SequentialCommandGroup(
+    // chooser.setDefaultOption("Blue Hanger 2", new SequentialCommandGroup(
+    //   new InstantCommand(superstructure.intake::toggle),
+    //   new ParallelRaceGroup(
+    //     new TrajectorySequence(drivebase, "paths/BlueHanger2.wpilib.json"),
+    //     new BallManager(superstructure)
+    //   ),
+    //   new Shoot(drivebase, superstructure, shooter, vision)
+    //   ));
+    // chooser.addOption("Blue Terminal 2", new SequentialCommandGroup(
+    //   new InstantCommand(superstructure.intake::toggle),
+    //   new ParallelRaceGroup(
+    //     new TrajectorySequence(drivebase, "paths/BlueTerminal2.wpilib.json"),
+    //     new BallManager(superstructure)
+    //   ),
+    //   new Shoot(drivebase, superstructure, shooter, vision)
+    //   ));
+    chooser.addOption("3 Ball", new SequentialCommandGroup(
+      new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(2)),
       new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/BlueHanger2.wpilib.json"),
-      new Shoot(drivebase, superstructure, shooter, vision)
-      ));
-    chooser.addOption("Blue Terminal 2", new SequentialCommandGroup(
-      new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/BlueTerminal2.wpilib.json"),
-      new Shoot(drivebase, superstructure, shooter, vision)
-      ));
-    chooser.addOption("Blue Terminal 3", new SequentialCommandGroup(
-      new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(3)),
-      new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/BlueTerminal3.wpilib.json"),
+      new ParallelRaceGroup(
+        new TrajectorySequence(drivebase, "paths/3BallAuto.wpilib.json"),
+        new BallManager(superstructure)
+      ),
       new Shoot(drivebase, superstructure, shooter, vision)));
 
-    chooser.addOption("Red Hanger 2", new SequentialCommandGroup(
-      new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/RedHanger2.wpilib.json"),
-      new Shoot(drivebase, superstructure, shooter, vision)));
-    chooser.addOption("Red Terminal 2", new SequentialCommandGroup(
-      new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/RedTerminal2.wpilib.json"),
-      new Shoot(drivebase, superstructure, shooter, vision)));
-    chooser.addOption("Red Terminal 3", new SequentialCommandGroup(
-      new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(3)),
-      new InstantCommand(superstructure.intake::toggle),
-      new TrajectorySequence(drivebase, "paths/RedTerminal3.wpilib.json"),
-      new Shoot(drivebase, superstructure, shooter, vision)));
+    // chooser.addOption("Red Hanger 2", new SequentialCommandGroup(
+    //   new InstantCommand(superstructure.intake::toggle),
+    //   new ParallelRaceGroup(
+    //     new TrajectorySequence(drivebase, "paths/RedHanger2.wpilib.json"),
+    //     new BallManager(superstructure)
+    //     ),
+    //   new Shoot(drivebase, superstructure, shooter, vision)));
+    // chooser.addOption("Red Terminal 2", new SequentialCommandGroup(
+    //   new InstantCommand(superstructure.intake::toggle),
+    //   new ParallelRaceGroup(
+    //     new TrajectorySequence(drivebase, "paths/RedTerminal2.wpilib.json"),
+    //     new BallManager(superstructure)
+    //   ),
+    //   new Shoot(drivebase, superstructure, shooter, vision)));
+    // chooser.addOption("Red Terminal 3", new SequentialCommandGroup(
+    //   new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(3)),
+    //   new InstantCommand(superstructure.intake::toggle),
+    //   new ParallelRaceGroup(
+      //   new TrajectorySequence(drivebase, "paths/RedTerminal3.wpilib.json"),
+      //   new BallManager(superstructure)
+      // ),
+      // new Shoot(drivebase, superstructure, shooter, vision)));
 
     chooser.addOption("Forwards Backwards", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::toggle),

@@ -83,7 +83,7 @@ public class Shoot extends CommandBase {
     if (Math.abs(shooter.getMainRPM() - preset.mainRPM) < preset.mainRPM * 0.05 && isAligned) {
       upperIndexer = 0.5;
 
-      if (!superstructure.indexer.hasUpperBall()) lowerIndexer = 1;
+      lowerIndexer = 1;
     }
 
     superstructure.indexer.setIndexerSpeed(upperIndexer, lowerIndexer);
