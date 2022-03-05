@@ -51,7 +51,7 @@ public final class Constants {
   }
 
   public static final class ClimberConstants {
-    public static final int climb_motor = 12;
+    public static final int climb_motor = 11;
     public static final double spool_diameter = 1.375;
     public static final double stage_length = 27.5;
     public static final double safety_margin = 2;
