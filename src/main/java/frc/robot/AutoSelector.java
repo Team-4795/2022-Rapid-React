@@ -50,7 +50,6 @@ public class AutoSelector {
       new Shoot(drivebase, superstructure, shooter, vision)));
 
     chooser.addOption("Forwards Backwards", new SequentialCommandGroup(
-      new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(3)),
       new InstantCommand(superstructure.intake::toggle),
       new TrajectorySequence(drivebase, "paths/TwoBallPart1.wpilib.json", "paths/TwoBallPart1.wpilib.json"),
       new Shoot(drivebase, superstructure, shooter, vision)));
