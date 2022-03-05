@@ -71,10 +71,10 @@ public class RobotContainer {
     });
     climbButton.whenPressed(climber::toggle);
     lowGoalButton.whileHeld(new ParallelCommandGroup(
-      new RunCommand(() -> shooter.setShooterPower(0.3, 0.3), shooter),
+      new RunCommand(() -> shooter.setShooterPower(0.2, 0.15), shooter),
       new SequentialCommandGroup(
         new WaitCommand(2),
-        new RunCommand(() -> superstructure.indexer.setIndexerSpeed(0.5, 1), superstructure)
+        new RunCommand(() -> superstructure.indexer.setIndexerSpeed(0.75, 1), superstructure)
       )
     ));
     unjamButton.whileHeld(new RunCommand(() -> {

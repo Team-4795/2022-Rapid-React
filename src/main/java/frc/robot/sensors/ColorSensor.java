@@ -27,7 +27,7 @@ public class ColorSensor {
 
     var detectedColor = colorSensor.getColor();
 
-    if (getProximity() < 150) {
+    if (getProximity() < 200) {
       ballColor = Color.Other;
     } else if (detectedColor.blue > detectedColor.red) {
       ballColor = Color.Blue;

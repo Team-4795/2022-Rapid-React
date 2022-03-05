@@ -34,7 +34,7 @@ public class BallManager extends CommandBase {
 
       if (intake.isExtended()) intake.toggle();
     } else if (intake.isExtended()) {
-      double intakeSpeed = 1;
+      double intakeSpeed = 0.75;
       double upperSpeed = 0.25;
       double lowerSpeed = 1;
 

@@ -18,7 +18,7 @@ public final class Constants {
     public static final int LEFT_DRIVE_GROUP_CURRENT_LIMIT = 60;
     public static final int RIGHT_DRIVE_GROUP_CURRENT_LIMIT = 60;
 
-    public static final IdleMode IDLE_MODE = IdleMode.kCoast;
+    public static final IdleMode IDLE_MODE = IdleMode.kBrake;
 
     public static final double GEARING = 10.0;
     public static final double kTrackwidthMeters = 0.63;
@@ -36,7 +36,7 @@ public final class Constants {
     public static final int LEFT_MOTOR = 12;
     public static final int RIGHT_MOTOR = 13;
 
-    public static final int FORWARD_CHANNEL = 14;
+    public static final int FORWARD_CHANNEL = 0;
     public static final int REVERSE_CHANNEL = 1;
   }
   
