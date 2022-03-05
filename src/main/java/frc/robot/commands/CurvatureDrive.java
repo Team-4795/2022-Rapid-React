@@ -36,6 +36,7 @@ public class CurvatureDrive extends CommandBase {
 
   @Override
   public void initialize() {
+    drivebase.disableBrakeMode();
     lastAcceleration = 0;
     lastUpdate = System.currentTimeMillis();
   }

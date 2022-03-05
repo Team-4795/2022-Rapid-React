@@ -6,8 +6,6 @@ package frc.robot.commands;
 
 import java.util.ArrayList;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -43,7 +41,7 @@ public class Shoot extends CommandBase {
 
   @Override
   public void initialize() {
-    drivebase.setIdleMode(IdleMode.kBrake);
+    drivebase.enableBrakeMode();
     preset = presets.get(0);
     initialDirection = drivebase.getDirection();
     vision.enableLED();
@@ -95,7 +93,6 @@ public class Shoot extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drivebase.setDirection(initialDirection);
-    drivebase.setIdleMode(IdleMode.kCoast);
   }
 
   @Override
