@@ -71,13 +71,13 @@ public class Climber extends SubsystemBase {
    
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Climber Rotations", m_climb_Encoder.getPosition());
-    SmartDashboard.putBoolean("Climber extended", extended);
+    // SmartDashboard.putNumber("Climber Rotations", m_climb_Encoder.getPosition());
+    // SmartDashboard.putBoolean("Climber extended", extended);
 
-    if (extended) {
-      extend();
-    } else {
-      retract();
-    }
+    // if (extended) {
+    //   extend();
+    // } else {
+    //   retract();
+    // }
   }
 }
