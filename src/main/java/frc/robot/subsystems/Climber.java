@@ -16,13 +16,11 @@ import com.revrobotics.RelativeEncoder;
 import java.lang.Math;
 
 
-
 public class Climber extends SubsystemBase {
 
   private CANSparkMax climb_motor = new CANSparkMax(ClimberConstants.climb_motor, MotorType.kBrushless);
   private RelativeEncoder m_climb_Encoder;
   private DigitalInput limitSwitch = new DigitalInput(ClimberConstants.hall_effect_port);
-  
 
   public Climber() {
     climb_motor.restoreFactoryDefaults();
@@ -35,6 +33,9 @@ public class Climber extends SubsystemBase {
     public void set(double speed) {
       climb_motor.set(speed);
     }
+
+    public boolean getLimitSwitchState() {
+      return limitSwitch.get();}
 
   public void extend(){
     double extend_rotations_needed = (ClimberConstants.stage_length/(ClimberConstants.spool_diameter*Math.PI))*(ClimberConstants.physical_gear*ClimberConstants.versaplanetary)+ClimberConstants.safety_margin;
@@ -65,13 +66,15 @@ public class Climber extends SubsystemBase {
   //  } else {
   //    climb_motor.set(0.0);
   if (m_climb_Encoder.getPosition()>5 && m_climb_Encoder.getPosition()<= 140)
-
   {
-    climb_motor.set(-0.5);
+    if (getLimitSwitchState()==true){
+      climb_motor.set(0.0);
+    }else{
+      climb_motor.set(-0.5);
+    }
 
   }else{
     climb_motor.set(0.0);
-
     }
   
   }
