@@ -50,10 +50,10 @@ public class Drivebase extends SubsystemBase {
     leftFollower.follow(leftLeader);
     rightFollower.follow(rightLeader);
 
-    leftLeader.setIdleMode(DrivebaseConstants.IDLE_MODE);
-    leftFollower.setIdleMode(DrivebaseConstants.IDLE_MODE);
-    rightLeader.setIdleMode(DrivebaseConstants.IDLE_MODE);
-    rightFollower.setIdleMode(DrivebaseConstants.IDLE_MODE);
+    leftLeader.setIdleMode(IdleMode.kBrake);
+    leftFollower.setIdleMode(IdleMode.kBrake);
+    rightLeader.setIdleMode(IdleMode.kBrake);
+    rightFollower.setIdleMode(IdleMode.kBrake);
 
     leftLeader.setInverted(true);
     leftFollower.setInverted(true);
@@ -80,11 +80,18 @@ public class Drivebase extends SubsystemBase {
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
   }
 
-  public void setIdleMode(IdleMode mode) {
-    leftLeader.setIdleMode(mode);
-    leftFollower.setIdleMode(mode);
-    rightLeader.setIdleMode(mode);
-    rightFollower.setIdleMode(mode);
+  public void enableBrakeMode() {
+    leftLeader.setIdleMode(IdleMode.kBrake);
+    leftFollower.setIdleMode(IdleMode.kBrake);
+    rightLeader.setIdleMode(IdleMode.kBrake);
+    rightFollower.setIdleMode(IdleMode.kBrake);
+  }
+
+  public void disableBrakeMode() {
+    leftLeader.setIdleMode(IdleMode.kCoast);
+    leftFollower.setIdleMode(IdleMode.kCoast);
+    rightLeader.setIdleMode(IdleMode.kCoast);
+    rightFollower.setIdleMode(IdleMode.kCoast);
   }
 
   public void curvatureDrive(double speed, double rotation, boolean quickTurn) {

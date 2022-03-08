@@ -6,8 +6,6 @@ package frc.robot.commands;
 
 import java.util.ArrayList;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -32,18 +30,18 @@ public class Shoot extends CommandBase {
     this.shooter = shooter;
     this.vision = vision;
 
-    presets.add(new Preset(300, 2800, 0));
+    presets.add(new Preset(300, 2500, 0));
     presets.add(new Preset(400, 3000, 5));
     presets.add(new Preset(1000, 3200, 8));
-    presets.add(new Preset(3500, 1200, 12));
-    presets.add(new Preset(4000, 1200, 15));
+    presets.add(new Preset(3100, 1200, 12));
+    presets.add(new Preset(3300, 1200, 13.5));
 
     addRequirements(drivebase, superstructure, shooter, vision);
   }
 
   @Override
   public void initialize() {
-    drivebase.setIdleMode(IdleMode.kBrake);
+    drivebase.enableBrakeMode();
     preset = presets.get(0);
     initialDirection = drivebase.getDirection();
     vision.enableLED();
@@ -79,13 +77,16 @@ public class Shoot extends CommandBase {
       drivebase.curvatureDrive(0, 0, false);
     }
 
+    // preset.topRPM = SmartDashboard.getNumber("top target", 500);
+    // preset.mainRPM = SmartDashboard.getNumber("main target", 1500);
+
     double upperIndexer = 0;
     double lowerIndexer = 0;
 
-    if (Math.abs(shooter.getMainRPM() - preset.mainRPM) < preset.mainRPM * 0.05 && isAligned && Math.abs(shooter.getTopRPM() - preset.topRPM) < preset.topRPM * 0.05) {
+    if (Math.abs(shooter.getMainRPM() - preset.mainRPM) < Math.abs(preset.mainRPM) * 0.05 && isAligned && (Math.abs(preset.topRPM) > 500 ? Math.abs(shooter.getTopRPM() - preset.topRPM) < Math.abs(preset.topRPM) * 0.05 : true)) {
       upperIndexer = 0.5;
 
-      if (!superstructure.indexer.hasUpperBall()) lowerIndexer = 1;
+      lowerIndexer = 1;
     }
 
     superstructure.indexer.setIndexerSpeed(upperIndexer, lowerIndexer);
@@ -95,7 +96,6 @@ public class Shoot extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drivebase.setDirection(initialDirection);
-    drivebase.setIdleMode(IdleMode.kCoast);
   }
 
   @Override

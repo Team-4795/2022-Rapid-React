@@ -38,6 +38,8 @@ public class BallManager extends CommandBase {
       double upperSpeed = 0.25;
       double lowerSpeed = 1;
 
+      // if (indexer.hasLowerBall()) upperSpeed = 0.25;
+
       if (indexer.hasUpperBall()) {
         upperSpeed = 0;
 

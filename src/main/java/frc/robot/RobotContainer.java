@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CurvatureDrive;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.BallManager;
@@ -49,7 +50,10 @@ public class RobotContainer {
     ));
     superstructure.setDefaultCommand(new BallManager(superstructure));
     shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterPower(0, 0), shooter));
+    climber.setDefaultCommand(new RunCommand(() -> climber.setPower(0), climber));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
+    SmartDashboard.putNumber("top target", 500);
+    SmartDashboard.putNumber("main target", 1500);
 
     configureButtonBindings();
   }
@@ -58,10 +62,13 @@ public class RobotContainer {
     final JoystickButton reverseButton = new JoystickButton(driverController, Controller.Button.kRightBumper.value);
     final JoystickButton shootButton = new JoystickButton(driverController, Controller.Button.kA.value);
     final JoystickButton intakeButton = new JoystickButton(driverController, Controller.Button.kB.value);
-    final JoystickButton intakeOverride = new JoystickButton(operatorController, Controller.Button.kB.value);
     final JoystickButton climbButton = new JoystickButton(driverController, Controller.Button.kX.value);
     final JoystickButton lowGoalButton = new JoystickButton(driverController, Controller.Button.kY.value);
+
     final JoystickButton unjamButton = new JoystickButton(operatorController, Controller.Button.kA.value);
+    final JoystickButton retractClimber = new JoystickButton(operatorController, Controller.Button.kY.value);
+    final JoystickButton resetClimber = new JoystickButton(operatorController, Controller.Button.kX.value);
+    final JoystickButton intakeOverride = new JoystickButton(operatorController, Controller.Button.kB.value);
 
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
@@ -71,16 +78,18 @@ public class RobotContainer {
     });
     climbButton.whenPressed(climber::toggle);
     lowGoalButton.whileHeld(new ParallelCommandGroup(
-      new RunCommand(() -> shooter.setShooterPower(0.2, 0.15), shooter),
+      new RunCommand(() -> shooter.setShooterRPM(750, 1500), shooter),
       new SequentialCommandGroup(
-        new WaitCommand(2),
-        new RunCommand(() -> superstructure.indexer.setIndexerSpeed(0.75, 1), superstructure)
+        new WaitCommand(1.5),
+        new RunCommand(() -> superstructure.indexer.setIndexerSpeed(0.5, 1), superstructure)
       )
     ));
     unjamButton.whileHeld(new RunCommand(() -> {
       superstructure.indexer.setIndexerSpeed(-0.3, -0.3);
       shooter.setShooterPower(-0.3, 0);
     }, superstructure, shooter));
+    retractClimber.whileHeld(new RunCommand(() -> climber.setPower(-0.2), climber));
+    resetClimber.whenPressed(climber::resetEncoder);
   }
 
   public Command getAutonomousCommand() {
