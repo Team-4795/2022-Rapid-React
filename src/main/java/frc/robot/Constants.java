@@ -51,15 +51,7 @@ public final class Constants {
   }
 
   public static final class ClimberConstants {
-    public static final int climb_motor = 11;
-    public static final double spool_diameter = 1.375;
-    public static final double stage_length = 27.5;
-    public static final double safety_margin = 2;
-    public static final int hall_effect_port = 0;
-    public static final double physical_gear = 46/16;
-    public static final double versaplanetary = 7;
-    public static final double starting_hook_height = 35.125;
-    public static final double bar_height = 60.25;
+    public static final int CLIMB_MOTOR = 11;
   }
  
   public static final class VisionConstants {

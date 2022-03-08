@@ -34,14 +34,6 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Current", PD.getTotalCurrent());
     SmartDashboard.putNumber("Voltage", PD.getTotalPower());
-    SmartDashboard.putNumber("Right Drivebase Current", PD.getCurrent(0));
-    SmartDashboard.putNumber("Left Drivebase Current", PD.getCurrent(18));
-    SmartDashboard.putNumber("Right Intake Current", PD.getCurrent(5));
-    SmartDashboard.putNumber("Left Intake Current", PD.getCurrent(17));
-    SmartDashboard.putNumber("Tower Upper Current", PD.getCurrent(2));
-    SmartDashboard.putNumber("Tower Lower Current", PD.getCurrent(3));
-    SmartDashboard.putNumber("Shooter Main Current", PD.getCurrent(4));
-    SmartDashboard.putNumber("Shooter Top Current", PD.getCurrent(15));
   }
 
   @Override
