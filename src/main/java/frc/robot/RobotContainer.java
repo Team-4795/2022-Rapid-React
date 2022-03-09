@@ -46,7 +46,7 @@ public class RobotContainer {
     ));
     superstructure.setDefaultCommand(new BallManager(superstructure));
     shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterPower(0, 0), shooter));
-    climber.setDefaultCommand(new RunCommand(() -> climber.setPower(0), climber));
+    // climber.setDefaultCommand(new RunCommand(() -> climber.setPower(0), climber));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
 
     configureButtonBindings();

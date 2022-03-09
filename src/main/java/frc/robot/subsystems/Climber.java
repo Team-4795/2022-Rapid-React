@@ -37,7 +37,7 @@ public class Climber extends SubsystemBase {
   }
 
   public void extend() {
-    if (m_climb_Encoder.getPosition() < 130 && m_climb_Encoder.getPosition() >= 0) {
+    if (m_climb_Encoder.getPosition() < 100 && m_climb_Encoder.getPosition() >= 0) {
       climb_motor.set(0.5);
     } else {
       climb_motor.set(0.0);
@@ -45,7 +45,7 @@ public class Climber extends SubsystemBase {
   }
   
   public void retract() {
-    if (m_climb_Encoder.getPosition() > 3.5 && m_climb_Encoder.getPosition() <= 140) {
+    if (m_climb_Encoder.getPosition() > 10 && m_climb_Encoder.getPosition() <= 110) {
       climb_motor.set(-0.5);
     } else {
       climb_motor.set(0.0);
