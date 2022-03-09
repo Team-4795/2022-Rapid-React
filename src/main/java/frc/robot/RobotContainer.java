@@ -65,7 +65,7 @@ public class RobotContainer {
 
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
-    intakeButton.whenPressed(superstructure.intake::toggle);
+    // intakeButton.whenPressed(superstructure.intake::toggle);
     climbButton.whenPressed(climber::toggle);
 
     unjamButton.whileHeld(new RunCommand(() -> {
@@ -73,7 +73,7 @@ public class RobotContainer {
       shooter.setShooterPower(-0.3, 0);
     }, superstructure, shooter));
     intakeOverride.whenPressed(() -> {
-      if (superstructure.intake.isExtended()) superstructure.intake.toggle();
+     superstructure.intake.toggle();
     });
     resetClimber.whenPressed(climber::resetEncoder);
     retractClimber.whileHeld(new RunCommand(() -> climber.setPower(-0.2), climber));
