@@ -77,8 +77,8 @@ public class Shoot extends CommandBase {
       drivebase.curvatureDrive(0, 0, false);
     }
 
-    // preset.topRPM = SmartDashboard.getNumber("top target", 500);
-    // preset.mainRPM = SmartDashboard.getNumber("main target", 1500);
+    preset.topRPM = 750;
+    preset.mainRPM = 1500;
 
     double upperIndexer = 0;
     double lowerIndexer = 0;
