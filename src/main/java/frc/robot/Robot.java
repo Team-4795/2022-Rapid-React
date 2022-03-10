@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     SmartDashboard.putNumber("Current", PD.getTotalCurrent());
-    SmartDashboard.putNumber("Voltage", PD.getTotalPower());
+    SmartDashboard.putNumber("Voltage", PD.getVoltage());
   }
 
   @Override
