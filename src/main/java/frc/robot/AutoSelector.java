@@ -24,7 +24,7 @@ public class AutoSelector {
       new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(2)),
       new InstantCommand(superstructure.intake::toggle),
       new ParallelRaceGroup(
-        new TrajectorySequence(drivebase, "paths/3BallAuto.wpilib.json"),
+        new TrajectorySequence(drivebase, "paths/3BallAuto_V2.wpilib.json"),
         new BallManager(superstructure)
       ),
       new Shoot(drivebase, superstructure, shooter, vision))
