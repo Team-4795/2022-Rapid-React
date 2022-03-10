@@ -37,7 +37,7 @@ public class BallManager extends CommandBase {
 
     if (System.currentTimeMillis() - lastIncorrect < 1000) {
       intake.setSpeed(0);
-      indexer.setIndexerSpeed(-0.25, -1);
+      indexer.setIndexerSpeed(0, -1);
 
       if (intake.isExtended()) intake.toggle();
     } else if ((lowerColor == Color.Red && alliance == Alliance.Blue) || (lowerColor == Color.Blue && alliance == Alliance.Red)) {
