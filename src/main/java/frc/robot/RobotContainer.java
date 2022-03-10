@@ -46,7 +46,6 @@ public class RobotContainer {
     ));
     superstructure.setDefaultCommand(new BallManager(superstructure));
     shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterPower(0, 0), shooter));
-    // climber.setDefaultCommand(new RunCommand(() -> climber.setPower(0), climber));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
 
     configureButtonBindings();
@@ -65,16 +64,14 @@ public class RobotContainer {
 
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
-    // intakeButton.whenPressed(superstructure.intake::toggle);
+    intakeButton.whenPressed(superstructure.intake::toggle);
     climbButton.whenPressed(climber::toggle);
 
     unjamButton.whileHeld(new RunCommand(() -> {
       superstructure.indexer.setIndexerSpeed(-0.3, -0.3);
       shooter.setShooterPower(-0.3, 0);
     }, superstructure, shooter));
-    intakeOverride.whenPressed(() -> {
-     superstructure.intake.toggle();
-    });
+    intakeOverride.whenPressed(superstructure.intake::toggle);
     resetClimber.whenPressed(climber::resetEncoder);
     retractClimber.whileHeld(new RunCommand(() -> climber.setPower(-0.2), climber));
   }
