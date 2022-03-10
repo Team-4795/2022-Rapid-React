@@ -23,19 +23,23 @@ public class ColorSensor {
   public Color getColor() {
     Color ballColor = Color.Other;
 
-    if (getProximity() == 0) colorSensor = new ColorSensorV3(I2C.Port.kMXP);
+    try {
+      if (getProximity() == 0) colorSensor = new ColorSensorV3(I2C.Port.kMXP);
 
-    var detectedColor = colorSensor.getColor();
+      var detectedColor = colorSensor.getColor();
 
-    if (getProximity() < 200) {
-      ballColor = Color.Other;
-    } else if (detectedColor.blue > detectedColor.red) {
-      ballColor = Color.Blue;
-    } else if (detectedColor.red > detectedColor.blue) {
-      ballColor = Color.Red;
+      if (getProximity() < 200) {
+        ballColor = Color.Other;
+      } else if (detectedColor.blue > detectedColor.red) {
+        ballColor = Color.Blue;
+      } else if (detectedColor.red > detectedColor.blue) {
+        ballColor = Color.Red;
+      }
+
+      SmartDashboard.putString("Detected Color: ", ballColor == Color.Red ? "red" : (ballColor == Color.Blue ? "blue" : "other"));
+    } catch (Exception e) {
+      SmartDashboard.putString("Detected Color: ", "error");
     }
-
-    SmartDashboard.putString("Detected Color: ", ballColor == Color.Red ? "red" : (ballColor == Color.Blue ? "blue" : "other"));
 
     return ballColor;
   }

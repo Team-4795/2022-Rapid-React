@@ -15,7 +15,8 @@ import frc.robot.sensors.ColorSensor.Color;
 public class BallManager extends CommandBase {
   private final Intake intake;
   private final Indexer indexer;
-  private final Alliance alliance = DriverStation.getAlliance();
+  private Alliance alliance;
+  private long lastIncorrect;
 
   public BallManager(Superstructure superstructure) {
     this.intake = superstructure.intake;
@@ -25,20 +26,26 @@ public class BallManager extends CommandBase {
   }
 
   @Override
+  public void initialize() {
+    alliance = DriverStation.getAlliance();
+    lastIncorrect = 0;
+  }
+
+  @Override
   public void execute() {
     Color lowerColor = indexer.getLowerColor();
 
-    if ((lowerColor == Color.Red && alliance == Alliance.Blue) || (lowerColor == Color.Blue && alliance == Alliance.Red)) {
+    if (System.currentTimeMillis() - lastIncorrect < 1000) {
       intake.setSpeed(0);
       indexer.setIndexerSpeed(-0.25, -1);
 
       if (intake.isExtended()) intake.toggle();
+    } else if ((lowerColor == Color.Red && alliance == Alliance.Blue) || (lowerColor == Color.Blue && alliance == Alliance.Red)) {
+      lastIncorrect = System.currentTimeMillis();
     } else if (intake.isExtended()) {
       double intakeSpeed = 0.75;
       double upperSpeed = 0.25;
       double lowerSpeed = 1;
-
-      // if (indexer.hasLowerBall()) upperSpeed = 0.25;
 
       if (indexer.hasUpperBall()) {
         upperSpeed = 0;
