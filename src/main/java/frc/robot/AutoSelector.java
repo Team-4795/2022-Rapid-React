@@ -20,7 +20,21 @@ public class AutoSelector {
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   public AutoSelector(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision) {
-    chooser.setDefaultOption("3 Ball", new SequentialCommandGroup(
+    chooser.setDefaultOption("3 Ball (2-1)", new SequentialCommandGroup(
+      new InstantCommand(superstructure.intake::toggle),
+      new ParallelRaceGroup(
+        new TrajectorySequence(drivebase, "paths/3Ball-2-1_1.wpilib.json"),
+        new BallManager(superstructure)
+      ),
+      new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(3)),
+      new ParallelRaceGroup(
+        new TrajectorySequence(drivebase, "paths/3Ball-2-1_2.wpilib.json"),
+        new BallManager(superstructure)
+      ),
+      new Shoot(drivebase, superstructure, shooter, vision))
+    );
+
+    chooser.addOption("3 Ball (1-2)", new SequentialCommandGroup(
       new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(2)),
       new InstantCommand(superstructure.intake::toggle),
       new ParallelRaceGroup(
@@ -42,12 +56,10 @@ public class AutoSelector {
       new InstantCommand(superstructure.intake::toggle),
       new ParallelRaceGroup(
         new BallManager(superstructure),
-        new ParallelRaceGroup(
-          new RunCommand(() -> drivebase.curvatureDrive(-0.35, 0, false), drivebase),
-          new WaitCommand(3)
-        )
+        new RunCommand(() -> drivebase.curvatureDrive(0.35, 0, false), drivebase),
+        new WaitCommand(3)
       ),
-      new RunCommand(() -> drivebase.curvatureDrive(0, 0, false), drivebase)
+      new Shoot(drivebase, superstructure, shooter, vision)
       )
     );
     
