@@ -23,7 +23,7 @@ public class Shoot extends CommandBase {
   private double initialDirection;
   private ArrayList<Preset> presets = new ArrayList<>();
   private Preset preset;
-  private Preset defaultPreset;
+  private boolean useCV = true;
 
   public Shoot(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision, Preset ... defaultPreset) {
     this.drivebase = drivebase;
@@ -31,9 +31,13 @@ public class Shoot extends CommandBase {
     this.shooter = shooter;
     this.vision = vision;
     
-    for (Preset x : defaultPreset) this.defaultPreset = x;
+    if (defaultPreset.length == 0) {
+      presets.add(new Preset(1500, 750, 0));
+    } else {
+      presets.add(defaultPreset[0]);
+      useCV = false;
+    }
 
-    presets.add(new Preset(1500, 750, 0));
     presets.add(new Preset(400, 3000, 5));
     presets.add(new Preset(1000, 3200, 8));
     presets.add(new Preset(3100, 1200, 12));
@@ -54,7 +58,7 @@ public class Shoot extends CommandBase {
   public void execute() {
     boolean isAligned = true;
 
-    if(vision.hasTarget()) {
+    if(vision.hasTarget() && useCV) {
       double distance = vision.getTargetDistance();
       double angle = vision.getTargetAngle();
       double driveSpeed = 0;

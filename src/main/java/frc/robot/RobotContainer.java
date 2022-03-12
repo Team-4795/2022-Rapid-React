@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.Preset;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivebase;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -56,6 +57,8 @@ public class RobotContainer {
     final JoystickButton reverseButton = new JoystickButton(driverController, Controller.Button.kRightBumper.value);
     final JoystickButton shootButton = new JoystickButton(driverController, Controller.Button.kA.value);
     final JoystickButton intakeButton = new JoystickButton(driverController, Controller.Button.kB.value);
+    final JoystickButton tarmacButton = new JoystickButton(driverController, Controller.Button.kX.value);
+    final JoystickButton lowGoalButton = new JoystickButton(driverController, Controller.Button.kY.value);
 
     final JoystickButton unjamButton = new JoystickButton(operatorController, Controller.Button.kA.value);
     final JoystickButton intakeOverride = new JoystickButton(operatorController, Controller.Button.kB.value);
@@ -66,6 +69,8 @@ public class RobotContainer {
 
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
+    tarmacButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision, new Preset(400, 3000, 5)));
+    lowGoalButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision, new Preset(1500, 750, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
     retractClimber.whileHeld(new RunCommand(climber::retract, climber));
     extendClimber.whileHeld(new RunCommand(climber::extend, climber));

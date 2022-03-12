@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.Preset;
 import frc.robot.commands.BallManager;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TrajectorySequence;
@@ -49,7 +50,7 @@ public class AutoSelector {
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json")),
-      new Shoot(drivebase, superstructure, shooter, vision))
+      new Shoot(drivebase, superstructure, shooter, vision, new Preset(1000, 3200, 8)))
     );
 
     chooser.addOption("Backup", new SequentialCommandGroup(
