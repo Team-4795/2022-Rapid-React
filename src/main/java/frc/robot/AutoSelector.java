@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants.Preset;
 import frc.robot.commands.BallManager;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TrajectorySequence;
@@ -21,7 +20,7 @@ public class AutoSelector {
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   public AutoSelector(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision) {
-    chooser.setDefaultOption("3 Ball (2-1)", new SequentialCommandGroup(
+    chooser.addOption("(2-1) 3 Ball", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::toggle),
       new ParallelRaceGroup(
         new TrajectorySequence(drivebase, "paths/3Ball-2-1_1.wpilib.json"),
@@ -35,7 +34,7 @@ public class AutoSelector {
       new Shoot(drivebase, superstructure, shooter, vision))
     );
 
-    chooser.addOption("3 Ball (1-2)", new SequentialCommandGroup(
+    chooser.addOption("(1-2) 3 Ball", new SequentialCommandGroup(
       new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(2)),
       new InstantCommand(superstructure.intake::toggle),
       new ParallelRaceGroup(
@@ -45,12 +44,12 @@ public class AutoSelector {
       new Shoot(drivebase, superstructure, shooter, vision))
     );
 
-    chooser.addOption("2 Ball", new SequentialCommandGroup(
+    chooser.setDefaultOption("2 Ball", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::toggle),
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json")),
-      new Shoot(drivebase, superstructure, shooter, vision, new Preset(1000, 3200, 8)))
+      new Shoot(drivebase, superstructure, shooter, vision))
     );
 
     chooser.addOption("Backup", new SequentialCommandGroup(
