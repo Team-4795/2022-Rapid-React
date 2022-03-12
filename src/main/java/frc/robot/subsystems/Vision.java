@@ -9,6 +9,7 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.common.hardware.VisionLEDMode;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.VisionConstants;
@@ -57,6 +58,8 @@ public class Vision extends SubsystemBase {
         Units.degreesToRadians(result.getBestTarget().getPitch()))
         );
       targetAngle = result.getBestTarget().getYaw();
+      SmartDashboard.putNumber("distance", targetDistance);
+      SmartDashboard.putNumber("angle", targetAngle);
     } else {
       hasTarget = false;
       targetDistance = -1;

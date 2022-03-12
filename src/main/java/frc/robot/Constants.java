@@ -57,9 +57,9 @@ public final class Constants {
   public static final class VisionConstants {
     public static final String CAMERA_NAME = "LifeCam";
 
-    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(25.5);
-    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(103.5);
-    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(35);
+    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24.5);
+    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(104);
+    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(40);
   }
 
   public static final class ControllerConstants {
