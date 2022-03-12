@@ -9,24 +9,30 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxLimitSwitch;
+
 import frc.robot.Constants.ClimberConstants;
 
 public class Climber extends SubsystemBase {
   private CANSparkMax climb_motor = new CANSparkMax(ClimberConstants.CLIMB_MOTOR, MotorType.kBrushless);
   private RelativeEncoder m_climb_Encoder;
-  private boolean extended = false;
+  // private boolean extended = false;
+  private SparkMaxLimitSwitch limitSwitch;
 
   public Climber() {
     climb_motor.restoreFactoryDefaults();
     climb_motor.setIdleMode(IdleMode.kBrake);
     m_climb_Encoder = climb_motor.getEncoder();
     climb_motor.setInverted(false);
+    limitSwitch = climb_motor.getReverseLimitSwitch(Type.kNormallyOpen);
+    limitSwitch.enableLimitSwitch(true);
   }
 
-  public void toggle() {
-    extended = !extended;
-  }
+  // public void toggle() {
+  //   extended = !extended;
+  // }
 
   public void setPower(double power) {
     climb_motor.set(power);
@@ -45,8 +51,8 @@ public class Climber extends SubsystemBase {
   }
   
   public void retract() {
-    if (m_climb_Encoder.getPosition() > 10 && m_climb_Encoder.getPosition() <= 110) {
-      climb_motor.set(-0.5);
+    if (m_climb_Encoder.getPosition() > 5 && m_climb_Encoder.getPosition() <= 110) {
+      climb_motor.set(-1);
     } else {
       climb_motor.set(0.0);
     }
@@ -55,12 +61,13 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Climber Rotations", m_climb_Encoder.getPosition());
-    SmartDashboard.putBoolean("Climber extended", extended);
+    // SmartDashboard.putBoolean("Climber extended", extended);
+    SmartDashboard.putBoolean("Limit switch", limitSwitch.isPressed());
 
-    if (extended) {
-      extend();
-    } else {
-      retract();
-    }
+    // if (extended) {
+    //   extend();
+    // } else {
+    //   retract();
+    // }
   }
 }

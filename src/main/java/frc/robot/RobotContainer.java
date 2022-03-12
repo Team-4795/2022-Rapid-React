@@ -46,6 +46,7 @@ public class RobotContainer {
     ));
     superstructure.setDefaultCommand(new BallManager(superstructure));
     shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterPower(0, 0), shooter));
+    climber.setDefaultCommand(new RunCommand(() -> climber.setPower(0), climber));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
 
     configureButtonBindings();
@@ -55,17 +56,20 @@ public class RobotContainer {
     final JoystickButton reverseButton = new JoystickButton(driverController, Controller.Button.kRightBumper.value);
     final JoystickButton shootButton = new JoystickButton(driverController, Controller.Button.kA.value);
     final JoystickButton intakeButton = new JoystickButton(driverController, Controller.Button.kB.value);
-    final JoystickButton climbButton = new JoystickButton(driverController, Controller.Button.kX.value);
+    // final JoystickButton climbButton = new JoystickButton(driverController, Controller.Button.kX.value);
 
     final JoystickButton unjamButton = new JoystickButton(operatorController, Controller.Button.kA.value);
     final JoystickButton intakeOverride = new JoystickButton(operatorController, Controller.Button.kB.value);
     final JoystickButton resetClimber = new JoystickButton(operatorController, Controller.Button.kX.value);
-    final JoystickButton retractClimber = new JoystickButton(operatorController, Controller.Button.kY.value);
+    final JoystickButton manualRetract = new JoystickButton(operatorController, Controller.Button.kY.value);
+    final JoystickButton retractClimber = new JoystickButton(operatorController, Controller.Button.kLeftBumper.value);
+    final JoystickButton extendClimber = new JoystickButton(operatorController, Controller.Button.kRightBumper.value);
 
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
     intakeButton.whenPressed(superstructure.intake::toggle);
-    climbButton.whenPressed(climber::toggle);
+    retractClimber.whileHeld(new RunCommand(climber::retract, climber));
+    extendClimber.whileHeld(new RunCommand(climber::extend, climber));
 
     unjamButton.whileHeld(new RunCommand(() -> {
       superstructure.indexer.setIndexerSpeed(-0.3, -0.3);
@@ -73,7 +77,7 @@ public class RobotContainer {
     }, superstructure, shooter));
     intakeOverride.whenPressed(superstructure.intake::toggle);
     resetClimber.whenPressed(climber::resetEncoder);
-    retractClimber.whileHeld(new RunCommand(() -> climber.setPower(-0.2), climber));
+    manualRetract.whileHeld(new RunCommand(() -> climber.setPower(-0.2), climber));
   }
 
   public Command getAutonomousCommand() {
