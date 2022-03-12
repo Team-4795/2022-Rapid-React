@@ -52,6 +52,14 @@ public class AutoSelector {
       new Shoot(drivebase, superstructure, shooter, vision))
     );
 
+    chooser.setDefaultOption("(Field Plot) 2 Ball", new SequentialCommandGroup(
+      new InstantCommand(superstructure.intake::toggle),
+      new ParallelRaceGroup(
+        new BallManager(superstructure),
+        new TrajectorySequence(drivebase, "paths/2Ball.wpilib.json", "paths/2Ball_0.wpilib.json")),
+      new Shoot(drivebase, superstructure, shooter, vision))
+    );
+
     chooser.addOption("Backup", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::toggle),
       new ParallelRaceGroup(

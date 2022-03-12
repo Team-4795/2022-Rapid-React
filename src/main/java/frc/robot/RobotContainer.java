@@ -28,6 +28,8 @@ public class RobotContainer {
   private final Vision vision;
   private final AutoSelector autoSelector;
 
+  private final LED led;
+
   private final Controller driverController = new Controller(ControllerConstants.DRIVER);
   private final Controller operatorController = new Controller(ControllerConstants.OPERATOR);
 
@@ -38,6 +40,7 @@ public class RobotContainer {
     climber = new Climber();
     vision = new Vision();
     autoSelector = new AutoSelector(drivebase, superstructure, shooter, vision);
+    led = new LED();
 
     drivebase.setDefaultCommand(new CurvatureDrive(
       drivebase,
@@ -76,8 +79,9 @@ public class RobotContainer {
     extendClimber.whileHeld(new RunCommand(climber::extend, climber));
 
     unjamButton.whileHeld(new RunCommand(() -> {
-      superstructure.indexer.setIndexerSpeed(-0.3, -0.3);
+      superstructure.indexer.setIndexerSpeed(-0.3, -1);
       shooter.setShooterPower(-0.3, 0);
+      led.setRed();
     }, superstructure, shooter));
     intakeOverride.whenPressed(superstructure.intake::toggle);
     resetClimber.whenPressed(climber::resetEncoder);

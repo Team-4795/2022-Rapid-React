@@ -24,6 +24,7 @@ public class Shoot extends CommandBase {
   private ArrayList<Preset> presets = new ArrayList<>();
   private Preset preset;
   private boolean useCV = true;
+  private long start;
 
   public Shoot(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision, Preset ... defaultPreset) {
     this.drivebase = drivebase;
@@ -39,7 +40,7 @@ public class Shoot extends CommandBase {
     }
 
     presets.add(new Preset(400, 3000, 5));
-    presets.add(new Preset(1000, 3200, 8));
+    presets.add(new Preset(1500, 2000, 8));
     presets.add(new Preset(3100, 1200, 12));
     presets.add(new Preset(3300, 1200, 13.5));
 
@@ -52,13 +53,14 @@ public class Shoot extends CommandBase {
     preset = presets.get(0);
     initialDirection = drivebase.getDirection();
     vision.enableLED();
+    start = System.currentTimeMillis();
   }
 
   @Override
   public void execute() {
     boolean isAligned = true;
 
-    if(vision.hasTarget() && useCV) {
+    if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 4000) {
       double distance = vision.getTargetDistance();
       double angle = vision.getTargetAngle() + 2;
       double driveSpeed = 0;
