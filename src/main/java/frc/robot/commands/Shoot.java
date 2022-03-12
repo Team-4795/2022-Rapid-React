@@ -23,12 +23,15 @@ public class Shoot extends CommandBase {
   private double initialDirection;
   private ArrayList<Preset> presets = new ArrayList<>();
   private Preset preset;
+  private Preset defaultPreset;
 
-  public Shoot(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision) {
+  public Shoot(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision, Preset ... defaultPreset) {
     this.drivebase = drivebase;
     this.superstructure = superstructure;
     this.shooter = shooter;
     this.vision = vision;
+    
+    for (Preset x : defaultPreset) this.defaultPreset = x;
 
     presets.add(new Preset(1500, 750, 0));
     presets.add(new Preset(400, 3000, 5));

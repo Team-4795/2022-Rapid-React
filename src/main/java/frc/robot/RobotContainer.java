@@ -56,7 +56,6 @@ public class RobotContainer {
     final JoystickButton reverseButton = new JoystickButton(driverController, Controller.Button.kRightBumper.value);
     final JoystickButton shootButton = new JoystickButton(driverController, Controller.Button.kA.value);
     final JoystickButton intakeButton = new JoystickButton(driverController, Controller.Button.kB.value);
-    // final JoystickButton climbButton = new JoystickButton(driverController, Controller.Button.kX.value);
 
     final JoystickButton unjamButton = new JoystickButton(operatorController, Controller.Button.kA.value);
     final JoystickButton intakeOverride = new JoystickButton(operatorController, Controller.Button.kB.value);

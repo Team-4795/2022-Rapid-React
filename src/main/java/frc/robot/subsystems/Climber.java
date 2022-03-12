@@ -18,7 +18,6 @@ import frc.robot.Constants.ClimberConstants;
 public class Climber extends SubsystemBase {
   private CANSparkMax climb_motor = new CANSparkMax(ClimberConstants.CLIMB_MOTOR, MotorType.kBrushless);
   private RelativeEncoder m_climb_Encoder;
-  // private boolean extended = false;
   private SparkMaxLimitSwitch limitSwitch;
 
   public Climber() {
@@ -30,10 +29,6 @@ public class Climber extends SubsystemBase {
     limitSwitch.enableLimitSwitch(true);
   }
 
-  // public void toggle() {
-  //   extended = !extended;
-  // }
-
   public void setPower(double power) {
     climb_motor.set(power);
   }
@@ -43,7 +38,7 @@ public class Climber extends SubsystemBase {
   }
 
   public void extend() {
-    if (m_climb_Encoder.getPosition() < 100 && m_climb_Encoder.getPosition() >= 0) {
+    if (m_climb_Encoder.getPosition() < 105 && m_climb_Encoder.getPosition() >= 0) {
       climb_motor.set(0.5);
     } else {
       climb_motor.set(0.0);
@@ -51,7 +46,7 @@ public class Climber extends SubsystemBase {
   }
   
   public void retract() {
-    if (m_climb_Encoder.getPosition() > 5 && m_climb_Encoder.getPosition() <= 110) {
+    if (m_climb_Encoder.getPosition() > 5 && m_climb_Encoder.getPosition() <= 115) {
       climb_motor.set(-1);
     } else {
       climb_motor.set(0.0);
@@ -61,13 +56,6 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Climber Rotations", m_climb_Encoder.getPosition());
-    // SmartDashboard.putBoolean("Climber extended", extended);
     SmartDashboard.putBoolean("Limit switch", limitSwitch.isPressed());
-
-    // if (extended) {
-    //   extend();
-    // } else {
-    //   retract();
-    // }
   }
 }
