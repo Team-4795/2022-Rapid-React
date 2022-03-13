@@ -52,6 +52,23 @@ public class AutoSelector {
       new Shoot(drivebase, superstructure, shooter, vision))
     );
 
+    chooser.setDefaultOption("2BSpin", new SequentialCommandGroup(
+      new InstantCommand(superstructure.intake::toggle),
+      new ParallelRaceGroup(
+        new BallManager(superstructure),
+        new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json")),
+      new ParallelRaceGroup(
+        new Shoot(drivebase, superstructure, shooter, vision),
+        new WaitCommand(3)),
+      new InstantCommand(superstructure.intake::toggle),
+        new ParallelRaceGroup(
+          new WaitCommand(5),
+          new BallManager(superstructure)
+        ),
+      new InstantCommand(superstructure.intake::toggle),
+      new Shoot(drivebase, superstructure, shooter, vision))
+    );
+
     // chooser.setDefaultOption("(Field Plot) 2 Ball", new SequentialCommandGroup(
     //   new InstantCommand(superstructure.intake::toggle),
     //   new ParallelRaceGroup(
