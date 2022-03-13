@@ -21,14 +21,12 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Vision;
 
 public class RobotContainer {
-  private final Drivebase drivebase;
-  private final Superstructure superstructure;
-  private final Shooter shooter;
-  private final Climber climber;
-  private final Vision vision;
+  public final Drivebase drivebase;
+  public final Superstructure superstructure;
+  public final Shooter shooter;
+  public final Climber climber;
+  public final Vision vision;
   private final AutoSelector autoSelector;
-
-  private final LED led;
 
   private final Controller driverController = new Controller(ControllerConstants.DRIVER);
   private final Controller operatorController = new Controller(ControllerConstants.OPERATOR);
@@ -40,7 +38,6 @@ public class RobotContainer {
     climber = new Climber();
     vision = new Vision();
     autoSelector = new AutoSelector(drivebase, superstructure, shooter, vision);
-    led = new LED();
 
     drivebase.setDefaultCommand(new CurvatureDrive(
       drivebase,
@@ -80,8 +77,7 @@ public class RobotContainer {
 
     unjamButton.whileHeld(new RunCommand(() -> {
       superstructure.indexer.setIndexerSpeed(-0.3, -1);
-      shooter.setShooterPower(-0.3, 0);
-      led.setRed();
+      shooter.setShooterPower(-0.3, -0.3);
     }, superstructure, shooter));
     intakeOverride.whenPressed(superstructure.intake::toggle);
     resetClimber.whenPressed(climber::resetEncoder);

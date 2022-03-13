@@ -40,7 +40,7 @@ public class Shoot extends CommandBase {
     }
 
     presets.add(new Preset(400, 3000, 5));
-    presets.add(new Preset(1500, 2000, 8));
+    presets.add(new Preset(1800, 1900, 8));
     presets.add(new Preset(3100, 1200, 12));
     presets.add(new Preset(3300, 1200, 13.5));
 
@@ -60,9 +60,9 @@ public class Shoot extends CommandBase {
   public void execute() {
     boolean isAligned = true;
 
-    if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 4000) {
+    if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();
-      double angle = vision.getTargetAngle() + 2;
+      double angle = vision.getTargetAngle() + 2.5;
       double driveSpeed = 0;
       double turnSpeed = angle / 50.0;
 
@@ -77,11 +77,11 @@ public class Shoot extends CommandBase {
       turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.25, 0.25);
 
       driveSpeed = MathUtil.clamp((distance - preset.distance) / 5.0, -0.35, 0.35);
-      driveSpeed = Math.copySign(Math.max(Math.abs(driveSpeed), 0.15), driveSpeed);
+      driveSpeed = Math.copySign(Math.max(Math.abs(driveSpeed), 0.12), driveSpeed);
 
-      if (Math.abs(angle) > 2 || Math.abs(distance - preset.distance) > 0.25) isAligned = false;
+      if (Math.abs(angle) > 2 || Math.abs(distance - preset.distance) > 0.3) isAligned = false;
 
-      drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.25 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.25);
+      drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.3 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.3);
     } else {
       drivebase.curvatureDrive(0, 0, false);
     }

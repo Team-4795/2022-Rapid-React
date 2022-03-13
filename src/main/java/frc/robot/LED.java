@@ -7,61 +7,79 @@ package frc.robot;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
-/** Add your docs here. */
 public class LED {
     private AddressableLED led;
-    private AddressableLED led2;
     private AddressableLEDBuffer buffer;
-    private int length = 60;
 
     public LED() {
         led = new AddressableLED(0);
-        led2 = new AddressableLED(1);
-        buffer = new AddressableLEDBuffer(length);
+        buffer = new AddressableLEDBuffer(30);
+        led.setLength(buffer.getLength());
     }
 
-    public void setRed() {
-        for (int i = 0; i < buffer.getLength(); i++) {
-            buffer.setRGB(i, 255, 0, 0);
-        }
+    public void setColor(int r, int g, int b, double percent) {
+        for (int i = 0; i < buffer.getLength(); i++) buffer.setRGB(i, 0, 0, 0);
+        for (int i = 0; i < Math.round(buffer.getLength() * percent); i++) buffer.setRGB(i, r, g, b);
         led.setData(buffer);
-        led2.setData(buffer);
         led.start();
-        led2.start();
     }
 
-    public void setBlue() {
-        for (int i = 0; i < buffer.getLength(); i++) {
-            buffer.setRGB(i, 0, 255, 0);
-        }
-        led.setData(buffer);
-        led2.setData(buffer);
-        led.start();
-        led2.start();
-    }
+    // public void setRed() {
+    //     for (int i = 0; i < buffer.getLength()/2; i++) {
+    //         buffer.setRGB(i, 128, 0, 0);
+    //     }
+    //     led.setData(buffer);
+    //     led.start();
+    // }
 
-    public void setGreen() {
-        for (int i = 0; i < buffer.getLength(); i++) {
-            buffer.setRGB(i, 0, 0, 255);
-        }
-        led.setData(buffer);
-        led2.setData(buffer);
-        led.start();
-        led2.start();
-    }
+    // public void setUpperHalfRed() {
+    //     for (int i = buffer.getLength()/2; i < buffer.getLength(); i++) {
+    //         buffer.setRGB(i, 128, 0, 0);
+    //     }
+    //     led.setData(buffer);
+    // }
 
-    public void setPurple() {
-        for (int i = 0; i < buffer.getLength(); i++) {
-            buffer.setRGB(i, 128, 128, 0);
-        }
-        led.setData(buffer);
-        led2.setData(buffer);
-        led.start();
-        led2.start();
-    }
+    // public void setLowerHalfBlue() {
+    //     for (int i = 0; i < buffer.getLength()/2; i++) {
+    //         buffer.setRGB(i, 0, 0, 128);
+    //     }
+    //     led.setData(buffer);
+    // }
 
-    public void stop() {
-        led.stop();
-        led2.stop();
-    }
+    // public void startLED() {
+    //     setUpperHalfRed();
+    //     setLowerHalfBlue();
+    //     // setRed();
+    //     led.start();
+    // }
+
+    // public void setBlue() {
+    //     for (int i = 0; i < buffer.getLength(); i++) {
+    //         buffer.setRGB(i, 0, 0, 128);
+    //     }
+    //     for (int i = 0; i < buffer2.getLength(); i++) {
+    //         buffer2.setRGB(i, 0, 0, 128);
+    //     }
+    //     led.setData(buffer);
+    //     led2.setData(buffer2);
+    //     led.start();
+    //     led2.start();
+    // }
+
+    // public void setGreen() {
+    //     for (int i = 0; i < buffer.getLength(); i++) {
+    //         buffer.setRGB(i, 0, 128, 0);
+    //     }
+    //     for (int i = 0; i < buffer2.getLength(); i++) {
+    //         buffer2.setRGB(i, 0, 128, 0);
+    //     }
+    //     led.setData(buffer);
+    //     led2.setData(buffer2);
+    //     led.start();
+    //     led2.start();
+    // }
+
+    // public void stop() {
+    //     led.stop();
+    // }
 }
