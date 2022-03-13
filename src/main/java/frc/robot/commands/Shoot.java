@@ -64,9 +64,9 @@ public class Shoot extends CommandBase {
 
     if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();
-      double angle = vision.getTargetAngle() + 2.5;
+      double angle = -vision.getTargetAngle() + 2.5;
       double driveSpeed = 0;
-      double turnSpeed = angle / 50.0;
+      double turnSpeed = -angle / 50.0;
 
       for (Preset p : presets) if (Math.abs(distance - p.distance) < Math.abs(distance - preset.distance)) preset = p;
 

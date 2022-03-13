@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Voltage", PD.getVoltage());
 
     if (robotContainer.shooter.getMainRPM() > 500) {
-      led.setColor(128, 128, 128, 1);
+      led.setColor(200, 90, 240, 1);
     } else if (robotContainer.superstructure.indexer.hasUpperBall()) {
       if (robotContainer.superstructure.indexer.hasLowerBall()) {
         led.setColor(0, 128, 0, 1);
