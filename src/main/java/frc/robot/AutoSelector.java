@@ -52,7 +52,7 @@ public class AutoSelector {
         new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json")),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, shooter, vision),
-        new WaitCommand(3)),
+        new WaitCommand(5)),
       new InstantCommand(superstructure.intake::toggle),
       new ParallelCommandGroup(
         new RunCommand(() -> superstructure.intake.setSpeed(0.75))),

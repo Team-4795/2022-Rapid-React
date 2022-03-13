@@ -40,12 +40,14 @@ public class Shoot extends CommandBase {
     }
 
     presets.add(new Preset(400, 3000, 5));
-    presets.add(new Preset(1800, 1900, 8));
+    presets.add(new Preset(1800, 1700, 8));
     presets.add(new Preset(3100, 1200, 12));
-    presets.add(new Preset(3300, 1200, 13.5));
+    presets.add(new Preset(3600, 1300, 15));
 
     addRequirements(drivebase, superstructure, shooter, vision);
   }
+  
+  //24687531
 
   @Override
   public void initialize() {

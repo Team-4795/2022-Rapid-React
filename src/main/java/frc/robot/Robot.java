@@ -32,6 +32,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robotContainer = new RobotContainer();
     alliance = DriverStation.getAlliance();
+    if (alliance == Alliance.Red) {
+      led.setColor(128, 0, 0, 1);
+    } else {
+      led.setColor(0, 0, 128, 1);
+    }
 
     CameraServer.startAutomaticCapture();
   }
@@ -42,6 +47,20 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Current", PD.getTotalCurrent());
     SmartDashboard.putNumber("Voltage", PD.getVoltage());
+
+    if (robotContainer.shooter.getMainRPM() > 500) {
+      led.setColor(128, 128, 128, 1);
+    } else if (robotContainer.superstructure.indexer.hasUpperBall()) {
+      if (robotContainer.superstructure.indexer.hasLowerBall()) {
+        led.setColor(0, 128, 0, 1);
+      } else {
+        led.setColor(0, 128, 0, 0.5);
+      }
+    } else if (alliance == Alliance.Red) {
+      led.setColor(128, 0, 0, 1);
+    } else {
+      led.setColor(0, 0, 128, 1);
+    }
   }
 
   @Override
@@ -57,6 +76,8 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
+
+    alliance = DriverStation.getAlliance();
   }
 
   @Override
@@ -79,20 +100,6 @@ public class Robot extends TimedRobot {
       robotContainer.setRumble(1);
     } else {
       robotContainer.setRumble(0);
-    }
-
-    if (robotContainer.shooter.getTopRPM() > 500) {
-      led.setColor(128, 128, 128, 1);
-    } else if (robotContainer.superstructure.indexer.hasUpperBall()) {
-      if (robotContainer.superstructure.indexer.hasLowerBall()) {
-        led.setColor(0, 128, 0, 1);
-      } else {
-        led.setColor(0, 128, 0, 0.5);
-      }
-    } else if (alliance == Alliance.Red) {
-      led.setColor(128, 0, 0, 1);
-    } else {
-      led.setColor(0, 0, 128, 1);
     }
   }
 

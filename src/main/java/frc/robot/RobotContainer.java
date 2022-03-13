@@ -76,8 +76,8 @@ public class RobotContainer {
     extendClimber.whileHeld(new RunCommand(climber::extend, climber));
 
     unjamButton.whileHeld(new RunCommand(() -> {
-      superstructure.indexer.setIndexerSpeed(-0.3, -1);
-      shooter.setShooterPower(-0.3, -0.3);
+      superstructure.indexer.setIndexerSpeed(0.3, 1);
+      shooter.setShooterPower(0.3, 0.3);
     }, superstructure, shooter));
     intakeOverride.whenPressed(superstructure.intake::toggle);
     resetClimber.whenPressed(climber::resetEncoder);

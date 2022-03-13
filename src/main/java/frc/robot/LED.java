@@ -19,7 +19,7 @@ public class LED {
 
     public void setColor(int r, int g, int b, double percent) {
         for (int i = 0; i < buffer.getLength(); i++) buffer.setRGB(i, 0, 0, 0);
-        for (int i = 0; i < Math.round(buffer.getLength() * percent); i++) buffer.setRGB(i, r, g, b);
+        for (int i = buffer.getLength() - 1; i > buffer.getLength() - Math.round(buffer.getLength() * percent); i--) buffer.setRGB(i, r, g, b);
         led.setData(buffer);
         led.start();
     }
