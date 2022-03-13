@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -49,24 +50,14 @@ public class AutoSelector {
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json")),
-      new Shoot(drivebase, superstructure, shooter, vision))
-    );
-
-    chooser.setDefaultOption("2BSpin", new SequentialCommandGroup(
-      new InstantCommand(superstructure.intake::toggle),
-      new ParallelRaceGroup(
-        new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json")),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, shooter, vision),
         new WaitCommand(3)),
       new InstantCommand(superstructure.intake::toggle),
-        new ParallelRaceGroup(
-          new WaitCommand(5),
-          new BallManager(superstructure)
-        ),
-      new InstantCommand(superstructure.intake::toggle),
-      new Shoot(drivebase, superstructure, shooter, vision))
+      new ParallelCommandGroup(
+        new RunCommand(() -> superstructure.intake.setSpeed(0.75))),
+        new Shoot(drivebase, superstructure, shooter, vision)
+      )
     );
 
     // chooser.setDefaultOption("(Field Plot) 2 Ball", new SequentialCommandGroup(

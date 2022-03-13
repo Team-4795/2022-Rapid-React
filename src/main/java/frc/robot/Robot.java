@@ -82,17 +82,17 @@ public class Robot extends TimedRobot {
     }
 
     if (robotContainer.shooter.getTopRPM() > 500) {
-      led.setColor(128, 128, 128, 0, 1);
+      led.setColor(128, 128, 128, 1);
     } else if (robotContainer.superstructure.indexer.hasUpperBall()) {
       if (robotContainer.superstructure.indexer.hasLowerBall()) {
-        led.setColor(0, 128, 0, 0, 1);
+        led.setColor(0, 128, 0, 1);
       } else {
-        led.setColor(0, 128, 0, 0.5, 1);
+        led.setColor(0, 128, 0, 0.5);
       }
     } else if (alliance == Alliance.Red) {
-      led.setColor(128, 0, 0, 0, 1);
+      led.setColor(128, 0, 0, 1);
     } else {
-      led.setColor(0, 0, 128, 0, 1);
+      led.setColor(0, 0, 128, 1);
     }
   }
 
