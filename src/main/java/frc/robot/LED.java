@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import frc.robot.Constants.LEDPreset;
 
 public class LED {
     private AddressableLED led;
@@ -13,14 +14,27 @@ public class LED {
 
     public LED() {
         led = new AddressableLED(0);
-        buffer = new AddressableLEDBuffer(30);
+        buffer = new AddressableLEDBuffer(27);
         led.setLength(buffer.getLength());
     }
 
-    public void setColor(int r, int g, int b, double percent) {
+    public void setColor(LEDPreset p) {
+        for (int i = (int) Math.round(buffer.getLength() * p.lowPercent); i < Math.round(buffer.getLength() * p.highPercent); i++) buffer.setRGB(i, p.r, p.g, p.b);
+        led.setData(buffer);   
+    }
+
+    public void clearLED() {
         for (int i = 0; i < buffer.getLength(); i++) buffer.setRGB(i, 0, 0, 0);
+<<<<<<< Updated upstream
         for (int i = buffer.getLength() - 1; i > buffer.getLength() - Math.round(buffer.getLength() * percent); i--) buffer.setRGB(i, r, g, b);
         led.setData(buffer);
+=======
+        led.start();
+        led.stop();
+    }
+
+    public void startLED() {
+>>>>>>> Stashed changes
         led.start();
     }
 

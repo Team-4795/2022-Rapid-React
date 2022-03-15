@@ -85,4 +85,20 @@ public final class Constants {
       mainRPM = m;
     }
   }
+
+  public static final class LEDPreset {
+    public int r;
+    public int g;
+    public int b;
+    public double lowPercent;
+    public double highPercent;
+
+    public LEDPreset(int r, int g, int b, double lowPercent, double highPercent) {
+      this.r = r;
+      this.g = g;
+      this.b = b;
+      this.lowPercent = lowPercent;
+      this.highPercent = highPercent;
+    }
+  }
 }
