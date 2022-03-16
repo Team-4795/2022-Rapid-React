@@ -9,23 +9,24 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxLimitSwitch;
+
 import frc.robot.Constants.ClimberConstants;
 
 public class Climber extends SubsystemBase {
   private CANSparkMax climb_motor = new CANSparkMax(ClimberConstants.CLIMB_MOTOR, MotorType.kBrushless);
   private RelativeEncoder m_climb_Encoder;
-  private boolean extended = false;
+  private SparkMaxLimitSwitch limitSwitch;
 
   public Climber() {
     climb_motor.restoreFactoryDefaults();
     climb_motor.setIdleMode(IdleMode.kBrake);
     m_climb_Encoder = climb_motor.getEncoder();
     climb_motor.setInverted(false);
-  }
-
-  public void toggle() {
-    extended = !extended;
+    limitSwitch = climb_motor.getReverseLimitSwitch(Type.kNormallyOpen);
+    limitSwitch.enableLimitSwitch(true);
   }
 
   public void setPower(double power) {
@@ -37,16 +38,16 @@ public class Climber extends SubsystemBase {
   }
 
   public void extend() {
-    if (m_climb_Encoder.getPosition() < 100 && m_climb_Encoder.getPosition() >= 0) {
-      climb_motor.set(0.5);
+    if (m_climb_Encoder.getPosition() < 105) {
+      climb_motor.set(0.75);
     } else {
       climb_motor.set(0.0);
     }
   }
   
   public void retract() {
-    if (m_climb_Encoder.getPosition() > 10 && m_climb_Encoder.getPosition() <= 110) {
-      climb_motor.set(-0.5);
+    if (m_climb_Encoder.getPosition() > 5) {
+      climb_motor.set(-1);
     } else {
       climb_motor.set(0.0);
     }
@@ -55,12 +56,6 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Climber Rotations", m_climb_Encoder.getPosition());
-    SmartDashboard.putBoolean("Climber extended", extended);
-
-    if (extended) {
-      extend();
-    } else {
-      retract();
-    }
+    SmartDashboard.putBoolean("Limit switch", limitSwitch.isPressed());
   }
 }

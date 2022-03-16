@@ -23,21 +23,31 @@ public class Shoot extends CommandBase {
   private double initialDirection;
   private ArrayList<Preset> presets = new ArrayList<>();
   private Preset preset;
+  private boolean useCV = true;
+  private long start;
 
-  public Shoot(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision) {
+  public Shoot(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision, Preset ... defaultPreset) {
     this.drivebase = drivebase;
     this.superstructure = superstructure;
     this.shooter = shooter;
     this.vision = vision;
+    
+    if (defaultPreset.length == 0) {
+      presets.add(new Preset(1500, 750, 0));
+    } else {
+      presets.add(defaultPreset[0]);
+      useCV = false;
+    }
 
-    presets.add(new Preset(1500, 750, 0));
     presets.add(new Preset(400, 3000, 5));
-    presets.add(new Preset(1000, 3200, 8));
+    presets.add(new Preset(1900, 1700, 8));
     presets.add(new Preset(3100, 1200, 12));
-    presets.add(new Preset(3300, 1200, 13.5));
+    presets.add(new Preset(3800, 1000, 15));
 
     addRequirements(drivebase, superstructure, shooter, vision);
   }
+  
+  //24687531
 
   @Override
   public void initialize() {
@@ -45,17 +55,18 @@ public class Shoot extends CommandBase {
     preset = presets.get(0);
     initialDirection = drivebase.getDirection();
     vision.enableLED();
+    start = System.currentTimeMillis();
   }
 
   @Override
   public void execute() {
     boolean isAligned = true;
 
-    if(vision.hasTarget()) {
+    if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();
-      double angle = vision.getTargetAngle();
+      double angle = -vision.getTargetAngle() + 2.5;
       double driveSpeed = 0;
-      double turnSpeed = angle / 50.0;
+      double turnSpeed = -angle / 50.0;
 
       for (Preset p : presets) if (Math.abs(distance - p.distance) < Math.abs(distance - preset.distance)) preset = p;
 
@@ -68,11 +79,11 @@ public class Shoot extends CommandBase {
       turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.25, 0.25);
 
       driveSpeed = MathUtil.clamp((distance - preset.distance) / 5.0, -0.35, 0.35);
-      driveSpeed = Math.copySign(Math.max(Math.abs(driveSpeed), 0.15), driveSpeed);
+      driveSpeed = Math.copySign(Math.max(Math.abs(driveSpeed), 0.12), driveSpeed);
 
-      if (Math.abs(angle) > 2 || Math.abs(distance - preset.distance) > 0.25) isAligned = false;
+      if (Math.abs(angle) > 2 || Math.abs(distance - preset.distance) > 0.3) isAligned = false;
 
-      drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.25 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.25);
+      drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.3 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.3);
     } else {
       drivebase.curvatureDrive(0, 0, false);
     }

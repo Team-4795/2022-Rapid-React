@@ -55,11 +55,11 @@ public final class Constants {
   }
  
   public static final class VisionConstants {
-    public static final String CAMERA_NAME = "mmal_service_16.1";
+    public static final String CAMERA_NAME = "LifeCam";
 
-    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(27.5);
-    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(103.5);
-    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(35);
+    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(25.25);
+    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(104);
+    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(42.5);
   }
 
   public static final class ControllerConstants {
@@ -83,6 +83,22 @@ public final class Constants {
       distance = d;
       topRPM = t;
       mainRPM = m;
+    }
+  }
+
+  public static final class LEDPreset {
+    public int r;
+    public int g;
+    public int b;
+    public double lowPercent;
+    public double highPercent;
+
+    public LEDPreset(int r, int g, int b, double lowPercent, double highPercent) {
+      this.r = r;
+      this.g = g;
+      this.b = b;
+      this.lowPercent = lowPercent;
+      this.highPercent = highPercent;
     }
   }
 }
