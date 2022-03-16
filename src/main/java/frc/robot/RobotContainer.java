@@ -77,11 +77,7 @@ public class RobotContainer {
 
     unjamButton.whileHeld(new RunCommand(() -> {
       superstructure.indexer.setIndexerSpeed(0.3, 1);
-<<<<<<< Updated upstream
-      shooter.setShooterPower(0.3, 0.3);
-=======
       shooter.setShooterPower(0.3, 0.4);
->>>>>>> Stashed changes
     }, superstructure, shooter));
     intakeOverride.whenPressed(superstructure.intake::toggle);
     resetClimber.whenPressed(climber::resetEncoder);
