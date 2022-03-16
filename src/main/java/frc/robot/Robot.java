@@ -66,7 +66,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    led.setColor(new LEDPreset(128, 0, 128, 0, 0));
   }
 
   @Override
@@ -104,25 +103,20 @@ public class Robot extends TimedRobot {
     } else {
       robotContainer.setRumble(0);
     }
-<<<<<<< Updated upstream
-=======
 
     if (robotContainer.shooter.getTopRPM() > 500) {
-      led.setColor(new LEDPreset(128, 128, 128, 0, 1));
+      led.setColor(128, 128, 128, 1);
     } else if (robotContainer.superstructure.indexer.hasUpperBall()) {
       if (robotContainer.superstructure.indexer.hasLowerBall()) {
-        led.setColor(new LEDPreset(0, 128, 0, 0, 1));
+        led.setColor(0, 128, 0,  1);
       } else {
-        led.setColor(new LEDPreset(0, 128, 0, 0, 0.5));
+        led.setColor(0, 128, 0, 0.5);
       }
     } else if (alliance == Alliance.Red) {
-      led.setColor(new LEDPreset(128, 0, 0, 0, 1));
+      led.setColor(128, 0, 0, 1);
     } else {
-      led.setColor(new LEDPreset(0, 0, 128, 0, 1));
+      led.setColor(0, 0, 128, 1);
     }
-
-    led.startLED();
->>>>>>> Stashed changes
   }
 
   @Override
