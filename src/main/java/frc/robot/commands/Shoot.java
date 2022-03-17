@@ -46,8 +46,6 @@ public class Shoot extends CommandBase {
 
     addRequirements(drivebase, superstructure, shooter, vision);
   }
-  
-  //24687531
 
   @Override
   public void initialize() {
