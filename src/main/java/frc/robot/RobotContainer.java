@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CurvatureDrive;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.BallManager;
@@ -50,6 +51,9 @@ public class RobotContainer {
     shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterPower(0, 0), shooter));
     climber.setDefaultCommand(new RunCommand(() -> climber.setPower(0), climber));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
+    
+    SmartDashboard.putNumber("shooter top target", 1500);
+    SmartDashboard.putNumber("shooter main target", 2000);
 
     configureButtonBindings();
   }

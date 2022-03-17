@@ -33,13 +33,12 @@ public class Shoot extends CommandBase {
     this.vision = vision;
     
     if (defaultPreset.length == 0) {
-      presets.add(new Preset(1500, 750, 0));
+      presets.add(new Preset(1500, 2000, 5));
     } else {
       presets.add(defaultPreset[0]);
       useCV = false;
     }
 
-    presets.add(new Preset(400, 3000, 5));
     presets.add(new Preset(1900, 1700, 8));
     presets.add(new Preset(3100, 1200, 12));
     presets.add(new Preset(3800, 1000, 15));
@@ -59,6 +58,9 @@ public class Shoot extends CommandBase {
   @Override
   public void execute() {
     boolean isAligned = true;
+
+    preset.topRPM = SmartDashboard.getNumber("shooter top target", 1000);
+    preset.mainRPM = SmartDashboard.getNumber("shooter main target", 1000);
 
     if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();

@@ -46,11 +46,11 @@ public class Indexer extends SubsystemBase {
   }
 
   public boolean hasUpperBall() {
-    return breakBeam.isBroken();
+    return colorSensor.getProximity() > 250;
   }
 
   public boolean hasLowerBall() {
-    return colorSensor.getProximity() > 250;
+    return breakBeam.isBroken();
   }
 
   public boolean isActive() {
