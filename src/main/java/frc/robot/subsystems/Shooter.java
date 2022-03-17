@@ -17,6 +17,7 @@ import frc.robot.Constants.ShooterConstants;
 public class Shooter extends SubsystemBase {
   private final TalonFX FlywheelMain = new TalonFX(ShooterConstants.FLYWHEEL_MAIN_TALON);
   private final TalonFX FlywheelTop = new TalonFX(ShooterConstants.FLYWHEEL_TOP_TALON);
+  private double targetRPM;
 
   public Shooter() {
     FlywheelMain.configFactoryDefault();
@@ -45,11 +46,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooterPower(double speedMain, double speedTop) {
+    targetRPM = 0;
+
     FlywheelMain.set(ControlMode.PercentOutput, speedMain);
     FlywheelTop.set(ControlMode.PercentOutput, speedTop);
   }
 
   public void setShooterRPM(double speedMain, double speedTop) {
+    targetRPM = speedMain;
     // 2048 ticks per revolution, ticks per .10 second, 1 / 2048 * 60
     double speed_FalconUnits1 = speedMain / (600.0) * 2048.0;
     double speed_FalconUnits2 = speedTop / (600.0) * 2048.0;
@@ -73,6 +77,10 @@ public class Shooter extends SubsystemBase {
 
   public double getTopRPM() {
     return (FlywheelTop.getSelectedSensorVelocity()) / 2048.0 * 600;
+  }
+
+  public double getTargetRPM() {
+    return targetRPM;
   }
 
   @Override

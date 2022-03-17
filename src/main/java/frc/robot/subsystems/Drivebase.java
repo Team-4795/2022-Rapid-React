@@ -78,6 +78,8 @@ public class Drivebase extends SubsystemBase {
     gyro = new AHRS(SPI.Port.kMXP);
 
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
+
+    SmartDashboard.putData(m_field2d);
   }
 
   public void enableBrakeMode() {

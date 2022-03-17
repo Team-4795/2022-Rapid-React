@@ -43,8 +43,15 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Current", PD.getTotalCurrent());
     SmartDashboard.putNumber("Voltage", PD.getVoltage());
 
-    if (robotContainer.shooter.getMainRPM() > 500) {
-      led.setColor(200, 90, 240, 1);
+    if (robotContainer.shooter.getTargetRPM() > 0) {
+      if (robotContainer.superstructure.indexer.isActive()) {
+        led.setColor(115, 15, 150, 1);
+      } else {
+        double percent = robotContainer.shooter.getTargetRPM() - robotContainer.shooter.getMainRPM();
+        percent = 1.0 - Math.abs(percent / robotContainer.shooter.getTargetRPM());
+  
+        led.setColor(200, 90, 240, percent);
+      }
     } else if (robotContainer.superstructure.indexer.hasUpperBall()) {
       if (robotContainer.superstructure.indexer.hasLowerBall()) {
         led.setColor(0, 128, 0, 1);
@@ -91,7 +98,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (getSecondsRemaining() < 17 && getSecondsRemaining() > 15) {
+    if (getSecondsRemaining() < 20 && getSecondsRemaining() > 18) {
       robotContainer.setRumble(1);
     } else {
       robotContainer.setRumble(0);

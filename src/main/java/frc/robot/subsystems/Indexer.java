@@ -52,4 +52,8 @@ public class Indexer extends SubsystemBase {
   public boolean hasLowerBall() {
     return colorSensor.getProximity() > 250;
   }
+
+  public boolean isActive() {
+    return Math.abs(upperMotor.get()) > 0 || Math.abs(lowerMotor.get()) > 0;
+  }
 }

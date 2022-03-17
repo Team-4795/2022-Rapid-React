@@ -70,8 +70,6 @@ public class Shoot extends CommandBase {
 
       drivebase.setDirection(-1);
 
-      SmartDashboard.putNumber("distance", distance);
-      SmartDashboard.putNumber("angle", angle);
       SmartDashboard.putNumber("preset", preset.distance);
 
       turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.25, 0.25);

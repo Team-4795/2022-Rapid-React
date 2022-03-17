@@ -26,6 +26,7 @@ public class RobotContainer {
   public final Shooter shooter;
   public final Climber climber;
   public final Vision vision;
+
   private final AutoSelector autoSelector;
 
   private final Controller driverController = new Controller(ControllerConstants.DRIVER);
