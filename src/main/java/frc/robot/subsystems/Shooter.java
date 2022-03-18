@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -86,11 +88,9 @@ public class Shooter extends SubsystemBase {
   
   public Preset interpolate(double distance, ArrayList<Preset> presets) {
     Preset bottomPreset = presets.get(0);
-    Presets upperPreset = new Preset(0, 0, 0);
+    Preset upperPreset = new Preset(0, 0, 0);
     
-    presets.forEach((p) -> {
-        if (Math.abs(distance - p.distance) < Math.abs(distance - bottomPreset.distance)) bottomPreset = p;
-      });
+    for (Preset p : presets) if (Math.abs(distance - p.distance) < Math.abs(distance - bottomPreset.distance)) bottomPreset = p;
 
     try {
       upperPreset = presets.get(presets.indexOf(bottomPreset) + 1);
@@ -108,8 +108,8 @@ public class Shooter extends SubsystemBase {
 
     double percentage = (distance - bottomPreset.distance)/dist;
 
-    topRPM = percentage*topRPMDifference + bottomPreset.topRPM;
-    mainRPM = percentage*mainRPMDifference + bottomPreset.mainRPM;
+    double topRPM = percentage*topRPMDifference + bottomPreset.topRPM;
+    double mainRPM = percentage*mainRPMDifference + bottomPreset.mainRPM;
     
     return new Preset(topRPM, mainRPM, distance);
   }

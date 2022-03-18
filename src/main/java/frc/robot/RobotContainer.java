@@ -59,7 +59,7 @@ public class RobotContainer {
     SmartDashboard.putData(vision);
     
     SmartDashboard.putBoolean("USE INTERPOLATION", false);
-    SmartDashboard.putNumber("CV DISTANCE (TEST), 5");
+    SmartDashboard.putNumber("CV DISTANCE (TEST)", 5);
 
     configureButtonBindings();
   }
