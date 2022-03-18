@@ -58,7 +58,7 @@ public class RobotContainer {
     SmartDashboard.putData(climber);
     SmartDashboard.putData(vision);
     
-    SmartDashboard.putBoolean("IS CV ALIGNED (TEST)", false);
+    SmartDashboard.putBoolean("USE INTERPOLATION", false);
     SmartDashboard.putNumber("CV DISTANCE (TEST), 5");
 
     configureButtonBindings();
