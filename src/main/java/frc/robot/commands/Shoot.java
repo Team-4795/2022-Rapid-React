@@ -7,20 +7,29 @@ package frc.robot.commands;
 import java.util.ArrayList;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
+import frc.robot.sensors.ColorSensor.Color;
 import frc.robot.Constants.Preset;
+
+enum Stage {
+  Hold, Shoot, Feed
+}
 
 public class Shoot extends CommandBase {
   private final Drivebase drivebase;
   private final Superstructure superstructure;
   private final Shooter shooter;
   private final Vision vision;
-  private double initialDirection;
+  private final Alliance alliance = DriverStation.getAlliance();
+  private Stage stage;
+  private double mainRPM, topRPM, upperIndexer, lowerIndexer, initialDirection;
   private ArrayList<Preset> presets = new ArrayList<>();
   private Preset preset;
   private boolean useCV = true;
@@ -33,7 +42,7 @@ public class Shoot extends CommandBase {
     this.vision = vision;
     
     if (defaultPreset.length == 0) {
-      presets.add(new Preset(1500, 2000, 5));
+      presets.add(new Preset(1500, 1800, 5));
     } else {
       presets.add(defaultPreset[0]);
       useCV = false;
@@ -48,8 +57,9 @@ public class Shoot extends CommandBase {
 
   @Override
   public void initialize() {
-    drivebase.enableBrakeMode();
+    stage = Stage.Hold;
     preset = presets.get(0);
+    drivebase.enableBrakeMode();
     initialDirection = drivebase.getDirection();
     vision.enableLED();
     start = System.currentTimeMillis();
@@ -57,14 +67,12 @@ public class Shoot extends CommandBase {
 
   @Override
   public void execute() {
+    Color upperColor = superstructure.indexer.getUpperColor();
     boolean isAligned = true;
-
-    preset.topRPM = SmartDashboard.getNumber("shooter top target", 1000);
-    preset.mainRPM = SmartDashboard.getNumber("shooter main target", 1000);
 
     if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();
-      double angle = -vision.getTargetAngle() + 2.5;
+      double angle = -vision.getTargetAngle();
       double driveSpeed = 0;
       double turnSpeed = -angle / 50.0;
 
@@ -86,16 +94,45 @@ public class Shoot extends CommandBase {
       drivebase.curvatureDrive(0, 0, false);
     }
 
-    double upperIndexer = 0;
-    double lowerIndexer = 0;
+    switch (stage) {
+      case Hold:
+        upperIndexer = 0;
+        lowerIndexer = 0;
 
-    if (Math.abs(shooter.getMainRPM() - preset.mainRPM) < Math.abs(preset.mainRPM) * 0.05 && isAligned && (Math.abs(preset.topRPM) > 500 ? Math.abs(shooter.getTopRPM() - preset.topRPM) < Math.abs(preset.topRPM) * 0.05 : true)) {
-      upperIndexer = 0.5;
-      lowerIndexer = 1;
+        mainRPM = preset.mainRPM;
+        topRPM = preset.topRPM;
+    
+        if (upperColor == Color.Red && alliance == Alliance.Blue) {
+          mainRPM = 1000;
+          topRPM = 1000;
+        }
+    
+        if (upperColor == Color.Blue && alliance == Alliance.Red) {
+          mainRPM = 1000;
+          topRPM = 1000;
+        }
+
+        if (isAligned && Math.abs(shooter.getMainRPM() - mainRPM) < mainRPM * 0.05 && Math.abs(shooter.getTopRPM() - topRPM) < topRPM * 0.05) stage = Stage.Shoot;
+
+        break;
+      case Shoot:
+        upperIndexer = 0.5;
+        lowerIndexer = 0.5;
+
+        if (upperColor == Color.Other) stage = Stage.Feed;
+
+        break;
+      case Feed:
+        upperIndexer = 0.25;
+        lowerIndexer = 1;
+
+        if (upperColor != Color.Other) stage = Stage.Hold;
+
+        break;
     }
 
     superstructure.indexer.setIndexerSpeed(upperIndexer, lowerIndexer);
-    shooter.setShooterRPM(preset.mainRPM, preset.topRPM);
+    shooter.setShooterRPM(mainRPM, topRPM);
   }
 
   @Override

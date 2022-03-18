@@ -41,7 +41,7 @@ public class Indexer extends SubsystemBase {
     lowerMotor.set(lowerSpeed);
   }
 
-  public Color getLowerColor() {
+  public Color getUpperColor() {
     return colorSensor.getColor();
   }
 
