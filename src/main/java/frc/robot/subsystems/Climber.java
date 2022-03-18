@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -52,10 +52,11 @@ public class Climber extends SubsystemBase {
       climb_motor.set(0.0);
     }
   }
-   
+
   @Override
-  public void periodic() {
-    SmartDashboard.putNumber("Climber Rotations", m_climb_Encoder.getPosition());
-    SmartDashboard.putBoolean("Limit switch", limitSwitch.isPressed());
+  public void initSendable(SendableBuilder builder) {
+    builder.setSmartDashboardType("Climber");
+    builder.addDoubleProperty("Rotations", m_climb_Encoder::getPosition, null);
+    builder.addBooleanProperty("Limit switch", limitSwitch::isPressed, null);
   }
 }

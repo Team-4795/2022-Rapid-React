@@ -10,7 +10,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
@@ -84,8 +84,9 @@ public class Shooter extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    SmartDashboard.putNumber("shooter Main RPM", getMainRPM());
-    SmartDashboard.putNumber("shooter Top RPM", getTopRPM());
+  public void initSendable(SendableBuilder builder) {
+    builder.setSmartDashboardType("Shooter");
+    builder.addDoubleProperty("Main RPM", this::getMainRPM, null);
+    builder.addDoubleProperty("Top RPM", this::getTopRPM, null);
   }
 }
