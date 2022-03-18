@@ -60,6 +60,8 @@ public class RobotContainer {
     
     SmartDashboard.putBoolean("USE INTERPOLATION", false);
     SmartDashboard.putNumber("CV DISTANCE (TEST)", 5);
+    SmartDashboard.putNumber("main target", 1800);
+    SmartDashboard.putNumber("top target", 1600);
 
     configureButtonBindings();
   }
@@ -80,7 +82,7 @@ public class RobotContainer {
 
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
-    tarmacButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision, new Preset(1500, 1800, 5)));
+    tarmacButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision, new Preset(1650, 1800, 5)));
     lowGoalButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision, new Preset(1500, 750, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
     retractClimber.whileHeld(new RunCommand(climber::retract, climber));

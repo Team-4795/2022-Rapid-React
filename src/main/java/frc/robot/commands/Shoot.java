@@ -42,14 +42,18 @@ public class Shoot extends CommandBase {
     this.vision = vision;
     
     if (defaultPreset.length == 0) {
-      presets.add(new Preset(1500, 1800, 5));
+      presets.add(new Preset(1650, 1800, 5));
     } else {
       presets.add(defaultPreset[0]);
       useCV = false;
     }
 
-    presets.add(new Preset(1900, 1700, 8));
-    presets.add(new Preset(3100, 1200, 12));
+    presets.add(new Preset(1950, 1600, 6.5));
+    presets.add(new Preset(2300, 1550, 8));
+    presets.add(new Preset(2650, 1500, 10));
+    presets.add(new Preset(3350, 1200, 11));
+    presets.add(new Preset(3900, 950, 12));
+    presets.add(new Preset(4200, 900, 13.5));
     presets.add(new Preset(3800, 1000, 15));
 
     addRequirements(drivebase, superstructure, shooter, vision);
