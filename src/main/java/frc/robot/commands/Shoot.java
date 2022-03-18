@@ -91,6 +91,10 @@ public class Shoot extends CommandBase {
 
       drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.3 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.3);
     } else {
+      if (SmartDashboard.getBoolean("USE INTERPOLATION", false)) {
+        preset = shooter.interpolate(SmartDashboard.putNumber("CV DISTANCE (TEST), 5"), presets); //ADDED BEFORE FUNCTION DEF - WILL BE FIXED IN LATER COMMIT
+      }
+        
       drivebase.curvatureDrive(0, 0, false);
     }
 
