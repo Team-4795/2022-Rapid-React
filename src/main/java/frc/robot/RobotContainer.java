@@ -53,6 +53,7 @@ public class RobotContainer {
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
 
     SmartDashboard.putData(drivebase);
+    SmartDashboard.putData(superstructure.indexer);
     SmartDashboard.putData(shooter);
     SmartDashboard.putData(climber);
     SmartDashboard.putData(vision);
