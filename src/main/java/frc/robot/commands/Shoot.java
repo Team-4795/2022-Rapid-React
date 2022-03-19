@@ -29,7 +29,7 @@ public class Shoot extends CommandBase {
   private final Vision vision;
   private final Alliance alliance = DriverStation.getAlliance();
   private Stage stage;
-  private double mainRPM, topRPM, upperIndexer, lowerIndexer, initialDirection;
+  private double mainRPM, topRPM, upperIndexer, lowerIndexer;
   private ArrayList<Preset> presets = new ArrayList<>();
   private Preset preset;
   private boolean useCV = true;
@@ -42,21 +42,53 @@ public class Shoot extends CommandBase {
     this.vision = vision;
     
     if (defaultPreset.length == 0) {
-      presets.add(new Preset(1650, 1800, 5));
+      presets.add(new Preset(1400, 2100, 3));
     } else {
       presets.add(defaultPreset[0]);
       useCV = false;
     }
 
+    presets.add(new Preset(1650, 1800, 5));
     presets.add(new Preset(1950, 1600, 6.5));
     presets.add(new Preset(2300, 1550, 8));
     presets.add(new Preset(2650, 1500, 10));
     presets.add(new Preset(3350, 1200, 11));
     presets.add(new Preset(3900, 950, 12));
     presets.add(new Preset(4200, 900, 13.5));
-    presets.add(new Preset(3800, 1000, 15));
+    presets.add(new Preset(4500, 900, 15));
 
     addRequirements(drivebase, superstructure, shooter, vision);
+  }
+
+  private Preset interpolate(double distance, ArrayList<Preset> presets) {
+    Preset bottomPreset = presets.get(presets.size() - 1);
+    Preset upperPreset;
+    
+	  for (int i = presets.size() - 1; i >= 0; i--) {
+      if (distance > presets.get(i).distance) {
+        bottomPreset = presets.get(i);
+        break;
+      }
+    }
+
+    try {
+      upperPreset = presets.get(presets.indexOf(bottomPreset) + 1);
+    } catch (IndexOutOfBoundsException e) {
+      upperPreset = bottomPreset;
+    }
+
+    double topRPMDifference = upperPreset.topRPM - bottomPreset.topRPM;
+    double mainRPMDifference = upperPreset.mainRPM - bottomPreset.mainRPM;
+    double dist = upperPreset.distance - bottomPreset.distance;
+
+    if (dist == 0) dist = bottomPreset.distance;
+
+    double percentage = (distance - bottomPreset.distance) / dist;
+
+    double topRPM = percentage * topRPMDifference + bottomPreset.topRPM;
+    double mainRPM = percentage * mainRPMDifference + bottomPreset.mainRPM;
+    
+    return new Preset(topRPM, mainRPM, distance);
   }
 
   @Override
@@ -64,7 +96,6 @@ public class Shoot extends CommandBase {
     stage = Stage.Hold;
     preset = presets.get(0);
     drivebase.enableBrakeMode();
-    initialDirection = drivebase.getDirection();
     vision.enableLED();
     start = System.currentTimeMillis();
   }
@@ -77,28 +108,18 @@ public class Shoot extends CommandBase {
     if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();
       double angle = -vision.getTargetAngle();
-      double driveSpeed = 0;
       double turnSpeed = -angle / 50.0;
 
-      for (Preset p : presets) if (Math.abs(distance - p.distance) < Math.abs(distance - preset.distance)) preset = p;
-
-      drivebase.setDirection(-1);
+      preset = interpolate(distance, presets);
 
       SmartDashboard.putNumber("preset", preset.distance);
 
       turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.25, 0.25);
 
-      driveSpeed = MathUtil.clamp((distance - preset.distance) / 5.0, -0.35, 0.35);
-      driveSpeed = Math.copySign(Math.max(Math.abs(driveSpeed), 0.12), driveSpeed);
+      if (Math.abs(angle) > 2) isAligned = false;
 
-      if (Math.abs(angle) > 2 || Math.abs(distance - preset.distance) > 0.3) isAligned = false;
-
-      drivebase.curvatureDrive(Math.abs(distance - preset.distance) > 0.3 ? driveSpeed : 0, Math.abs(angle) > 2 ? turnSpeed : 0, Math.abs(angle) > 2 && Math.abs(distance - preset.distance) < 0.3);
+      drivebase.curvatureDrive(0, Math.abs(angle) > 2 ? turnSpeed : 0, true);
     } else {
-      if (SmartDashboard.getBoolean("USE INTERPOLATION", false)) {
-        preset = shooter.interpolate(SmartDashboard.getNumber("CV DISTANCE (TEST)", 5), presets); //ADDED BEFORE FUNCTION DEF - WILL BE FIXED IN LATER COMMIT
-      }
-        
       drivebase.curvatureDrive(0, 0, false);
     }
 
@@ -110,12 +131,7 @@ public class Shoot extends CommandBase {
         mainRPM = preset.mainRPM;
         topRPM = preset.topRPM;
     
-        if (upperColor == Color.Red && alliance == Alliance.Blue) {
-          mainRPM = 1000;
-          topRPM = 1000;
-        }
-    
-        if (upperColor == Color.Blue && alliance == Alliance.Red) {
+        if ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)) {
           mainRPM = 1000;
           topRPM = 1000;
         }
@@ -144,9 +160,7 @@ public class Shoot extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {
-    drivebase.setDirection(initialDirection);
-  }
+  public void end(boolean interrupted) {}
 
   @Override
   public boolean isFinished() {

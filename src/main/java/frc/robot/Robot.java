@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
 
     if (robotContainer.shooter.getTargetRPM() > 0) {
       if (robotContainer.superstructure.indexer.isActive()) {
-        led.setColor(135, 15, 150, 1);
+        led.setColor(150, 0, 150, 1);
       } else {
         double percent = robotContainer.shooter.getTargetRPM() - robotContainer.shooter.getMainRPM();
         percent = 1.0 - Math.abs(percent / robotContainer.shooter.getTargetRPM());

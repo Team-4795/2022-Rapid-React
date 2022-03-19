@@ -103,14 +103,6 @@ public class Drivebase extends SubsystemBase {
     diffDrive.curvatureDrive(speed * direction, rotation, quickTurn);
   }
 
-  public void setDirection(double d) {
-    direction = d;
-  }
-
-  public double getDirection() {
-    return direction;
-  }
-
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     leftLeader.setVoltage(leftVolts);
     rightLeader.setVoltage(rightVolts);

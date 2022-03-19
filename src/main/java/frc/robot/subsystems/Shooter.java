@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.ArrayList;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -15,7 +13,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.Preset;
 
 public class Shooter extends SubsystemBase {
   private final TalonFX FlywheelMain = new TalonFX(ShooterConstants.FLYWHEEL_MAIN_TALON);
@@ -43,8 +40,6 @@ public class Shooter extends SubsystemBase {
     
     FlywheelMain.config_kF(0, 0.0512, 0);
     FlywheelMain.config_kP(0, 0.04, 0);
-    FlywheelMain.config_kI(0, 0.001, 0);
-    // FlywheelMain.config_IntegralZone(0, izone);
 
     FlywheelTop.config_kF(0, 0.0512, 0);
     FlywheelTop.config_kP(0, 0.04, 0);
@@ -86,34 +81,6 @@ public class Shooter extends SubsystemBase {
 
   public double getTargetRPM() {
     return targetRPM;
-  }
-  
-  public Preset interpolate(double distance, ArrayList<Preset> presets) {
-    Preset bottomPreset = presets.get(0);
-    Preset upperPreset = new Preset(0, 0, 0);
-    
-    for (Preset p : presets) if (Math.abs(distance - p.distance) < Math.abs(distance - bottomPreset.distance)) bottomPreset = p;
-
-    try {
-      upperPreset = presets.get(presets.indexOf(bottomPreset) + 1);
-    } catch (IndexOutOfBoundsException e) {
-      upperPreset = bottomPreset;
-    }
-
-    double topRPMDifference = upperPreset.topRPM - bottomPreset.topRPM;
-    double mainRPMDifference = upperPreset.mainRPM - bottomPreset.mainRPM;
-    double dist = upperPreset.distance - bottomPreset.distance;
-
-    if (dist == 0) {
-      dist = bottomPreset.distance;
-    }
-
-    double percentage = (distance - bottomPreset.distance)/dist;
-
-    double topRPM = percentage*topRPMDifference + bottomPreset.topRPM;
-    double mainRPM = percentage*mainRPMDifference + bottomPreset.mainRPM;
-    
-    return new Preset(topRPM, mainRPM, distance);
   }
 
   @Override

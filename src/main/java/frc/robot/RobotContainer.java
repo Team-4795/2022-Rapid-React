@@ -57,11 +57,6 @@ public class RobotContainer {
     SmartDashboard.putData(shooter);
     SmartDashboard.putData(climber);
     SmartDashboard.putData(vision);
-    
-    SmartDashboard.putBoolean("USE INTERPOLATION", false);
-    SmartDashboard.putNumber("CV DISTANCE (TEST)", 5);
-    SmartDashboard.putNumber("main target", 1800);
-    SmartDashboard.putNumber("top target", 1600);
 
     configureButtonBindings();
   }
@@ -89,8 +84,8 @@ public class RobotContainer {
     extendClimber.whileHeld(new RunCommand(climber::extend, climber));
 
     unjamButton.whileHeld(new RunCommand(() -> {
-      superstructure.indexer.setIndexerSpeed(0.3, 1);
-      shooter.setShooterPower(0.3, 0.4);
+      superstructure.indexer.setIndexerSpeed(-0.3, -1);
+      shooter.setShooterPower(-0.3, -0.3);
     }, superstructure, shooter));
     intakeOverride.whenPressed(superstructure.intake::toggle);
     resetClimber.whenPressed(climber::resetEncoder);
