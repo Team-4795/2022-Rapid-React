@@ -55,7 +55,7 @@ public class Vision extends SubsystemBase {
         VisionConstants.CAMERA_HEIGHT_METERS,
         VisionConstants.TARGET_HEIGHT_METERS,
         VisionConstants.CAMERA_PITCH_RADIANS,
-        Units.degreesToRadians(result.getBestTarget().getPitch()))
+        Units.degreesToRadians(result.getBestTarget().getPitch())) - VisionConstants.CAMERA_OFFSET_METERS
         );
       targetAngle = result.getBestTarget().getYaw();
     } else {
@@ -68,6 +68,7 @@ public class Vision extends SubsystemBase {
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("Vision");
+    builder.addBooleanProperty("Has target", () -> hasTarget, null);
     builder.addDoubleProperty("Goal distance", () -> targetDistance, null);
     builder.addDoubleProperty("Goal angle", () -> targetAngle, null);
   }

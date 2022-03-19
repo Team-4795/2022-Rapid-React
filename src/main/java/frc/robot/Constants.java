@@ -57,6 +57,7 @@ public final class Constants {
   public static final class VisionConstants {
     public static final String CAMERA_NAME = "LifeCam";
 
+    public static final double CAMERA_OFFSET_METERS = Units.inchesToMeters(12);
     public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(25.25);
     public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(104);
     public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(42.5);

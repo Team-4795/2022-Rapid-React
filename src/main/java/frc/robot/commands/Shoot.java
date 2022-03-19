@@ -17,18 +17,13 @@ import frc.robot.subsystems.Vision;
 import frc.robot.sensors.ColorSensor.Color;
 import frc.robot.Constants.Preset;
 
-enum Stage {
-  Hold, Shoot, Feed
-}
-
 public class Shoot extends CommandBase {
   private final Drivebase drivebase;
   private final Superstructure superstructure;
   private final Shooter shooter;
   private final Vision vision;
   private final Alliance alliance = DriverStation.getAlliance();
-  private Stage stage;
-  private double mainRPM, topRPM, upperIndexer, lowerIndexer;
+  private double mainRPM, topRPM;
   private ArrayList<Preset> presets = new ArrayList<>();
   private Preset preset;
   private boolean useCV = true;
@@ -59,7 +54,7 @@ public class Shoot extends CommandBase {
     addRequirements(drivebase, superstructure, shooter, vision);
   }
 
-  private Preset interpolate(double distance, ArrayList<Preset> presets) {
+  private Preset interpolate(double distance) {
     Preset bottomPreset = presets.get(presets.size() - 1);
     Preset upperPreset;
     
@@ -92,7 +87,6 @@ public class Shoot extends CommandBase {
 
   @Override
   public void initialize() {
-    stage = Stage.Hold;
     preset = presets.get(0);
     drivebase.enableBrakeMode();
     vision.enableLED();
@@ -109,47 +103,31 @@ public class Shoot extends CommandBase {
       double angle = -vision.getTargetAngle();
       double turnSpeed = -angle / 50.0;
 
-      preset = interpolate(distance, presets);
+      preset = interpolate(distance);
 
       turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.25, 0.25);
 
       if (Math.abs(angle) > 2) isAligned = false;
 
-      drivebase.curvatureDrive(0, Math.abs(angle) > 2 ? turnSpeed : 0, true);
+      drivebase.curvatureDrive(0, !isAligned ? turnSpeed : 0, true);
     } else {
       drivebase.curvatureDrive(0, 0, false);
     }
 
-    switch (stage) {
-      case Hold:
-        upperIndexer = 0;
-        lowerIndexer = 0;
+    double upperIndexer = 0;
+    double lowerIndexer = 0;
 
-        mainRPM = preset.mainRPM;
-        topRPM = preset.topRPM;
-    
-        if ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)) {
-          mainRPM = 1000;
-          topRPM = 1000;
-        }
+    mainRPM = preset.mainRPM;
+    topRPM = preset.topRPM;
 
-        if (isAligned && Math.abs(shooter.getMainRPM() - mainRPM) < mainRPM * 0.05 && Math.abs(shooter.getTopRPM() - topRPM) < topRPM * 0.05) stage = Stage.Shoot;
+    if ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)) {
+      mainRPM = 1000;
+      topRPM = 1000;
+    }
 
-        break;
-      case Shoot:
-        upperIndexer = 0.5;
-        lowerIndexer = 0.5;
-
-        if (upperColor == Color.Other) stage = Stage.Feed;
-
-        break;
-      case Feed:
-        upperIndexer = 0.25;
-        lowerIndexer = 1;
-
-        if (upperColor != Color.Other) stage = Stage.Hold;
-
-        break;
+    if (isAligned && Math.abs(shooter.getMainRPM() - mainRPM) < mainRPM * 0.05 && Math.abs(shooter.getTopRPM() - topRPM) < topRPM * 0.05) {
+      upperIndexer = 0.5;
+      lowerIndexer = 1;
     }
 
     superstructure.indexer.setIndexerSpeed(upperIndexer, lowerIndexer);
