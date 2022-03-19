@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 import frc.robot.sensors.ColorSensor.Color;
 import frc.robot.Constants.Preset;
@@ -20,19 +19,17 @@ import frc.robot.Constants.Preset;
 public class Shoot extends CommandBase {
   private final Drivebase drivebase;
   private final Superstructure superstructure;
-  private final Shooter shooter;
   private final Vision vision;
-  private final Alliance alliance = DriverStation.getAlliance();
+  private Alliance alliance;
   private double mainRPM, topRPM;
   private ArrayList<Preset> presets = new ArrayList<>();
   private Preset preset;
   private boolean useCV = true;
   private long start;
 
-  public Shoot(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision, Preset ... defaultPreset) {
+  public Shoot(Drivebase drivebase, Superstructure superstructure, Vision vision, Preset ... defaultPreset) {
     this.drivebase = drivebase;
     this.superstructure = superstructure;
-    this.shooter = shooter;
     this.vision = vision;
     
     if (defaultPreset.length == 0) {
@@ -51,7 +48,7 @@ public class Shoot extends CommandBase {
     presets.add(new Preset(4200, 900, 13.5));
     presets.add(new Preset(4500, 900, 15));
 
-    addRequirements(drivebase, superstructure, shooter, vision);
+    addRequirements(drivebase, superstructure, vision);
   }
 
   private Preset interpolate(double distance) {
@@ -90,6 +87,7 @@ public class Shoot extends CommandBase {
     preset = presets.get(0);
     drivebase.enableBrakeMode();
     vision.enableLED();
+    alliance = DriverStation.getAlliance();
     start = System.currentTimeMillis();
   }
 
@@ -125,13 +123,13 @@ public class Shoot extends CommandBase {
       topRPM = 1000;
     }
 
-    if (isAligned && Math.abs(shooter.getMainRPM() - mainRPM) < mainRPM * 0.05 && Math.abs(shooter.getTopRPM() - topRPM) < topRPM * 0.05) {
+    if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.05 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.05) {
       upperIndexer = 0.5;
       lowerIndexer = 1;
     }
 
     superstructure.indexer.setIndexerSpeed(upperIndexer, lowerIndexer);
-    shooter.setShooterRPM(mainRPM, topRPM);
+    superstructure.shooter.setShooterRPM(mainRPM, topRPM);
   }
 
   @Override

@@ -17,14 +17,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CurvatureDrive;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.BallManager;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Vision;
 
 public class RobotContainer {
   public final Drivebase drivebase;
   public final Superstructure superstructure;
-  public final Shooter shooter;
   public final Climber climber;
   public final Vision vision;
 
@@ -36,10 +34,9 @@ public class RobotContainer {
   public RobotContainer() {
     drivebase = new Drivebase();
     superstructure = new Superstructure();
-    shooter = new Shooter();
     climber = new Climber();
     vision = new Vision();
-    autoSelector = new AutoSelector(drivebase, superstructure, shooter, vision);
+    autoSelector = new AutoSelector(drivebase, superstructure, vision);
 
     drivebase.setDefaultCommand(new CurvatureDrive(
       drivebase,
@@ -48,13 +45,12 @@ public class RobotContainer {
       () -> driverController.getRightTriggerAxis()
     ));
     superstructure.setDefaultCommand(new BallManager(superstructure));
-    shooter.setDefaultCommand(new RunCommand(() -> shooter.setShooterPower(0, 0), shooter));
     climber.setDefaultCommand(new RunCommand(() -> climber.setPower(0), climber));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
 
     SmartDashboard.putData(drivebase);
     SmartDashboard.putData(superstructure.indexer);
-    SmartDashboard.putData(shooter);
+    SmartDashboard.putData(superstructure.shooter);
     SmartDashboard.putData(climber);
     SmartDashboard.putData(vision);
 
@@ -76,17 +72,17 @@ public class RobotContainer {
     final JoystickButton extendClimber = new JoystickButton(operatorController, Controller.Button.kRightBumper.value);
 
     reverseButton.whenPressed(drivebase::reverse);
-    shootButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision));
-    tarmacButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision, new Preset(1650, 1800, 5)));
-    lowGoalButton.whileHeld(new Shoot(drivebase, superstructure, shooter, vision, new Preset(1500, 750, 0)));
+    shootButton.whileHeld(new Shoot(drivebase, superstructure, vision));
+    tarmacButton.whileHeld(new Shoot(drivebase, superstructure, vision, new Preset(1650, 1800, 5)));
+    lowGoalButton.whileHeld(new Shoot(drivebase, superstructure, vision, new Preset(1500, 750, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
     retractClimber.whileHeld(new RunCommand(climber::retract, climber));
     extendClimber.whileHeld(new RunCommand(climber::extend, climber));
 
     unjamButton.whileHeld(new RunCommand(() -> {
       superstructure.indexer.setIndexerSpeed(-0.3, -1);
-      shooter.setShooterPower(-0.3, -0.3);
-    }, superstructure, shooter));
+      superstructure.shooter.setShooterPower(-0.3, -0.3);
+    }, superstructure));
     intakeOverride.whenPressed(superstructure.intake::toggle);
     resetClimber.whenPressed(climber::resetEncoder);
     manualRetract.whileHeld(new RunCommand(() -> climber.setPower(-0.2), climber));

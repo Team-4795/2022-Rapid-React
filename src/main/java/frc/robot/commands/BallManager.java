@@ -4,24 +4,33 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Intake;
+import frc.robot.sensors.ColorSensor.Color;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
 
 public class BallManager extends CommandBase {
   private final Intake intake;
   private final Indexer indexer;
+  private final Shooter shooter;
+  private Alliance alliance;
 
   public BallManager(Superstructure superstructure) {
     this.intake = superstructure.intake;
     this.indexer = superstructure.indexer;
+    this.shooter = superstructure.shooter;
 
     addRequirements(superstructure);
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    alliance = DriverStation.getAlliance();
+  }
 
   @Override
   public void execute() {
@@ -41,6 +50,18 @@ public class BallManager extends CommandBase {
     } else {
       intake.setSpeed(0);
       indexer.setIndexerSpeed(0, 0);
+    }
+
+    Color upperColor = indexer.getUpperColor();
+
+    if ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)) {
+      shooter.setShooterRPM(1000, 1000);
+
+      if (shooter.getMainRPM() > 900) {
+        indexer.setIndexerSpeed(0.5, 1);
+      }
+    } else {
+      shooter.setShooterPower(0, 0);
     }
   }
 

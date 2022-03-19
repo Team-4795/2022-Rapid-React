@@ -43,12 +43,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Current", PD.getTotalCurrent());
     SmartDashboard.putNumber("Voltage", PD.getVoltage());
 
-    if (robotContainer.shooter.getTargetRPM() > 0) {
+    if (robotContainer.superstructure.shooter.getTargetRPM() > 0) {
       if (robotContainer.superstructure.indexer.isActive()) {
         led.setColor(150, 0, 150, 1);
       } else {
-        double percent = robotContainer.shooter.getTargetRPM() - robotContainer.shooter.getMainRPM();
-        percent = 1.0 - Math.abs(percent / robotContainer.shooter.getTargetRPM());
+        double percent = robotContainer.superstructure.shooter.getTargetRPM() - robotContainer.superstructure.shooter.getMainRPM();
+        percent = 1.0 - Math.abs(percent / robotContainer.superstructure.shooter.getTargetRPM());
   
         led.setColor(200, 90, 240, percent);
       }
