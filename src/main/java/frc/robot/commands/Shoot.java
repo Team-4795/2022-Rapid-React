@@ -72,15 +72,17 @@ public class Shoot extends CommandBase {
         break;
       }
     }
-  try {
-    bottomPreset = presets.get(presets.indexOf(bottomPreset)-1);
-    upperPreset = presets.get(presets.indexOf(bottomPreset) + 1);
-  } catch (IndexOutOfBoundsException e) {
-    if (distance > presets.get(presets.size()-1).distance) {
-      bottomPreset = presets.get(presets.size()-1);
+
+    try {
+      bottomPreset = presets.get(presets.indexOf(bottomPreset)-1);
+      upperPreset = presets.get(presets.indexOf(bottomPreset) + 1);
+    } catch (IndexOutOfBoundsException e) {
+      if (distance > presets.get(presets.size()-1).distance) {
+        bottomPreset = presets.get(presets.size()-1);
+      }
+      upperPreset = bottomPreset;
     }
-    upperPreset = bottomPreset;
-  }
+
     double topRPMDifference = upperPreset.topRPM - bottomPreset.topRPM;
     double mainRPMDifference = upperPreset.mainRPM - bottomPreset.mainRPM;
     double dist = upperPreset.distance - bottomPreset.distance;

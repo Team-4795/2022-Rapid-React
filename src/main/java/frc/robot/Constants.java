@@ -61,8 +61,8 @@ public final class Constants {
 
     public static final double CAMERA_OFFSET_METERS = Units.inchesToMeters(12);
     public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(25.25);
-    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(104);
-    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(42.5);
+    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(103);
+    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(35);
   }
 
   public static final class ControllerConstants {
