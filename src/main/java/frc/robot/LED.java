@@ -126,8 +126,8 @@ public class LED {
 
   public void wave(HSVPreset color, double time) {
     for (var i = 0; i < buffer.getLength(); i++) {
-      double s = 150 + ((i - pixelOffset) / buffer.getLength()) * 75;
-      buffer.setHSV(i, color.h, (int) s, color.v);
+      double v = 175 + Math.sin((double) (i - pixelOffset) / (double) buffer.getLength() * Math.PI * 2) * 75;
+      buffer.setHSV(i, color.h, color.v, (int) v);
     }
     if (timer.get() < time) {
       if (pixelOffset == buffer.getLength()-1) {
