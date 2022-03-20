@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Voltage", PD.getVoltage());
 
     if (robotContainer.climber.isActive()) {
-      led.wave(LEDColors.CLIMBING, 0.2);
+      led.wave(LEDColors.CLIMBING, 0.05);
     } else if (robotContainer.superstructure.shooter.getTargetRPM() > 0) {
       if (robotContainer.superstructure.indexer.isActive()) {
         led.setColor(LEDColors.SHOOTING);
@@ -57,14 +57,14 @@ public class Robot extends TimedRobot {
       }
     } else if (robotContainer.superstructure.indexer.hasUpperBall()) {
       if (robotContainer.superstructure.indexer.hasLowerBall()) {
-        led.setColor(LEDColors.HAS_BALL);
+        led.setColor(LEDColors.HAS_BALL, 1);
       } else {
         led.setColor(LEDColors.HAS_BALL, 0.5);
       }
     } else if (alliance == Alliance.Red) {
-      led.wave(LEDColors.RED, 0.1);
+      led.wave(LEDColors.RED, 0.05);
     } else {
-      led.wave(LEDColors.BLUE, 0.1);
+      led.wave(LEDColors.BLUE, 0.05);
     }
   }
 

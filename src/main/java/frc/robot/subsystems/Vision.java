@@ -57,6 +57,7 @@ public class Vision extends SubsystemBase {
         VisionConstants.CAMERA_PITCH_RADIANS,
         Units.degreesToRadians(result.getBestTarget().getPitch())) - VisionConstants.CAMERA_OFFSET_METERS
         );
+      targetDistance -= Math.pow(targetDistance * 0.1, 2);
       targetAngle = result.getBestTarget().getYaw();
     } else {
       hasTarget = false;

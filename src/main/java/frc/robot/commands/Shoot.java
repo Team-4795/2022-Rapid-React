@@ -44,20 +44,19 @@ public class Shoot extends CommandBase {
     this.vision = vision;
     
     if (defaultPreset.length == 0) {
-      presets.add(new ShooterPreset(1400, 2100, 3));
+      presets.add(new ShooterPreset(900, 2500, 3));
     } else {
       presets.add(defaultPreset[0]);
       useCV = false;
     }
 
-    presets.add(new ShooterPreset(1650, 1800, 5));
-    presets.add(new ShooterPreset(1950, 1600, 6.5));
-    presets.add(new ShooterPreset(2300, 1550, 8));
-    presets.add(new ShooterPreset(2650, 1500, 10));
+    presets.add(new ShooterPreset(1950, 1500, 5));
+    presets.add(new ShooterPreset(2150, 1500, 6.5));
+    presets.add(new ShooterPreset(2500, 1450, 8));
+    presets.add(new ShooterPreset(2950, 1350, 10));
     presets.add(new ShooterPreset(3350, 1200, 11));
-    presets.add(new ShooterPreset(3900, 950, 12));
-    presets.add(new ShooterPreset(4200, 900, 13.5));
-    presets.add(new ShooterPreset(4500, 900, 15));
+    presets.add(new ShooterPreset(4100, 800, 12));
+    presets.add(new ShooterPreset(4900, 700, 13.5));
 
     addRequirements(drivebase, superstructure, vision);
   }
@@ -124,6 +123,7 @@ public class Shoot extends CommandBase {
 
       drivebase.curvatureDrive(0, !isAligned ? turnSpeed : 0, true);
     } else {
+
       drivebase.curvatureDrive(0, 0, false);
     }
 
@@ -138,7 +138,7 @@ public class Shoot extends CommandBase {
       topRPM = 1000;
     }
 
-    if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.05 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.05) {
+    if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.02 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.02) {
       upperIndexer = 0.5;
       lowerIndexer = 1;
     }

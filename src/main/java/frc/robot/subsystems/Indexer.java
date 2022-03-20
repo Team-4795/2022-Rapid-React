@@ -47,7 +47,7 @@ public class Indexer extends SubsystemBase {
   }
 
   public boolean hasUpperBall() {
-    return colorSensor.getProximity() > 250;
+    return colorSensor.getProximity() > 550;
   }
 
   public boolean hasLowerBall() {
