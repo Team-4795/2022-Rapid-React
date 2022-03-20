@@ -1,5 +1,7 @@
 package frc.robot;
 
+import javax.swing.text.html.ParagraphView;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -48,16 +50,23 @@ public class AutoSelector {
       new InstantCommand(superstructure.intake::toggle),
       new ParallelRaceGroup(
         new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json")),
+        new TrajectorySequence(drivebase, "paths/3 Ball Human.wpilib.json")),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision),
-        new WaitCommand(5)),
+        new WaitCommand(3)),
       new InstantCommand(superstructure.intake::toggle),
-      new ParallelCommandGroup(
-        new RunCommand(() -> superstructure.intake.setSpeed(0.75))),
-        new Shoot(drivebase, superstructure, vision)
+      new ParallelRaceGroup(
+        new BallManager(superstructure),
+        new TrajectorySequence(drivebase, "paths/3 Ball Human_0.wpilib.json")),
+      new ParallelRaceGroup(
+        new TrajectorySequence(drivebase, "paths/3 Ball Human_1.wpilib.json"),
+        new RunCommand(() -> superstructure.intake.setSpeed(0.75))
+      ),
+      new ParallelRaceGroup(
+        new Shoot(drivebase, superstructure, vision),
+        new WaitCommand(3)
       )
-    );
+    ));
 
     // chooser.setDefaultOption("(Field Plot) 2 Ball", new SequentialCommandGroup(
     //   new InstantCommand(superstructure.intake::toggle),
