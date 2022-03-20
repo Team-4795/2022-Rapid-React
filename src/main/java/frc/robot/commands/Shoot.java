@@ -74,11 +74,11 @@ public class Shoot extends CommandBase {
     }
 
     try {
-      bottomPreset = presets.get(presets.indexOf(bottomPreset)-1);
+      bottomPreset = presets.get(presets.indexOf(bottomPreset) - 1);
       upperPreset = presets.get(presets.indexOf(bottomPreset) + 1);
     } catch (IndexOutOfBoundsException e) {
-      if (distance > presets.get(presets.size()-1).distance) {
-        bottomPreset = presets.get(presets.size()-1);
+      if (distance > presets.get(presets.size() - 1).distance) {
+        bottomPreset = presets.get(presets.size() - 1);
       }
       upperPreset = bottomPreset;
     }
