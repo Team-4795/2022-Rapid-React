@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.LEDColors;
 
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
@@ -45,23 +46,23 @@ public class Robot extends TimedRobot {
 
     if (robotContainer.superstructure.shooter.getTargetRPM() > 0) {
       if (robotContainer.superstructure.indexer.isActive()) {
-        led.setColor(150, 0, 150, 1);
+        led.setColor(LEDColors.SHOOTING);
       } else {
         double percent = robotContainer.superstructure.shooter.getTargetRPM() - robotContainer.superstructure.shooter.getMainRPM();
         percent = 1.0 - Math.abs(percent / robotContainer.superstructure.shooter.getTargetRPM());
   
-        led.setColor(200, 90, 240, percent);
+        led.setColor(LEDColors.SHOOTER_CHARGING, percent);
       }
     } else if (robotContainer.superstructure.indexer.hasUpperBall()) {
       if (robotContainer.superstructure.indexer.hasLowerBall()) {
-        led.setColor(0, 128, 0, 1);
+        led.setColor(LEDColors.ONE_BALL);
       } else {
-        led.setColor(0, 128, 0, 0.5);
+        led.setColor(LEDColors.TWO_BALLS);
       }
     } else if (alliance == Alliance.Red) {
-      led.setColor(128, 0, 0, 1);
+      led.wave(LEDColors.RED, 0.1);
     } else {
-      led.setColor(0, 0, 128, 1);
+      led.wave(LEDColors.BLUE, 0.1);
     }
   }
 
