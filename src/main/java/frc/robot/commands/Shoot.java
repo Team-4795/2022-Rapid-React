@@ -14,46 +14,57 @@ import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Vision;
 import frc.robot.sensors.ColorSensor.Color;
-import frc.robot.Constants.Preset;
 
 public class Shoot extends CommandBase {
+  public static final class ShooterPreset {
+    public double distance;
+    public double topRPM;
+    public double mainRPM;
+
+    public ShooterPreset(double t, double m, double d) {
+      distance = d;
+      topRPM = t;
+      mainRPM = m;
+    }
+  }
+
   private final Drivebase drivebase;
   private final Superstructure superstructure;
   private final Vision vision;
   private Alliance alliance;
   private double mainRPM, topRPM;
-  private ArrayList<Preset> presets = new ArrayList<>();
-  private Preset preset;
+  private ArrayList<ShooterPreset> presets = new ArrayList<>();
+  private ShooterPreset preset;
   private boolean useCV = true;
   private long start;
 
-  public Shoot(Drivebase drivebase, Superstructure superstructure, Vision vision, Preset ... defaultPreset) {
+  public Shoot(Drivebase drivebase, Superstructure superstructure, Vision vision, ShooterPreset ... defaultPreset) {
     this.drivebase = drivebase;
     this.superstructure = superstructure;
     this.vision = vision;
     
     if (defaultPreset.length == 0) {
-      presets.add(new Preset(1400, 2100, 3));
+      presets.add(new ShooterPreset(1400, 2100, 3));
     } else {
       presets.add(defaultPreset[0]);
       useCV = false;
     }
 
-    presets.add(new Preset(1650, 1800, 5));
-    presets.add(new Preset(1950, 1600, 6.5));
-    presets.add(new Preset(2300, 1550, 8));
-    presets.add(new Preset(2650, 1500, 10));
-    presets.add(new Preset(3350, 1200, 11));
-    presets.add(new Preset(3900, 950, 12));
-    presets.add(new Preset(4200, 900, 13.5));
-    presets.add(new Preset(4500, 900, 15));
+    presets.add(new ShooterPreset(1650, 1800, 5));
+    presets.add(new ShooterPreset(1950, 1600, 6.5));
+    presets.add(new ShooterPreset(2300, 1550, 8));
+    presets.add(new ShooterPreset(2650, 1500, 10));
+    presets.add(new ShooterPreset(3350, 1200, 11));
+    presets.add(new ShooterPreset(3900, 950, 12));
+    presets.add(new ShooterPreset(4200, 900, 13.5));
+    presets.add(new ShooterPreset(4500, 900, 15));
 
     addRequirements(drivebase, superstructure, vision);
   }
 
-  private Preset interpolate(double distance) {
-    Preset bottomPreset = presets.get(presets.size() - 1);
-    Preset upperPreset;
+  private ShooterPreset interpolate(double distance) {
+    ShooterPreset bottomPreset = presets.get(presets.size() - 1);
+    ShooterPreset upperPreset;
     
 	  for (int i = presets.size() - 1; i >= 0; i--) {
       if (distance > presets.get(i).distance) {
@@ -79,7 +90,7 @@ public class Shoot extends CommandBase {
     double topRPM = percentage * topRPMDifference + bottomPreset.topRPM;
     double mainRPM = percentage * mainRPMDifference + bottomPreset.mainRPM;
     
-    return new Preset(topRPM, mainRPM, distance);
+    return new ShooterPreset(topRPM, mainRPM, distance);
   }
 
   @Override

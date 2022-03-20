@@ -5,7 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.math.MathUtil;
+import frc.robot.LED.HSVPreset;
+import frc.robot.LED.RGBPreset;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 public final class Constants {
@@ -76,69 +77,12 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
 
-  public static final class Preset {
-    public double distance;
-    public double topRPM;
-    public double mainRPM;
-
-    public Preset(double t, double m, double d) {
-      distance = d;
-      topRPM = t;
-      mainRPM = m;
-    }
-  }
-
-  public static final class RGBPreset {
-    public int r;
-    public int g;
-    public int b;
-    public double percent;
-
-    public RGBPreset(int r, int g, int b, double ... percent) {
-      this.r = r;
-      this.g = g;
-      this.b = b;
-
-      if (percent.length == 1) {
-        this.percent = MathUtil.clamp(percent[0], 0, 1);
-      } else {
-        this.percent = 1;
-      }
-    }
-  }
-
-  public static final class HSVPreset {
-    public int h;
-    public int s;
-    public int v;
-    public double percent;
-
-    public HSVPreset(int h, int s, int v, double ... percent) {
-      this.h = h;
-      this.s = s;
-      this.v = v;
-
-      if (percent.length == 1) {
-        this.percent = MathUtil.clamp(percent[0], 0, 1);
-      } else {
-        this.percent = 1;
-      }
-    }
-  }
-
   public static final class LEDColors {
     public static final HSVPreset RED = new HSVPreset(0, 255, 255);
     public static final HSVPreset BLUE = new HSVPreset(125, 255, 255);
-    public static final RGBPreset ONE_BALL = new RGBPreset(0, 128, 0, 0.5);
-    public static final RGBPreset TWO_BALLS = new RGBPreset(0, 128, 0);
-    public static final RGBPreset SHOOTER_INIT = new RGBPreset(0, 128, 128); //cyan
-    public static final RGBPreset TARGET_FOUND = new RGBPreset(128, 108, 0); //orange
-    public static final RGBPreset SHOOTER_CHARGING = new RGBPreset(0, 128, 0); //green
-    public static final RGBPreset SHOOTING = new RGBPreset(235, 52, 119); // hot pink
-    public static final RGBPreset IDLE = new RGBPreset(128, 0, 128); //magenta
-    public static final RGBPreset CLIMBER_DOWN = new RGBPreset(64, 128, 0); //light green CHANGE LATER 
-    public static final RGBPreset CLIMBER_DOWN2 = new RGBPreset(64, 0, 128); //violet
-    public static final RGBPreset CLIMBER_UP = new RGBPreset(128, 108, 0); //Gold-ish
-    public static final RGBPreset CLIMBER_UP2 = new RGBPreset(0, 20, 128); //light green CHANGE LATER 
+    public static final RGBPreset HAS_BALL = new RGBPreset(0, 128, 0, 0.5);
+    public static final RGBPreset SHOOTER_CHARGING = new RGBPreset(200, 90, 240);
+    public static final RGBPreset SHOOTING = new RGBPreset(235, 52, 119);
+    public static final HSVPreset CLIMBING = new HSVPreset(150, 200, 235);
   }
 }

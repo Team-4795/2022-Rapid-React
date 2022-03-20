@@ -44,20 +44,22 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Current", PD.getTotalCurrent());
     SmartDashboard.putNumber("Voltage", PD.getVoltage());
 
-    if (robotContainer.superstructure.shooter.getTargetRPM() > 0) {
+    if (robotContainer.climber.isActive()) {
+      led.wave(LEDColors.CLIMBING, 0.2);
+    } else if (robotContainer.superstructure.shooter.getTargetRPM() > 0) {
       if (robotContainer.superstructure.indexer.isActive()) {
         led.setColor(LEDColors.SHOOTING);
       } else {
         double percent = robotContainer.superstructure.shooter.getTargetRPM() - robotContainer.superstructure.shooter.getMainRPM();
         percent = 1.0 - Math.abs(percent / robotContainer.superstructure.shooter.getTargetRPM());
-  
+
         led.setColor(LEDColors.SHOOTER_CHARGING, percent);
       }
     } else if (robotContainer.superstructure.indexer.hasUpperBall()) {
       if (robotContainer.superstructure.indexer.hasLowerBall()) {
-        led.setColor(LEDColors.ONE_BALL);
+        led.setColor(LEDColors.HAS_BALL);
       } else {
-        led.setColor(LEDColors.TWO_BALLS);
+        led.setColor(LEDColors.HAS_BALL, 0.5);
       }
     } else if (alliance == Alliance.Red) {
       led.wave(LEDColors.RED, 0.1);
