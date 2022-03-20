@@ -66,19 +66,21 @@ public class Shoot extends CommandBase {
     ShooterPreset bottomPreset = presets.get(presets.size() - 1);
     ShooterPreset upperPreset;
     
-	  for (int i = presets.size() - 1; i >= 0; i--) {
-      if (distance > presets.get(i).distance) {
-        bottomPreset = presets.get(i);
+	  for (ShooterPreset p : presets) {
+      if (distance - p.distance < 0) {
+        bottomPreset = p;
         break;
       }
     }
-
-    try {
-      upperPreset = presets.get(presets.indexOf(bottomPreset) + 1);
-    } catch (IndexOutOfBoundsException e) {
-      upperPreset = bottomPreset;
+  try {
+    bottomPreset = presets.get(presets.indexOf(bottomPreset)-1);
+    upperPreset = presets.get(presets.indexOf(bottomPreset) + 1);
+  } catch (IndexOutOfBoundsException e) {
+    if (distance > presets.get(presets.size()-1).distance) {
+      bottomPreset = presets.get(presets.size()-1);
     }
-
+    upperPreset = bottomPreset;
+  }
     double topRPMDifference = upperPreset.topRPM - bottomPreset.topRPM;
     double mainRPMDifference = upperPreset.mainRPM - bottomPreset.mainRPM;
     double dist = upperPreset.distance - bottomPreset.distance;
