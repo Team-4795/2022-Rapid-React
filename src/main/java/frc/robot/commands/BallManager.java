@@ -61,7 +61,11 @@ public class BallManager extends CommandBase {
         indexer.setIndexerSpeed(0.5, 1);
       }
     } else {
-      shooter.setShooterPower(0, 0);
+      if (shooter.getMainRPM() > 2300 && shooter.getTopRPM() > 1250) {
+        shooter.setShooterPower(0, 0);
+      } else {
+        shooter.setShooterRPM(2500, 1450);
+      }
     }
   }
 

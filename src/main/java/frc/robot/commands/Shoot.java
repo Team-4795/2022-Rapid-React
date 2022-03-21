@@ -117,7 +117,7 @@ public class Shoot extends CommandBase {
 
       preset = interpolate(distance);
 
-      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.25, 0.25);
+      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.2, 0.2);
 
       if (Math.abs(angle) > 2) isAligned = false;
 
