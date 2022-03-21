@@ -52,9 +52,7 @@ public class BallManager extends CommandBase {
       indexer.setIndexerSpeed(0, 0);
     }
 
-    Color upperColor = indexer.getUpperColor();
-
-    if ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)) {
+    if (indexer.isWrongColor(alliance)) {
       shooter.setShooterRPM(1000, 1000);
 
       if (shooter.getMainRPM() > 900) {
@@ -64,7 +62,7 @@ public class BallManager extends CommandBase {
       if (shooter.getMainRPM() > 2300 && shooter.getTopRPM() > 1250) {
         shooter.setShooterPower(0, 0);
       } else {
-        shooter.setShooterRPM(2500, 1450);
+        shooter.setShooterRPM(2500, 1450); //8 foot preset rpms at idle
       }
     }
   }

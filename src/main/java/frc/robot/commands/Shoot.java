@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Vision;
-import frc.robot.sensors.ColorSensor.Color;
 
 public class Shoot extends CommandBase {
   public static final class ShooterPreset {
@@ -107,7 +106,6 @@ public class Shoot extends CommandBase {
 
   @Override
   public void execute() {
-    Color upperColor = superstructure.indexer.getUpperColor();
     boolean isAligned = true;
 
     if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
@@ -133,7 +131,7 @@ public class Shoot extends CommandBase {
     mainRPM = preset.mainRPM;
     topRPM = preset.topRPM;
 
-    if ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)) {
+    if (superstructure.indexer.isWrongColor(alliance)) {
       mainRPM = 1000;
       topRPM = 1000;
     }
