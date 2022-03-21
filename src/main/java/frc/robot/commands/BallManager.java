@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake;
-import frc.robot.sensors.ColorSensor.Color;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 
@@ -59,11 +58,7 @@ public class BallManager extends CommandBase {
         indexer.setIndexerSpeed(0.5, 1);
       }
     } else {
-      if (shooter.getMainRPM() > 2300 && shooter.getTopRPM() > 1250) {
-        shooter.setShooterPower(0, 0);
-      } else {
-        shooter.setShooterRPM(2500, 1450); //8 foot preset rpms at idle
-      }
+        shooter.setShooterRPM(shooter.getMainRPM() > 2700 ? 2500 : 0, shooter.getTopRPM() > 1700 ? 1450 : 0); //8 foot preset rpms at idle
     }
   }
 
