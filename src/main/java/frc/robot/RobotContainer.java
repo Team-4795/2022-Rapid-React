@@ -35,6 +35,8 @@ public class RobotContainer {
   private final Controller operatorController = new Controller(ControllerConstants.OPERATOR);
 
   public RobotContainer() {
+
+    SmartDashboard.putBoolean("BEANS UPPER", false);
     
     drivebase = new Drivebase();
     superstructure = new Superstructure();

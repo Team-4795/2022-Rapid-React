@@ -47,8 +47,6 @@ public class BallManager extends CommandBase {
           RobotStates.setState(RobotStates.TWO_BALL);
           intake.toggle();
         }
-      } else {
-        RobotStates.setState(RobotStates.IDLE);
       }
 
       intake.setSpeed(intakeSpeed);
