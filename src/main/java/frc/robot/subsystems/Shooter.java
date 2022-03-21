@@ -87,6 +87,12 @@ public class Shooter extends SubsystemBase {
     return targetRPM;
   }
 
+  public double getFlywheelPercentage() {
+    double percent = getTargetRPM() - getMainRPM();
+    percent = Math.abs(1.0 - Math.abs(percent / getTargetRPM()));
+    return percent;
+  }
+
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("Shooter");

@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -13,6 +14,7 @@ import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxLimitSwitch;
 
+import frc.robot.RobotStates;
 import frc.robot.Constants.ClimberConstants;
 
 public class Climber extends SubsystemBase {
@@ -38,7 +40,9 @@ public class Climber extends SubsystemBase {
   }
 
   public void extend() {
+    RobotStates.setState(RobotStates.CLIMBING);
     if (m_climb_Encoder.getPosition() < 110) {
+      
       climb_motor.set(0.75);
     } else {
       climb_motor.set(0.0);
@@ -47,6 +51,7 @@ public class Climber extends SubsystemBase {
   
   public void retract() {
     if (m_climb_Encoder.getPosition() > 5) {
+      RobotStates.setState(RobotStates.CLIMBING);
       climb_motor.set(-1);
     } else {
       climb_motor.set(0.0);

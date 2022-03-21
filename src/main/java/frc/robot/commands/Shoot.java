@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotStates;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Vision;
@@ -106,6 +107,7 @@ public class Shoot extends CommandBase {
 
   @Override
   public void execute() {
+    RobotStates.setState(RobotStates.CHARGING);
     boolean isAligned = true;
 
     if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
@@ -121,7 +123,6 @@ public class Shoot extends CommandBase {
 
       drivebase.curvatureDrive(0, !isAligned ? turnSpeed : 0, true);
     } else {
-
       drivebase.curvatureDrive(0, 0, false);
     }
 
@@ -130,6 +131,7 @@ public class Shoot extends CommandBase {
 
     mainRPM = preset.mainRPM;
     topRPM = preset.topRPM;
+    
 
     if (superstructure.indexer.isWrongColor(alliance)) {
       mainRPM = 1000;
@@ -139,6 +141,7 @@ public class Shoot extends CommandBase {
     if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.02 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.02) {
       upperIndexer = 0.5;
       lowerIndexer = 1;
+      RobotStates.setState(RobotStates.SHOOTING);
     }
 
     superstructure.indexer.setIndexerSpeed(upperIndexer, lowerIndexer);
@@ -146,7 +149,9 @@ public class Shoot extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    RobotStates.setState(RobotStates.IDLE);
+  }
 
   @Override
   public boolean isFinished() {

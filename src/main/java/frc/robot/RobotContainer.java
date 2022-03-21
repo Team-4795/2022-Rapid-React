@@ -8,6 +8,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.Shoot.ShooterPreset;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.LED;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -26,17 +27,21 @@ public class RobotContainer {
   public final Climber climber;
   public final Vision vision;
 
+  public final LED led;
+
   private final AutoSelector autoSelector;
 
   private final Controller driverController = new Controller(ControllerConstants.DRIVER);
   private final Controller operatorController = new Controller(ControllerConstants.OPERATOR);
 
   public RobotContainer() {
+    
     drivebase = new Drivebase();
     superstructure = new Superstructure();
     climber = new Climber();
     vision = new Vision();
     autoSelector = new AutoSelector(drivebase, superstructure, vision);
+    led = new LED(this);
 
     drivebase.setDefaultCommand(new CurvatureDrive(
       drivebase,
@@ -47,6 +52,7 @@ public class RobotContainer {
     superstructure.setDefaultCommand(new BallManager(superstructure));
     climber.setDefaultCommand(new RunCommand(() -> climber.setPower(0), climber));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
+    led.setDefaultCommand(new RunCommand(led::leds, led));
 
     SmartDashboard.putData(drivebase);
     SmartDashboard.putData(superstructure.indexer);
@@ -78,6 +84,7 @@ public class RobotContainer {
     intakeButton.whenPressed(superstructure.intake::toggle);
     retractClimber.whileHeld(new RunCommand(climber::retract, climber));
     extendClimber.whileHeld(new RunCommand(climber::extend, climber));
+    
 
     unjamButton.whileHeld(new RunCommand(() -> {
       superstructure.indexer.setIndexerSpeed(-0.3, -1);

@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake;
-import frc.robot.sensors.ColorSensor.Color;
+import frc.robot.RobotStates;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 
@@ -41,8 +41,14 @@ public class BallManager extends CommandBase {
 
       if (indexer.hasUpperBall()) {
         upperSpeed = 0;
+        RobotStates.setState(RobotStates.ONE_BALL);
 
-        if (indexer.hasLowerBall()) intake.toggle();
+        if (indexer.hasLowerBall()) {
+          RobotStates.setState(RobotStates.TWO_BALL);
+          intake.toggle();
+        }
+      } else {
+        RobotStates.setState(RobotStates.IDLE);
       }
 
       intake.setSpeed(intakeSpeed);
@@ -56,6 +62,7 @@ public class BallManager extends CommandBase {
       shooter.setShooterRPM(1000, 1000);
 
       if (shooter.getMainRPM() > 900) {
+        RobotStates.setState(RobotStates.SHOOTING);
         indexer.setIndexerSpeed(0.5, 1);
       }
     } else {
@@ -68,7 +75,9 @@ public class BallManager extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    // RobotStates.setState(RobotStates.IDLE);
+  }
 
   @Override
   public boolean isFinished() {
