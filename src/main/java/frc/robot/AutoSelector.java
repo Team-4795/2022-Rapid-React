@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -20,52 +19,29 @@ public class AutoSelector {
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   public AutoSelector(Drivebase drivebase, Superstructure superstructure, Vision vision) {
-    // chooser.addOption("(2-1) 3 Ball", new SequentialCommandGroup(
-    //   new InstantCommand(superstructure.intake::toggle),
-    //   new ParallelRaceGroup(
-    //     new TrajectorySequence(drivebase, "paths/3Ball-2-1_1.wpilib.json"),
-    //     new BallManager(superstructure)
-    //   ),
-    //   new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(3)),
-    //   new ParallelRaceGroup(
-    //     new TrajectorySequence(drivebase, "paths/3Ball-2-1_2.wpilib.json"),
-    //     new BallManager(superstructure)
-    //   ),
-    //   new Shoot(drivebase, superstructure, shooter, vision))
-    // );
 
-    // chooser.addOption("(1-2) 3 Ball", new SequentialCommandGroup(
-    //   new ParallelRaceGroup(new Shoot(drivebase, superstructure, shooter, vision), new WaitCommand(2)),
-    //   new InstantCommand(superstructure.intake::toggle),
-    //   new ParallelRaceGroup(
-    //     new TrajectorySequence(drivebase, "paths/3BallAuto_V2.wpilib.json"),
-    //     new BallManager(superstructure)
-    //   ),
-    //   new Shoot(drivebase, superstructure, shooter, vision))
-    // );
-
-    chooser.setDefaultOption("2 Ball", new SequentialCommandGroup(
+    chooser.setDefaultOption("2-2 Ball", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::toggle),
       new ParallelRaceGroup(
         new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json")),
+        new TrajectorySequence(drivebase, "paths/3 Ball Human.wpilib.json")),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision),
-        new WaitCommand(5)),
+        new WaitCommand(1.5)),
       new InstantCommand(superstructure.intake::toggle),
-      new ParallelCommandGroup(
-        new RunCommand(() -> superstructure.intake.setSpeed(0.75))),
-        new Shoot(drivebase, superstructure, vision)
+      new ParallelRaceGroup(
+        new BallManager(superstructure),
+        new TrajectorySequence(drivebase, "paths/3 Ball Human_0.wpilib.json")),
+      new ParallelRaceGroup(
+        new TrajectorySequence(drivebase, "paths/3 Ball Human_1.wpilib.json"),
+        new RunCommand(() -> superstructure.intake.setSpeed(0.75))
+      ),
+      new ParallelRaceGroup(
+        new Shoot(drivebase, superstructure, vision),
+        new WaitCommand(1.5)
       )
-    );
+    ));
 
-    // chooser.setDefaultOption("(Field Plot) 2 Ball", new SequentialCommandGroup(
-    //   new InstantCommand(superstructure.intake::toggle),
-    //   new ParallelRaceGroup(
-    //     new BallManager(superstructure),
-    //     new TrajectorySequence(drivebase, "paths/2Ball.wpilib.json", "paths/2Ball_0.wpilib.json")),
-    //   new Shoot(drivebase, superstructure, shooter, vision))
-    // );
 
     chooser.addOption("Backup", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::toggle),

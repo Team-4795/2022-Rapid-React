@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.sensors.ColorSensor.Color;
 import frc.robot.sensors.BreakBeam;
@@ -56,6 +57,11 @@ public class Indexer extends SubsystemBase {
 
   public boolean isActive() {
     return Math.abs(upperMotor.get()) > 0 || Math.abs(lowerMotor.get()) > 0;
+  }
+
+  public boolean isWrongColor(Alliance alliance) {
+    Color upperColor = getUpperColor();
+    return (upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red);
   }
 
   @Override

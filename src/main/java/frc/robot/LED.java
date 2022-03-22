@@ -96,4 +96,24 @@ public class LED {
     led.setData(buffer);
     led.start();
   }
+
+  public void stream(HSVPreset color, double time) {
+    time = MathUtil.clamp(time, 0.025, time);
+    double v = 0;
+    for (var i = 0; i < buffer.getLength(); i++) {
+      v = 243-9*(i-pixelOffset);
+      buffer.setHSV(i, color.h, (int) v, color.v);
+    }
+    if (timer.get() < time) {
+      if (pixelOffset > (243/9)+1) {
+        pixelOffset = 0;
+      }
+    } else {
+      pixelOffset += 1;
+      timer.reset();
+    }
+    led.setData(buffer);
+    led.start();
+  }
+
 }

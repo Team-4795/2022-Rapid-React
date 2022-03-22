@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake;
-import frc.robot.sensors.ColorSensor.Color;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 
@@ -52,16 +51,14 @@ public class BallManager extends CommandBase {
       indexer.setIndexerSpeed(0, 0);
     }
 
-    Color upperColor = indexer.getUpperColor();
-
-    if ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)) {
+    if (indexer.isWrongColor(alliance)) {
       shooter.setShooterRPM(1000, 1000);
 
       if (shooter.getMainRPM() > 900) {
         indexer.setIndexerSpeed(0.5, 1);
       }
     } else {
-      shooter.setShooterPower(0, 0);
+        shooter.setShooterRPM(shooter.getMainRPM() > 2700 ? 2500 : 0, shooter.getTopRPM() > 1700 ? 1450 : 0); //8 foot preset rpms at idle
     }
   }
 
