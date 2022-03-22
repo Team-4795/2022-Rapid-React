@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.sensors.ColorSensor.Color;
 import frc.robot.sensors.BreakBeam;
@@ -41,15 +42,31 @@ public class Indexer extends SubsystemBase {
     lowerMotor.set(lowerSpeed);
   }
 
-  public Color getLowerColor() {
+  public Color getUpperColor() {
     return colorSensor.getColor();
   }
 
   public boolean hasUpperBall() {
-    return breakBeam.isBroken();
+    return colorSensor.getProximity() > 550;
   }
 
   public boolean hasLowerBall() {
-    return colorSensor.getProximity() > 250;
+    return breakBeam.isBroken();
+  }
+
+  public boolean isActive() {
+    return Math.abs(upperMotor.get()) > 0 || Math.abs(lowerMotor.get()) > 0;
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.setSmartDashboardType("Indexer");
+    builder.addBooleanProperty("Has upper ball", this::hasUpperBall, null);
+    builder.addBooleanProperty("Has lower ball", this::hasLowerBall, null);
+    builder.addDoubleProperty("Color sensor proximity", colorSensor::getProximity, null);
+    builder.addStringProperty("Ball color", () -> {
+      Color ballColor = colorSensor.getColor();
+      return ballColor == Color.Red ? "red" : (ballColor == Color.Blue ? "blue" : "other");
+    }, null);
   }
 }

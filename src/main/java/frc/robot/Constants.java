@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
+import frc.robot.LED.HSVPreset;
+import frc.robot.LED.RGBPreset;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 public final class Constants {
@@ -57,9 +59,10 @@ public final class Constants {
   public static final class VisionConstants {
     public static final String CAMERA_NAME = "LifeCam";
 
+    public static final double CAMERA_OFFSET_METERS = Units.inchesToMeters(12);
     public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(25.25);
-    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(104);
-    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(42.5);
+    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(103);
+    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(35);
   }
 
   public static final class ControllerConstants {
@@ -74,15 +77,12 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
 
-  public static final class Preset {
-    public double distance;
-    public double topRPM;
-    public double mainRPM;
-
-    public Preset(double t, double m, double d) {
-      distance = d;
-      topRPM = t;
-      mainRPM = m;
-    }
+  public static final class LEDColors {
+    public static final HSVPreset RED = new HSVPreset(0, 255, 255);
+    public static final HSVPreset BLUE = new HSVPreset(125, 255, 255);
+    public static final RGBPreset HAS_BALL = new RGBPreset(0, 128, 0, 0.5);
+    public static final RGBPreset SHOOTER_CHARGING = new RGBPreset(200, 90, 240);
+    public static final RGBPreset SHOOTING = new RGBPreset(235, 52, 119);
+    public static final HSVPreset CLIMBING = new HSVPreset(150, 200, 235);
   }
 }

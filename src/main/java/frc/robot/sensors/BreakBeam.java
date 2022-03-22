@@ -5,7 +5,6 @@
 package frc.robot.sensors;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class BreakBeam {
   private final DigitalInput sensor;
@@ -15,7 +14,6 @@ public class BreakBeam {
   }
 
   public boolean isBroken() {
-    SmartDashboard.putBoolean("beam", !sensor.get());
     return !sensor.get();
   }
 }

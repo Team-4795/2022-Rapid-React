@@ -9,7 +9,7 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.common.hardware.VisionLEDMode;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.VisionConstants;
@@ -55,15 +55,22 @@ public class Vision extends SubsystemBase {
         VisionConstants.CAMERA_HEIGHT_METERS,
         VisionConstants.TARGET_HEIGHT_METERS,
         VisionConstants.CAMERA_PITCH_RADIANS,
-        Units.degreesToRadians(result.getBestTarget().getPitch()))
+        Units.degreesToRadians(result.getBestTarget().getPitch())) - VisionConstants.CAMERA_OFFSET_METERS
         );
+      targetDistance -= Math.pow(targetDistance * 0.1, 2);
       targetAngle = result.getBestTarget().getYaw();
-      SmartDashboard.putNumber("distance", targetDistance);
-      SmartDashboard.putNumber("angle", targetAngle);
     } else {
       hasTarget = false;
       targetDistance = -1;
       targetAngle = -1;
     }
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.setSmartDashboardType("Vision");
+    builder.addBooleanProperty("Has target", () -> hasTarget, null);
+    builder.addDoubleProperty("Goal distance", () -> targetDistance, null);
+    builder.addDoubleProperty("Goal angle", () -> targetAngle, null);
   }
 }

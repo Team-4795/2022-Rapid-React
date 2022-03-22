@@ -14,13 +14,12 @@ import frc.robot.commands.Shoot;
 import frc.robot.commands.TrajectorySequence;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
 public class AutoSelector {
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
-  public AutoSelector(Drivebase drivebase, Superstructure superstructure, Shooter shooter, Vision vision) {
+  public AutoSelector(Drivebase drivebase, Superstructure superstructure, Vision vision) {
     // chooser.addOption("(2-1) 3 Ball", new SequentialCommandGroup(
     //   new InstantCommand(superstructure.intake::toggle),
     //   new ParallelRaceGroup(
@@ -51,12 +50,12 @@ public class AutoSelector {
         new BallManager(superstructure),
         new TrajectorySequence(drivebase, "paths/Forward.wpilib.json", "paths/Reverse.wpilib.json")),
       new ParallelRaceGroup(
-        new Shoot(drivebase, superstructure, shooter, vision),
+        new Shoot(drivebase, superstructure, vision),
         new WaitCommand(5)),
       new InstantCommand(superstructure.intake::toggle),
       new ParallelCommandGroup(
         new RunCommand(() -> superstructure.intake.setSpeed(0.75))),
-        new Shoot(drivebase, superstructure, shooter, vision)
+        new Shoot(drivebase, superstructure, vision)
       )
     );
 
@@ -75,7 +74,7 @@ public class AutoSelector {
         new RunCommand(() -> drivebase.curvatureDrive(0.35, 0, false), drivebase),
         new WaitCommand(3)
       ),
-      new Shoot(drivebase, superstructure, shooter, vision)
+      new Shoot(drivebase, superstructure, vision)
       )
     );
     

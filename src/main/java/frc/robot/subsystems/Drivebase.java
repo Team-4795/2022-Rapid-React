@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,10 +51,10 @@ public class Drivebase extends SubsystemBase {
     leftFollower.follow(leftLeader);
     rightFollower.follow(rightLeader);
 
-    leftLeader.setIdleMode(IdleMode.kBrake);
-    leftFollower.setIdleMode(IdleMode.kBrake);
-    rightLeader.setIdleMode(IdleMode.kBrake);
-    rightFollower.setIdleMode(IdleMode.kBrake);
+    leftLeader.setIdleMode(IdleMode.kCoast);
+    leftFollower.setIdleMode(IdleMode.kCoast);
+    rightLeader.setIdleMode(IdleMode.kCoast);
+    rightFollower.setIdleMode(IdleMode.kCoast);
 
     leftLeader.setInverted(true);
     leftFollower.setInverted(true);
@@ -78,6 +79,8 @@ public class Drivebase extends SubsystemBase {
     gyro = new AHRS(SPI.Port.kMXP);
 
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
+
+    SmartDashboard.putData(m_field2d);
   }
 
   public void enableBrakeMode() {
@@ -98,14 +101,6 @@ public class Drivebase extends SubsystemBase {
     movementSpeed = Math.max(Math.abs(speed), Math.abs(rotation));
 
     diffDrive.curvatureDrive(speed * direction, rotation, quickTurn);
-  }
-
-  public void setDirection(double d) {
-    direction = d;
-  }
-
-  public double getDirection() {
-    return direction;
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
@@ -166,11 +161,13 @@ public class Drivebase extends SubsystemBase {
     double rightDistance = getRightWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
 
     odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
+  }
 
-    SmartDashboard.putNumber("Left speed", m_leftEncoder.getVelocity());
-    SmartDashboard.putNumber("Right speed", m_rightEncoder.getVelocity());
-    SmartDashboard.putNumber("Left distance", leftDistance);
-    SmartDashboard.putNumber("Right distance", rightDistance);
-    SmartDashboard.putNumber("gyro", gyro.getRotation2d().getDegrees());
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.setSmartDashboardType("Drivebase");
+    builder.addDoubleProperty("Left speed", m_leftEncoder::getVelocity, null);
+    builder.addDoubleProperty("Right speed", m_rightEncoder::getVelocity, null);
+    builder.addDoubleProperty("Gyro angle", gyro.getRotation2d()::getDegrees, null);
   }
 }

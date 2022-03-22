@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.LEDColors;
 
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
@@ -43,18 +44,27 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Current", PD.getTotalCurrent());
     SmartDashboard.putNumber("Voltage", PD.getVoltage());
 
-    if (robotContainer.shooter.getMainRPM() > 500) {
-      led.setColor(200, 90, 240, 1);
+    if (robotContainer.climber.isActive()) {
+      led.wave(LEDColors.CLIMBING, 0.05);
+    } else if (robotContainer.superstructure.shooter.getTargetRPM() > 0) {
+      if (robotContainer.superstructure.indexer.isActive()) {
+        led.setColor(LEDColors.SHOOTING);
+      } else {
+        double percent = robotContainer.superstructure.shooter.getTargetRPM() - robotContainer.superstructure.shooter.getMainRPM();
+        percent = 1.0 - Math.abs(percent / robotContainer.superstructure.shooter.getTargetRPM());
+
+        led.setColor(LEDColors.SHOOTER_CHARGING, percent);
+      }
     } else if (robotContainer.superstructure.indexer.hasUpperBall()) {
       if (robotContainer.superstructure.indexer.hasLowerBall()) {
-        led.setColor(0, 128, 0, 1);
+        led.setColor(LEDColors.HAS_BALL, 1);
       } else {
-        led.setColor(0, 128, 0, 0.5);
+        led.setColor(LEDColors.HAS_BALL, 0.5);
       }
     } else if (alliance == Alliance.Red) {
-      led.setColor(128, 0, 0, 1);
+      led.wave(LEDColors.RED, 0.05);
     } else {
-      led.setColor(0, 0, 128, 1);
+      led.wave(LEDColors.BLUE, 0.05);
     }
   }
 
@@ -91,7 +101,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (getSecondsRemaining() < 17 && getSecondsRemaining() > 15) {
+    if (getSecondsRemaining() < 20 && getSecondsRemaining() > 18) {
       robotContainer.setRumble(1);
     } else {
       robotContainer.setRumble(0);

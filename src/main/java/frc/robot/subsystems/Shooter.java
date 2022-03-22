@@ -10,13 +10,14 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
   private final TalonFX FlywheelMain = new TalonFX(ShooterConstants.FLYWHEEL_MAIN_TALON);
   private final TalonFX FlywheelTop = new TalonFX(ShooterConstants.FLYWHEEL_TOP_TALON);
+  private double targetRPM;
 
   public Shooter() {
     FlywheelMain.configFactoryDefault();
@@ -38,18 +39,25 @@ public class Shooter extends SubsystemBase {
     FlywheelTop.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
     
     FlywheelMain.config_kF(0, 0.0512, 0);
-    FlywheelMain.config_kP(0, 0.04, 0);
+    FlywheelMain.config_kP(0, 0.07, 0);
+    FlywheelMain.config_kI(0, 0.0001, 0);
+    FlywheelMain.config_IntegralZone(0, 150.0 / (600.0) * 2048.0);
 
     FlywheelTop.config_kF(0, 0.0512, 0);
-    FlywheelTop.config_kP(0, 0.04, 0);
+    FlywheelTop.config_kP(0, 0.07, 0);
+    FlywheelTop.config_kI(0, 0.0001, 0);
+    FlywheelTop.config_IntegralZone(0, 150.0 / (600.0) * 2048.0);
   }
 
   public void setShooterPower(double speedMain, double speedTop) {
+    targetRPM = 0;
+
     FlywheelMain.set(ControlMode.PercentOutput, speedMain);
     FlywheelTop.set(ControlMode.PercentOutput, speedTop);
   }
 
   public void setShooterRPM(double speedMain, double speedTop) {
+    targetRPM = speedMain;
     // 2048 ticks per revolution, ticks per .10 second, 1 / 2048 * 60
     double speed_FalconUnits1 = speedMain / (600.0) * 2048.0;
     double speed_FalconUnits2 = speedTop / (600.0) * 2048.0;
@@ -75,9 +83,14 @@ public class Shooter extends SubsystemBase {
     return (FlywheelTop.getSelectedSensorVelocity()) / 2048.0 * 600;
   }
 
+  public double getTargetRPM() {
+    return targetRPM;
+  }
+
   @Override
-  public void periodic() {
-    SmartDashboard.putNumber("shooter Main RPM", getMainRPM());
-    SmartDashboard.putNumber("shooter Top RPM", getTopRPM());
+  public void initSendable(SendableBuilder builder) {
+    builder.setSmartDashboardType("Shooter");
+    builder.addDoubleProperty("Main RPM", this::getMainRPM, null);
+    builder.addDoubleProperty("Top RPM", this::getTopRPM, null);
   }
 }

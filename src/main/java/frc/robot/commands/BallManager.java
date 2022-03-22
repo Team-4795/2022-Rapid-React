@@ -7,20 +7,22 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 import frc.robot.sensors.ColorSensor.Color;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
 
 public class BallManager extends CommandBase {
   private final Intake intake;
   private final Indexer indexer;
+  private final Shooter shooter;
   private Alliance alliance;
-  private long lastIncorrect;
 
   public BallManager(Superstructure superstructure) {
     this.intake = superstructure.intake;
     this.indexer = superstructure.indexer;
+    this.shooter = superstructure.shooter;
 
     addRequirements(superstructure);
   }
@@ -28,21 +30,11 @@ public class BallManager extends CommandBase {
   @Override
   public void initialize() {
     alliance = DriverStation.getAlliance();
-    lastIncorrect = 0;
   }
 
   @Override
   public void execute() {
-    Color lowerColor = indexer.getLowerColor();
-
-    if (System.currentTimeMillis() - lastIncorrect < 1000) {
-      intake.setSpeed(0);
-      indexer.setIndexerSpeed(0, -1);
-
-      if (intake.isExtended()) intake.toggle();
-    } else if ((lowerColor == Color.Red && alliance == Alliance.Blue) || (lowerColor == Color.Blue && alliance == Alliance.Red)) {
-      lastIncorrect = System.currentTimeMillis();
-    } else if (intake.isExtended()) {
+    if (intake.isExtended()) {
       double intakeSpeed = 0.75;
       double upperSpeed = 0.25;
       double lowerSpeed = 1;
@@ -58,6 +50,18 @@ public class BallManager extends CommandBase {
     } else {
       intake.setSpeed(0);
       indexer.setIndexerSpeed(0, 0);
+    }
+
+    Color upperColor = indexer.getUpperColor();
+
+    if ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)) {
+      shooter.setShooterRPM(1000, 1000);
+
+      if (shooter.getMainRPM() > 900) {
+        indexer.setIndexerSpeed(0.5, 1);
+      }
+    } else {
+      shooter.setShooterPower(0, 0);
     }
   }
 
