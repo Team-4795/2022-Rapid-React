@@ -44,8 +44,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Current", PD.getTotalCurrent());
     SmartDashboard.putNumber("Voltage", PD.getVoltage());
 
-    if (robotContainer.climber.isActive()) {
+    if (robotContainer.climber.isActiveUpward()) {
       led.stream(LEDColors.CLIMBING, 0.025);
+    } else if (robotContainer.climber.isActiveDownward()) {
+      led.stream(LEDColors.CLIMBING, 0.025, true);
     } else if (robotContainer.superstructure.shooter.getTargetRPM() > 0) {
       if (robotContainer.superstructure.indexer.isActive()) {
         led.setColor(LEDColors.SHOOTING);

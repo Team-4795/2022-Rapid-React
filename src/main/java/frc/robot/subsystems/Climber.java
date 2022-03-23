@@ -53,10 +53,13 @@ public class Climber extends SubsystemBase {
     }
   }
 
-  public boolean isActive() {
+  public boolean isActiveUpward() {
     return climb_motor.get() > 0;
   }
-
+  
+  public boolean isActiveDownward() {
+    return climb_motor.get() < 0;
+  }
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("Climber");

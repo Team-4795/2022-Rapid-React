@@ -97,11 +97,16 @@ public class LED {
     led.start();
   }
 
-  public void stream(HSVPreset color, double time) {
+  public void stream(HSVPreset color, double time, boolean ... reverse) {
+    int sign = 1;
+    if (reverse.length != 1 && reverse[0] == true) {
+      sign = -1;
+    }
+
     time = MathUtil.clamp(time, 0.025, time);
     double v = 0;
     for (var i = 0; i < buffer.getLength(); i++) {
-      v = 243-9*(i-pixelOffset);
+      v = 243-9*(i+pixelOffset*sign);
       buffer.setHSV(i, color.h, (int) v, color.v);
     }
     if (timer.get() < time) {
