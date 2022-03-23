@@ -42,8 +42,8 @@ public final class Constants {
   public static final class IndexerConstants {
     public static final int INDEXER_LOWER = 10;
     public static final int INDEXER_UPPER = 9;
-    public static final int UPPER_BREAK_BEAM = 1;
-    public static final int LOWER_BREAK_BEAM = 2;
+    public static final int UPPER_BREAK_BEAM = 0;
+    public static final int LOWER_BREAK_BEAM = 1;
 
     public static final int CURRENT_LIMIT = 30;
   }
