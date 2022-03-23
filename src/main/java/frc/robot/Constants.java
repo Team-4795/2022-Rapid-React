@@ -20,13 +20,13 @@ public final class Constants {
     public static final int RIGHT_DRIVE_GROUP_CURRENT_LIMIT = 60;
 
     public static final double GEARING = 10.0;
-    public static final double kTrackwidthMeters = 0.63;
+    public static final double kTrackwidthMeters = 1.7864;
     public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
-    public static final double ksVolts = 0.146;
-    public static final double kvVoltSecondsPerMeter = 1.26;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.165;
+    public static final double ksVolts = 0.206;
+    public static final double kvVoltSecondsPerMeter = 1.28;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.224;
 
     public static final double kPDriveVel = 3;
   }

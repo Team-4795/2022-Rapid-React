@@ -25,8 +25,10 @@ public class AutoSelector {
     chooser.setDefaultOption("3 Ball + Human Ball", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::toggle),
       new ParallelRaceGroup(
-        new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/3 Ball Human.wpilib.json")),
+        new ParallelCommandGroup(
+          new BallManager(superstructure),
+          new TrajectorySequence(drivebase, "paths/3 Ball Human.wpilib.json")),
+        new WaitCommand(2.5)),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision),
         new WaitCommand(3)),
@@ -34,10 +36,11 @@ public class AutoSelector {
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new TrajectorySequence(drivebase, "paths/3 Ball Human_0.wpilib.json")),
-      new ParallelRaceGroup(
-        new TrajectorySequence(drivebase, "paths/3 Ball Human_1.wpilib.json"),
-        new RunCommand(() -> superstructure.intake.setSpeed(0.75))
+      new SequentialCommandGroup(
+        new BallManager(superstructure),
+        new WaitCommand(2)
       ),
+      new TrajectorySequence(drivebase, "paths/3 Ball Human_1.wpilib.json"),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision),
         new WaitCommand(3)
