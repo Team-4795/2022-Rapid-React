@@ -26,7 +26,7 @@ public class AutoSelector {
         new ParallelCommandGroup(
           new BallManager(superstructure),
           new TrajectorySequence(drivebase, "paths/Terminal_1.wpilib.json")),
-        new WaitCommand(3)),
+        new WaitCommand(4)),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision),
         new WaitCommand(3)),
