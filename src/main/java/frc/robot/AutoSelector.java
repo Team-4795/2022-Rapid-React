@@ -1,7 +1,5 @@
 package frc.robot;
 
-import javax.swing.text.html.ParagraphView;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,12 +20,12 @@ public class AutoSelector {
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   public AutoSelector(Drivebase drivebase, Superstructure superstructure, Vision vision) {
-    chooser.setDefaultOption("3 Ball + Human Ball", new SequentialCommandGroup(
+    chooser.setDefaultOption("Terminal", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::toggle),
       new ParallelRaceGroup(
         new ParallelCommandGroup(
           new BallManager(superstructure),
-          new TrajectorySequence(drivebase, "paths/3 Ball Human.wpilib.json")),
+          new TrajectorySequence(drivebase, "paths/Terminal_1.wpilib.json")),
         new WaitCommand(3)),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision),
@@ -35,12 +33,12 @@ public class AutoSelector {
       new InstantCommand(superstructure.intake::toggle),
       new ParallelRaceGroup(
         new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/3 Ball Human_0.wpilib.json")),
+        new TrajectorySequence(drivebase, "paths/Terminal_2.wpilib.json")),
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new WaitCommand(2)
       ),
-      new TrajectorySequence(drivebase, "paths/3 Ball Human_1.wpilib.json"),
+      new TrajectorySequence(drivebase, "paths/Terminal_3.wpilib.json"),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision),
         new WaitCommand(3)
@@ -55,8 +53,7 @@ public class AutoSelector {
         new WaitCommand(3)
       ),
       new Shoot(drivebase, superstructure, vision)
-      )
-    );
+    ));
     
     SmartDashboard.putData(chooser);
   }
