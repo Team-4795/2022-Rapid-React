@@ -20,6 +20,25 @@ public class Climber extends SubsystemBase {
   private RelativeEncoder m_climb_Encoder;
   private SparkMaxLimitSwitch limitSwitch;
 
+  public enum Level {
+    START(0),
+    MIDRETRACTING(1),
+    HIGHEXTENDING(2),
+    HIGHRETRACTING(3),
+    HIGHWAITING(4),
+    TRAVERSEEXTENDING(5),
+    TRAVERSERETRACTING(6),
+    END(7);
+
+    public int levelCode;
+
+    Level(int levelCode) {
+      this.levelCode = levelCode;
+    }
+  }
+
+  public Level level;
+
   public Climber() {
     climb_motor.restoreFactoryDefaults();
     climb_motor.setIdleMode(IdleMode.kBrake);
@@ -27,6 +46,7 @@ public class Climber extends SubsystemBase {
     climb_motor.setInverted(false);
     limitSwitch = climb_motor.getReverseLimitSwitch(Type.kNormallyOpen);
     limitSwitch.enableLimitSwitch(true);
+    level = Level.START;
   }
 
   public void setPower(double power) {
@@ -60,6 +80,11 @@ public class Climber extends SubsystemBase {
   public boolean isActiveDownward() {
     return climb_motor.get() < 0;
   }
+
+  public void advanceStage() {
+    level.levelCode++;
+  }
+
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("Climber");

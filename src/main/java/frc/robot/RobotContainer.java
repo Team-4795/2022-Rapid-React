@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CurvatureDrive;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.BallManager;
+import frc.robot.commands.ClimbSequence;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Vision;
 
@@ -70,6 +71,8 @@ public class RobotContainer {
     final JoystickButton manualRetract = new JoystickButton(operatorController, Controller.Button.kY.value);
     final JoystickButton retractClimber = new JoystickButton(operatorController, Controller.Button.kLeftBumper.value);
     final JoystickButton extendClimber = new JoystickButton(operatorController, Controller.Button.kRightBumper.value);
+    
+    final XBoxTrigger climbSequence = new XBoxTrigger(operatorController, 3);
 
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, vision));
@@ -78,6 +81,8 @@ public class RobotContainer {
     intakeButton.whenPressed(superstructure.intake::toggle);
     retractClimber.whileHeld(new RunCommand(climber::retract, climber));
     extendClimber.whileHeld(new RunCommand(climber::extend, climber));
+
+    climbSequence.whileHeld(new ClimbSequence(climber));
 
     unjamButton.whileHeld(new RunCommand(() -> {
       superstructure.indexer.setIndexerSpeed(-0.3, -1);
