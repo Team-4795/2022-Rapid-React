@@ -28,6 +28,8 @@ public class RobotContainer {
 
   private final AutoSelector autoSelector;
 
+  private final BallManager ballManager;
+
   private final Controller driverController = new Controller(ControllerConstants.DRIVER);
   private final Controller operatorController = new Controller(ControllerConstants.OPERATOR);
 
@@ -44,7 +46,10 @@ public class RobotContainer {
       () -> driverController.getRightX(),
       () -> driverController.getRightTriggerAxis()
     ));
-    superstructure.setDefaultCommand(new BallManager(superstructure));
+
+    ballManager = new BallManager(superstructure);
+    superstructure.setDefaultCommand(ballManager);
+
     climber.setDefaultCommand(new RunCommand(() -> climber.setPower(0), climber));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
 
@@ -68,6 +73,7 @@ public class RobotContainer {
     final JoystickButton intakeOverride = new JoystickButton(operatorController, Controller.Button.kB.value);
     final JoystickButton resetClimber = new JoystickButton(operatorController, Controller.Button.kX.value);
     final JoystickButton manualRetract = new JoystickButton(operatorController, Controller.Button.kY.value);
+    final JoystickButton reverseIntake = new JoystickButton(operatorController, Controller.Axis.kRightTrigger.value);
     final JoystickButton retractClimber = new JoystickButton(operatorController, Controller.Button.kLeftBumper.value);
     final JoystickButton extendClimber = new JoystickButton(operatorController, Controller.Button.kRightBumper.value);
 
@@ -76,16 +82,17 @@ public class RobotContainer {
     tarmacButton.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1650, 1800, 5)));
     lowGoalButton.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1500, 750, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
-    retractClimber.whileHeld(new RunCommand(climber::retract, climber));
-    extendClimber.whileHeld(new RunCommand(climber::extend, climber));
 
     unjamButton.whileHeld(new RunCommand(() -> {
       superstructure.indexer.setIndexerSpeed(-0.3, -1);
       superstructure.shooter.setShooterPower(-0.3, -0.3);
     }, superstructure));
     intakeOverride.whenPressed(superstructure.intake::toggle);
+    reverseIntake.whileHeld(() -> ballManager.setIntakeReversed(true)).whenReleased(() -> ballManager.setIntakeReversed(false));
     resetClimber.whenPressed(climber::resetEncoder);
     manualRetract.whileHeld(new RunCommand(() -> climber.setPower(-0.2), climber));
+    retractClimber.whileHeld(new RunCommand(climber::retract, climber));
+    extendClimber.whileHeld(new RunCommand(climber::extend, climber));
   }
 
   public Command getAutonomousCommand() {

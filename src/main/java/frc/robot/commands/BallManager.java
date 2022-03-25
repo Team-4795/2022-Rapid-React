@@ -18,6 +18,7 @@ public class BallManager extends CommandBase {
   private final Indexer indexer;
   private final Shooter shooter;
   private Alliance alliance;
+  private boolean reversed;
 
   public BallManager(Superstructure superstructure) {
     this.intake = superstructure.intake;
@@ -30,12 +31,17 @@ public class BallManager extends CommandBase {
   @Override
   public void initialize() {
     alliance = DriverStation.getAlliance();
+    reversed = false;
+  }
+
+  public void setIntakeReversed(boolean reversed) {
+    this.reversed = reversed;
   }
 
   @Override
   public void execute() {
     if (intake.isExtended()) {
-      double intakeSpeed = 0.75;
+      double intakeSpeed = 0.75 * (reversed ? -1 : 1);
       double upperSpeed = 0.25;
       double lowerSpeed = 1;
 

@@ -36,6 +36,7 @@ public class Intake extends SubsystemBase {
   public void toggle() {
     if (extended) {
       solenoid.set(Value.kReverse);
+      setSpeed(0);
     } else {
       solenoid.set(Value.kForward);
     }
@@ -53,8 +54,10 @@ public class Intake extends SubsystemBase {
   }
 
   public void setSpeed(double speed) {
-    leftRoller.set(speed);
-    rightRoller.set(speed);
+    if (extended) {
+      leftRoller.set(speed);
+      rightRoller.set(speed);
+    }
   }
 
   public boolean isExtended() {
