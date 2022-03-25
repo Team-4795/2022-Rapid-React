@@ -20,25 +20,45 @@ public class AutoSelector {
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   public AutoSelector(Drivebase drivebase, Superstructure superstructure, Vision vision) {
-    chooser.setDefaultOption("Terminal", new SequentialCommandGroup(
-      new InstantCommand(superstructure.intake::toggle),
+    chooser.setDefaultOption("4 Ball", new SequentialCommandGroup(
+      new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new ParallelCommandGroup(
           new BallManager(superstructure),
           new TrajectorySequence(drivebase, "paths/Terminal_1.wpilib.json")),
-        new WaitCommand(4)),
+        new WaitCommand(5).withInterrupt(() -> {
+          return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
+        })
+      ),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision),
         new WaitCommand(3)),
-      new InstantCommand(superstructure.intake::toggle),
+      new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new TrajectorySequence(drivebase, "paths/Terminal_2.wpilib.json")),
       new ParallelRaceGroup(
         new BallManager(superstructure),
-        new WaitCommand(2)
+        new WaitCommand(1)
       ),
       new TrajectorySequence(drivebase, "paths/Terminal_3.wpilib.json"),
+      new ParallelRaceGroup(
+        new Shoot(drivebase, superstructure, vision),
+        new WaitCommand(3)
+      )
+    ));
+
+    chooser.addOption("2 Ball", new SequentialCommandGroup(
+      new InstantCommand(superstructure.intake::deploy),
+      new ParallelRaceGroup(
+        new ParallelCommandGroup(
+          new BallManager(superstructure),
+          new TrajectorySequence(drivebase, "paths/Two_1.wpilib.json")),
+        new WaitCommand(4).withInterrupt(() -> {
+          return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
+        })
+      ),
+      new TrajectorySequence(drivebase, "paths/Two_2.wpilib.json"),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision),
         new WaitCommand(3)

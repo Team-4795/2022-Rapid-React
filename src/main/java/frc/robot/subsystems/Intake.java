@@ -42,6 +42,16 @@ public class Intake extends SubsystemBase {
     extended = !extended;
   }
 
+  public void deploy() {
+    solenoid.set(Value.kForward);
+    extended = true;
+  }
+
+  public void retract() {
+    solenoid.set(Value.kReverse);
+    extended = false;
+  }
+
   public void setSpeed(double speed) {
     leftRoller.set(speed);
     rightRoller.set(speed);
