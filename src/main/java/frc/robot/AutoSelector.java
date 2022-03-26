@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.BallManager;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TrajectorySequence;
-import frc.robot.commands.Shoot.ShooterPreset;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Vision;
@@ -32,19 +31,16 @@ public class AutoSelector {
         })
       ),
       new ParallelRaceGroup(
-        new Shoot(drivebase, superstructure, vision, new ShooterPreset(3725, 1000, 11.5)),
+        new Shoot(drivebase, superstructure, vision, false),
         new WaitCommand(3)),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/Terminal_2.wpilib.json")),
-      new ParallelRaceGroup(
-        new BallManager(superstructure),
-        new WaitCommand(1)
-      ),
-      new ParallelRaceGroup(
-        new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/Terminal_3.wpilib.json")
+        new SequentialCommandGroup(
+          new TrajectorySequence(drivebase, "paths/Terminal_2.wpilib.json"),
+          new WaitCommand(0.5),
+          new TrajectorySequence(drivebase, "paths/Terminal_3.wpilib.json")
+        )
       ),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision),
@@ -70,7 +66,7 @@ public class AutoSelector {
     ));
 
     chooser.addOption("Backup", new SequentialCommandGroup(
-      new InstantCommand(superstructure.intake::toggle),
+      new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new RunCommand(() -> drivebase.curvatureDrive(0.35, 0, false), drivebase),
