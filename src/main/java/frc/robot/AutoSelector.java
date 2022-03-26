@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.BallManager;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TrajectorySequence;
+import frc.robot.commands.Shoot.ShooterPreset;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Vision;
@@ -31,7 +32,7 @@ public class AutoSelector {
         })
       ),
       new ParallelRaceGroup(
-        new Shoot(drivebase, superstructure, vision),
+        new Shoot(drivebase, superstructure, vision, new ShooterPreset(3725, 1000, 11.5)),
         new WaitCommand(3)),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
@@ -57,7 +58,7 @@ public class AutoSelector {
         new ParallelCommandGroup(
           new BallManager(superstructure),
           new TrajectorySequence(drivebase, "paths/Two_1.wpilib.json")),
-        new WaitCommand(4).withInterrupt(() -> {
+        new WaitCommand(5).withInterrupt(() -> {
           return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
         })
       ),
