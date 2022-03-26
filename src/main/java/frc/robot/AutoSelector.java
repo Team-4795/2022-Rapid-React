@@ -32,7 +32,7 @@ public class AutoSelector {
       ),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision, false),
-        new WaitCommand(3.5)),
+        new WaitCommand(4)),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),

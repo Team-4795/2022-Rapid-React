@@ -62,7 +62,7 @@ public class BallManager extends CommandBase {
     Color upperColor = indexer.getUpperColor();
 
     if (System.currentTimeMillis() - startReject < 1250 || (indexer.hasUpperBall() && ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)))) {
-      shooter.setShooterRPM(1000, 500);
+      shooter.setShooterRPM(1000, 750);
       if (System.currentTimeMillis() - startReject > 2000) {
         startReject = System.currentTimeMillis();
       }
