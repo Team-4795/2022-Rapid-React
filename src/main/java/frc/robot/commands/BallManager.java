@@ -19,6 +19,7 @@ public class BallManager extends CommandBase {
   private final Shooter shooter;
   private Alliance alliance;
   private boolean reversed;
+  private long startReject;
 
   public BallManager(Superstructure superstructure) {
     this.intake = superstructure.intake;
@@ -60,9 +61,11 @@ public class BallManager extends CommandBase {
 
     Color upperColor = indexer.getUpperColor();
 
-    if ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)) {
-      shooter.setShooterRPM(1000, 1000);
-
+    if (System.currentTimeMillis() - startReject < 1250 || (indexer.hasUpperBall() && ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)))) {
+      shooter.setShooterRPM(1000, 500);
+      if (System.currentTimeMillis() - startReject > 2000) {
+        startReject = System.currentTimeMillis();
+      }
       if (shooter.getMainRPM() > 900) {
         indexer.setIndexerSpeed(0.5, 1);
       }

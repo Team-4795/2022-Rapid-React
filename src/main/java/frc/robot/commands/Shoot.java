@@ -44,7 +44,7 @@ public class Shoot extends CommandBase {
     this.vision = vision;
     
     if (defaultPreset.length == 0) {
-      presets.add(new ShooterPreset(900, 2500, 3));
+      presets.add(new ShooterPreset(900, 2200, 3));
     } else {
       presets.add(defaultPreset[0]);
       useCV = false;
@@ -135,7 +135,7 @@ public class Shoot extends CommandBase {
 
     if ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)) {
       mainRPM = 1000;
-      topRPM = 1000;
+      topRPM = 750;
     }
 
     if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.02 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.02) {

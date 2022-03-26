@@ -11,7 +11,7 @@ import frc.robot.subsystems.Drivebase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CurvatureDrive;
@@ -73,7 +73,7 @@ public class RobotContainer {
     final JoystickButton intakeOverride = new JoystickButton(operatorController, Controller.Button.kB.value);
     final JoystickButton resetClimber = new JoystickButton(operatorController, Controller.Button.kX.value);
     final JoystickButton manualRetract = new JoystickButton(operatorController, Controller.Button.kY.value);
-    final JoystickButton reverseIntake = new JoystickButton(operatorController, Controller.Axis.kRightTrigger.value);
+    final Trigger reverseIntake = new Trigger(() -> operatorController.getRightTriggerAxis() > 0);
     final JoystickButton retractClimber = new JoystickButton(operatorController, Controller.Button.kLeftBumper.value);
     final JoystickButton extendClimber = new JoystickButton(operatorController, Controller.Button.kRightBumper.value);
 
@@ -85,10 +85,10 @@ public class RobotContainer {
 
     unjamButton.whileHeld(new RunCommand(() -> {
       superstructure.indexer.setIndexerSpeed(-0.3, -1);
-      superstructure.shooter.setShooterPower(-0.3, -0.3);
+      superstructure.shooter.setShooterPower(-1, -0.3);
     }, superstructure));
     intakeOverride.whenPressed(superstructure.intake::toggle);
-    reverseIntake.whileHeld(() -> ballManager.setIntakeReversed(true)).whenReleased(() -> ballManager.setIntakeReversed(false));
+    reverseIntake.whenActive(() -> ballManager.setIntakeReversed(true)).whenInactive(() -> ballManager.setIntakeReversed(false));
     resetClimber.whenPressed(climber::resetEncoder);
     manualRetract.whileHeld(new RunCommand(() -> climber.setPower(-0.2), climber));
     retractClimber.whileHeld(new RunCommand(climber::retract, climber));
