@@ -32,7 +32,7 @@ public class AutoSelector {
       ),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision, false),
-        new WaitCommand(3)),
+        new WaitCommand(3.5)),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
@@ -61,7 +61,7 @@ public class AutoSelector {
       new TrajectorySequence(drivebase, "paths/Two_2.wpilib.json"),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision),
-        new WaitCommand(3)
+        new WaitCommand(3.5)
       )
     ));
 
@@ -70,7 +70,7 @@ public class AutoSelector {
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new RunCommand(() -> drivebase.curvatureDrive(0.35, 0, false), drivebase),
-        new WaitCommand(3)
+        new WaitCommand(2)
       ),
       new Shoot(drivebase, superstructure, vision)
     ));
