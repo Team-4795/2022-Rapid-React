@@ -117,7 +117,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     if (getSecondsRemaining() < 20 && getSecondsRemaining() > 18) {
       robotContainer.setRumble(1);
-    } else if (shooter.getTargetRPM() > 0 && shooter.getMainRPM() > 500 && !vision.hasTarget()) {
+    } else if (shooter.getTargetRPM() > 0 && shooter.getMainRPM() > 650 && !vision.hasTarget()) {
       robotContainer.setRumble(0.25);
     } else {
       robotContainer.setRumble(0);
