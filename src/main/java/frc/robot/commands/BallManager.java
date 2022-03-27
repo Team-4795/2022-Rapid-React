@@ -75,7 +75,11 @@ public class BallManager extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intake.setSpeed(0);
+    indexer.setIndexerSpeed(0, 0);
+    shooter.setShooterPower(0, 0);
+  }
 
   @Override
   public boolean isFinished() {

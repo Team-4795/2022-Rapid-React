@@ -154,7 +154,10 @@ public class Shoot extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    superstructure.indexer.setIndexerSpeed(0, 0);
+    superstructure.shooter.setShooterPower(0, 0);
+  }
 
   @Override
   public boolean isFinished() {
