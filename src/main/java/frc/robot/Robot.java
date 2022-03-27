@@ -15,6 +15,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.LEDColors;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Vision;
 
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
@@ -23,6 +27,10 @@ public class Robot extends TimedRobot {
   private Alliance alliance;
 
   private RobotContainer robotContainer;
+  private Indexer indexer;
+  private Shooter shooter;
+  private Climber climber;
+  private Vision vision;
 
   private long teleopStart;
 
@@ -33,6 +41,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robotContainer = new RobotContainer();
+    indexer = robotContainer.superstructure.indexer;
+    shooter = robotContainer.superstructure.shooter;
+    climber = robotContainer.climber;
+    vision = robotContainer.vision;
+
     alliance = DriverStation.getAlliance();
 
     CameraServer.startAutomaticCapture();
@@ -45,14 +58,14 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Current", PD.getTotalCurrent());
     SmartDashboard.putNumber("Voltage", PD.getVoltage());
 
-    if (robotContainer.climber.isActive()) {
+    if (climber.isActive()) {
       led.wave(LEDColors.CLIMBING, 0.05);
-    } else if (robotContainer.superstructure.shooter.getTargetRPM() > 0) {
-      if (robotContainer.superstructure.indexer.isActive()) {
+    } else if (shooter.getTargetRPM() > 0) {
+      if (indexer.isActive()) {
         led.setColor(LEDColors.SHOOTING);
       } else {
-        double percent = robotContainer.superstructure.shooter.getTargetRPM() - robotContainer.superstructure.shooter.getMainRPM();
-        percent = 1.0 - Math.abs(percent / robotContainer.superstructure.shooter.getTargetRPM());
+        double percent = shooter.getTargetRPM() - shooter.getMainRPM();
+        percent = 1.0 - Math.abs(percent / shooter.getTargetRPM());
 
         led.setColor(LEDColors.SHOOTER_CHARGING, percent);
       }
@@ -104,6 +117,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     if (getSecondsRemaining() < 20 && getSecondsRemaining() > 18) {
       robotContainer.setRumble(1);
+    } else if (shooter.getTargetRPM() > 0 && shooter.getMainRPM() > 500 && !vision.hasTarget()) {
+      robotContainer.setRumble(0.25);
     } else {
       robotContainer.setRumble(0);
     }
