@@ -123,8 +123,10 @@ public class Shoot extends CommandBase {
     Pose2d goalPose = drivebase.getGoalPose();
 
     if (goalPose != null && Math.abs(goalPose.getRotation().getDegrees()) > 45) {
+      isAligned = false;
       drivebase.curvatureDrive(0, -Math.signum(goalPose.getRotation().getDegrees()), true);
     } else if (goalPose != null && Units.metersToFeet(goalPose.getTranslation().getDistance(drivebase.getPose().getTranslation())) < 3.5) {
+      isAligned = false;
       drivebase.arcadeDrive(0.5, 0);
     } else if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();
