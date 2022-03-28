@@ -186,8 +186,14 @@ public class Drivebase extends SubsystemBase {
     builder.addDoubleProperty("Left speed", m_leftEncoder::getVelocity, null);
     builder.addDoubleProperty("Right speed", m_rightEncoder::getVelocity, null);
     builder.addDoubleProperty("Gyro angle", gyro.getRotation2d()::getDegrees, null);
-    builder.addDoubleProperty("Goal X", () -> getGoalPose().getX(), null);
-    builder.addDoubleProperty("Goal Y", () -> getGoalPose().getY(), null);
-    builder.addDoubleProperty("Goal Angle", () -> getGoalPose().getRotation().getDegrees(), null);
+    builder.addDoubleProperty("Goal X", () -> {
+      return currentGoal != null ? getGoalPose().getX() : 0;
+    }, null);
+    builder.addDoubleProperty("Goal Y", () -> {
+      return currentGoal != null ? getGoalPose().getY() : 0;
+    }, null);
+    builder.addDoubleProperty("Goal Angle", () -> {
+      return currentGoal != null ? getGoalPose().getRotation().getDegrees() : 0;
+    }, null);
   }
 }
