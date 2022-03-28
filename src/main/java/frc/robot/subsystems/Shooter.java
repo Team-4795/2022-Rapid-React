@@ -65,6 +65,10 @@ public class Shooter extends SubsystemBase {
     presets.add(0, p);
   }
 
+  public ArrayList<ShooterPreset> getPrests() {
+    return presets;
+  }
+  
   public void setShooterPower(double speedMain, double speedTop) {
     targetRPM = 0;
 

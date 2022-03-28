@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import java.util.ArrayList;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -34,7 +32,6 @@ public class Shoot extends CommandBase {
   private final Vision vision;
   private Alliance alliance;
   private double mainRPM, topRPM;
-  private ArrayList<ShooterPreset> presets = new ArrayList<>();
   private ShooterPreset preset;
   private final boolean useCV;
   private final boolean useAlignment;
@@ -48,20 +45,11 @@ public class Shoot extends CommandBase {
     
     if (defaultPreset.length == 0) {
       superstructure.shooter.addDefaultPreset(new ShooterPreset(900, 2200, 3));
-      presets.add(new ShooterPreset(900, 2200, 3));
       useCV = true;
     } else {
       superstructure.shooter.addDefaultPreset(defaultPreset[0]);
       useCV = false;
     }
-
-    // presets.add(new ShooterPreset(1950, 1500, 5));
-    // presets.add(new ShooterPreset(2150, 1500, 6.5));
-    // presets.add(new ShooterPreset(2500, 1450, 8));
-    // presets.add(new ShooterPreset(2950, 1350, 10));
-    // presets.add(new ShooterPreset(3350, 1200, 11));
-    // presets.add(new ShooterPreset(4100, 800, 12));
-    // presets.add(new ShooterPreset(4900, 700, 13.5));
 
     addRequirements(drivebase, superstructure, vision);
   }
@@ -70,11 +58,9 @@ public class Shoot extends CommandBase {
     this(drivebase, superstructure, vision, true, defaultPreset);
   }
 
-
-
   @Override
   public void initialize() {
-    preset = presets.get(0);
+    preset = superstructure.shooter.getPrests().get(0);
     drivebase.enableBrakeMode();
     vision.enableLED();
     alliance = DriverStation.getAlliance();
