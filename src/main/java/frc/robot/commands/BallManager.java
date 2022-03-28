@@ -9,7 +9,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake;
+import frc.robot.Constants;
+import frc.robot.commands.Shoot.ShooterPreset;
 import frc.robot.sensors.ColorSensor.Color;
+import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 
@@ -17,14 +20,16 @@ public class BallManager extends CommandBase {
   private final Intake intake;
   private final Indexer indexer;
   private final Shooter shooter;
+  private final Drivebase drivebase;
   private Alliance alliance;
   private boolean reversed;
   private long startReject;
 
-  public BallManager(Superstructure superstructure) {
+  public BallManager(Superstructure superstructure, Drivebase drivebase) {
     this.intake = superstructure.intake;
     this.indexer = superstructure.indexer;
     this.shooter = superstructure.shooter;
+    this.drivebase = drivebase;
 
     addRequirements(superstructure);
   }
@@ -70,7 +75,11 @@ public class BallManager extends CommandBase {
         indexer.setIndexerSpeed(0.5, 1);
       }
     } else {
-      shooter.setShooterPower(0, 0);
+      double centerX = Constants.FieldConstants.FIELD_WIDTH/2;
+      double centerY = Constants.FieldConstants.FIELD_HEIGHT/2;
+      double distance = Math.sqrt(Math.pow(drivebase.getPose().getX() - centerX, 2) + Math.pow(drivebase.getPose().getY() - centerY, 2)) - 2;
+      ShooterPreset s = shooter.interpolate(distance);
+      shooter.setShooterPower(0.9*s.topRPM, 0.9*s.mainRPM);
     }
   }
 

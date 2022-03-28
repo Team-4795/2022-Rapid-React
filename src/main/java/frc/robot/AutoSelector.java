@@ -24,7 +24,7 @@ public class AutoSelector {
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new ParallelCommandGroup(
-          new BallManager(superstructure),
+          new BallManager(superstructure, drivebase),
           new TrajectorySequence(drivebase, "paths/Terminal_1.wpilib.json")),
         new WaitCommand(5).withInterrupt(() -> {
           return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
@@ -35,7 +35,7 @@ public class AutoSelector {
         new WaitCommand(4)),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
-        new BallManager(superstructure),
+        new BallManager(superstructure, drivebase),
         new SequentialCommandGroup(
           new TrajectorySequence(drivebase, "paths/Terminal_2.wpilib.json"),
           new WaitCommand(0.75),
@@ -52,7 +52,7 @@ public class AutoSelector {
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new ParallelCommandGroup(
-          new BallManager(superstructure),
+          new BallManager(superstructure, drivebase),
           new TrajectorySequence(drivebase, "paths/Two_1.wpilib.json")),
         new WaitCommand(5).withInterrupt(() -> {
           return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
@@ -68,7 +68,7 @@ public class AutoSelector {
     chooser.addOption("Backup", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
-        new BallManager(superstructure),
+        new BallManager(superstructure, drivebase),
         new RunCommand(() -> drivebase.curvatureDrive(0.35, 0, false), drivebase),
         new WaitCommand(2)
       ),

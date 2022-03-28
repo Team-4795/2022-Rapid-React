@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Superstructure;
@@ -46,20 +47,21 @@ public class Shoot extends CommandBase {
     this.useAlignment = useAlignment;
     
     if (defaultPreset.length == 0) {
+      superstructure.shooter.addDefaultPreset(new ShooterPreset(900, 2200, 3));
       presets.add(new ShooterPreset(900, 2200, 3));
       useCV = true;
     } else {
-      presets.add(defaultPreset[0]);
+      superstructure.shooter.addDefaultPreset(defaultPreset[0]);
       useCV = false;
     }
 
-    presets.add(new ShooterPreset(1950, 1500, 5));
-    presets.add(new ShooterPreset(2150, 1500, 6.5));
-    presets.add(new ShooterPreset(2500, 1450, 8));
-    presets.add(new ShooterPreset(2950, 1350, 10));
-    presets.add(new ShooterPreset(3350, 1200, 11));
-    presets.add(new ShooterPreset(4100, 800, 12));
-    presets.add(new ShooterPreset(4900, 700, 13.5));
+    // presets.add(new ShooterPreset(1950, 1500, 5));
+    // presets.add(new ShooterPreset(2150, 1500, 6.5));
+    // presets.add(new ShooterPreset(2500, 1450, 8));
+    // presets.add(new ShooterPreset(2950, 1350, 10));
+    // presets.add(new ShooterPreset(3350, 1200, 11));
+    // presets.add(new ShooterPreset(4100, 800, 12));
+    // presets.add(new ShooterPreset(4900, 700, 13.5));
 
     addRequirements(drivebase, superstructure, vision);
   }
@@ -68,40 +70,7 @@ public class Shoot extends CommandBase {
     this(drivebase, superstructure, vision, true, defaultPreset);
   }
 
-  private ShooterPreset interpolate(double distance) {
-    ShooterPreset bottomPreset = presets.get(presets.size() - 1);
-    ShooterPreset upperPreset;
-    
-	  for (ShooterPreset p : presets) {
-      if (distance - p.distance < 0) {
-        bottomPreset = p;
-        break;
-      }
-    }
 
-    try {
-      bottomPreset = presets.get(presets.indexOf(bottomPreset) - 1);
-      upperPreset = presets.get(presets.indexOf(bottomPreset) + 1);
-    } catch (IndexOutOfBoundsException e) {
-      if (distance > presets.get(presets.size() - 1).distance) {
-        bottomPreset = presets.get(presets.size() - 1);
-      }
-      upperPreset = bottomPreset;
-    }
-
-    double topRPMDifference = upperPreset.topRPM - bottomPreset.topRPM;
-    double mainRPMDifference = upperPreset.mainRPM - bottomPreset.mainRPM;
-    double dist = upperPreset.distance - bottomPreset.distance;
-
-    if (dist == 0) dist = bottomPreset.distance;
-
-    double percentage = (distance - bottomPreset.distance) / dist;
-
-    double topRPM = percentage * topRPMDifference + bottomPreset.topRPM;
-    double mainRPM = percentage * mainRPMDifference + bottomPreset.mainRPM;
-    
-    return new ShooterPreset(topRPM, mainRPM, distance);
-  }
 
   @Override
   public void initialize() {
@@ -114,6 +83,9 @@ public class Shoot extends CommandBase {
 
   @Override
   public void execute() {
+    SmartDashboard.putNumber("DB X COORD", drivebase.getRobotCoords().getX());
+    SmartDashboard.putNumber("DB Y COORD", drivebase.getRobotCoords().getY());
+
     Color upperColor = superstructure.indexer.getUpperColor();
     boolean isAligned = true;
 
@@ -122,7 +94,7 @@ public class Shoot extends CommandBase {
       double angle = -vision.getTargetAngle();
       double turnSpeed = -angle / 50.0;
 
-      preset = interpolate(distance);
+      preset = superstructure.shooter.interpolate(distance);
 
       turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.25, 0.25);
 

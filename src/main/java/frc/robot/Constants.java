@@ -78,6 +78,11 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
 
+  public static final class FieldConstants {
+    public static final double FIELD_WIDTH = 16.4592;
+    public static final double FIELD_HEIGHT = 8.2296;
+  }
+
   public static final class LEDColors {
     public static final HSVPreset RED = new HSVPreset(0, 255, 255);
     public static final HSVPreset BLUE = new HSVPreset(125, 255, 255);

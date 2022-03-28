@@ -155,6 +155,10 @@ public class Drivebase extends SubsystemBase {
     m_field2d.getObject("traj").setTrajectory(trajectory);
   }
 
+  public Pose2d getRobotCoords() {
+    return getPose();
+  }
+
   @Override
   public void periodic() {
     double leftDistance = getLeftWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
