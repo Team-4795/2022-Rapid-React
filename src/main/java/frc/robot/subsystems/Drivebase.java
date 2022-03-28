@@ -39,6 +39,8 @@ public class Drivebase extends SubsystemBase {
 
   private final Field2d m_field2d = new Field2d();
 
+  private Pose2d currentGoal = null;
+
   private double movementSpeed = 0;
   private double direction = 1;
 
@@ -97,6 +99,12 @@ public class Drivebase extends SubsystemBase {
     rightFollower.setIdleMode(IdleMode.kCoast);
   }
 
+  public void arcadeDrive(double speed, double rotation) {
+    movementSpeed = Math.max(Math.abs(speed), Math.abs(rotation));
+
+    diffDrive.arcadeDrive(speed, rotation);
+  }
+
   public void curvatureDrive(double speed, double rotation, boolean quickTurn) {
     movementSpeed = Math.max(Math.abs(speed), Math.abs(rotation));
 
@@ -148,11 +156,20 @@ public class Drivebase extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
+    currentGoal = null;
     odometry.resetPosition(pose, gyro.getRotation2d());
   }
 
   public void putTrajectory(Trajectory trajectory) {
     m_field2d.getObject("traj").setTrajectory(trajectory);
+  }
+
+  public Pose2d getGoalPose() {
+    return currentGoal.relativeTo(getPose());
+  }
+
+  public void setGoalPose(Pose2d pose) {
+    currentGoal = pose;
   }
 
   @Override
@@ -169,5 +186,8 @@ public class Drivebase extends SubsystemBase {
     builder.addDoubleProperty("Left speed", m_leftEncoder::getVelocity, null);
     builder.addDoubleProperty("Right speed", m_rightEncoder::getVelocity, null);
     builder.addDoubleProperty("Gyro angle", gyro.getRotation2d()::getDegrees, null);
+    builder.addDoubleProperty("Goal X", () -> getGoalPose().getX(), null);
+    builder.addDoubleProperty("Goal Y", () -> getGoalPose().getY(), null);
+    builder.addDoubleProperty("Goal Angle", () -> getGoalPose().getRotation().getDegrees(), null);
   }
 }

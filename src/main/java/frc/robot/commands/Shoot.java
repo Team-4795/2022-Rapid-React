@@ -7,6 +7,9 @@ package frc.robot.commands;
 import java.util.ArrayList;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -117,7 +120,13 @@ public class Shoot extends CommandBase {
     Color upperColor = superstructure.indexer.getUpperColor();
     boolean isAligned = true;
 
-    if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
+    Pose2d goalPose = drivebase.getGoalPose();
+
+    if (goalPose != null && Math.abs(goalPose.getRotation().getDegrees()) > 45) {
+      drivebase.curvatureDrive(0, -Math.signum(goalPose.getRotation().getDegrees()), true);
+    } else if (goalPose != null && Units.metersToFeet(goalPose.getTranslation().getDistance(drivebase.getPose().getTranslation())) < 3.5) {
+      drivebase.arcadeDrive(0.5, 0);
+    } else if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();
       double angle = -vision.getTargetAngle();
       double turnSpeed = -angle / 50.0;
@@ -126,7 +135,12 @@ public class Shoot extends CommandBase {
 
       turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.25, 0.25);
 
-      if (Math.abs(angle) > 2) isAligned = false;
+      if (Math.abs(angle) > 2) {
+        isAligned = false;
+
+        drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(angle)));
+        drivebase.setGoalPose(new Pose2d(Units.feetToMeters(distance), 0, Rotation2d.fromDegrees(0)));
+      }
 
       drivebase.curvatureDrive(0, !isAligned && useAlignment ? turnSpeed : 0, true);
     } else {
