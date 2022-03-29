@@ -18,6 +18,8 @@ public class BallManager extends CommandBase {
   private final Indexer indexer;
   private final Shooter shooter;
   private Alliance alliance;
+  private boolean reversed;
+  private long startReject;
 
   public BallManager(Superstructure superstructure) {
     this.intake = superstructure.intake;
@@ -30,12 +32,17 @@ public class BallManager extends CommandBase {
   @Override
   public void initialize() {
     alliance = DriverStation.getAlliance();
+    reversed = false;
+  }
+
+  public void setIntakeReversed(boolean reversed) {
+    this.reversed = reversed;
   }
 
   @Override
   public void execute() {
     if (intake.isExtended()) {
-      double intakeSpeed = 0.75;
+      double intakeSpeed = 0.75 * (reversed ? -1 : 1);
       double upperSpeed = 0.25;
       double lowerSpeed = 1;
 
@@ -54,9 +61,11 @@ public class BallManager extends CommandBase {
 
     Color upperColor = indexer.getUpperColor();
 
-    if ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)) {
-      shooter.setShooterRPM(1000, 1000);
-
+    if (System.currentTimeMillis() - startReject < 1250 || (indexer.hasUpperBall() && ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)))) {
+      shooter.setShooterRPM(1000, 750);
+      if (System.currentTimeMillis() - startReject > 2000) {
+        startReject = System.currentTimeMillis();
+      }
       if (shooter.getMainRPM() > 900) {
         indexer.setIndexerSpeed(0.5, 1);
       }
@@ -66,7 +75,11 @@ public class BallManager extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intake.setSpeed(0);
+    indexer.setIndexerSpeed(0, 0);
+    shooter.setShooterPower(0, 0);
+  }
 
   @Override
   public boolean isFinished() {

@@ -18,7 +18,8 @@ import com.revrobotics.CANSparkMax.IdleMode;
 public class Indexer extends SubsystemBase {
   private final CANSparkMax upperMotor = new CANSparkMax(IndexerConstants.INDEXER_UPPER, MotorType.kBrushless);
   private final CANSparkMax lowerMotor = new CANSparkMax(IndexerConstants.INDEXER_LOWER, MotorType.kBrushed);
-  private final BreakBeam breakBeam = new BreakBeam(IndexerConstants.BREAK_BEAM_PORT);
+  private final BreakBeam upperBreakBeam = new BreakBeam(IndexerConstants.UPPER_BREAK_BEAM);
+  private final BreakBeam lowerBreakBeam = new BreakBeam(IndexerConstants.LOWER_BREAK_BEAM);
   private final ColorSensor colorSensor = new ColorSensor();
 
   public Indexer() {
@@ -47,11 +48,11 @@ public class Indexer extends SubsystemBase {
   }
 
   public boolean hasUpperBall() {
-    return colorSensor.getProximity() > 550;
+    return upperBreakBeam.isBroken();
   }
 
   public boolean hasLowerBall() {
-    return breakBeam.isBroken();
+    return lowerBreakBeam.isBroken();
   }
 
   public boolean isActive() {

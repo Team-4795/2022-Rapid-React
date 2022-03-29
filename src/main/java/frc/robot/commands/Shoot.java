@@ -35,16 +35,19 @@ public class Shoot extends CommandBase {
   private double mainRPM, topRPM;
   private ArrayList<ShooterPreset> presets = new ArrayList<>();
   private ShooterPreset preset;
-  private boolean useCV = true;
+  private final boolean useCV;
+  private final boolean useAlignment;
   private long start;
 
-  public Shoot(Drivebase drivebase, Superstructure superstructure, Vision vision, ShooterPreset ... defaultPreset) {
+  public Shoot(Drivebase drivebase, Superstructure superstructure, Vision vision, boolean useAlignment, ShooterPreset ... defaultPreset) {
     this.drivebase = drivebase;
     this.superstructure = superstructure;
     this.vision = vision;
+    this.useAlignment = useAlignment;
     
     if (defaultPreset.length == 0) {
-      presets.add(new ShooterPreset(900, 2500, 3));
+      presets.add(new ShooterPreset(900, 2200, 3));
+      useCV = true;
     } else {
       presets.add(defaultPreset[0]);
       useCV = false;
@@ -59,6 +62,10 @@ public class Shoot extends CommandBase {
     presets.add(new ShooterPreset(4900, 700, 13.5));
 
     addRequirements(drivebase, superstructure, vision);
+  }
+
+  public Shoot(Drivebase drivebase, Superstructure superstructure, Vision vision, ShooterPreset ... defaultPreset) {
+    this(drivebase, superstructure, vision, true, defaultPreset);
   }
 
   private ShooterPreset interpolate(double distance) {
@@ -121,9 +128,8 @@ public class Shoot extends CommandBase {
 
       if (Math.abs(angle) > 2) isAligned = false;
 
-      drivebase.curvatureDrive(0, !isAligned ? turnSpeed : 0, true);
+      drivebase.curvatureDrive(0, !isAligned && useAlignment ? turnSpeed : 0, true);
     } else {
-
       drivebase.curvatureDrive(0, 0, false);
     }
 
@@ -135,7 +141,7 @@ public class Shoot extends CommandBase {
 
     if ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)) {
       mainRPM = 1000;
-      topRPM = 1000;
+      topRPM = 750;
     }
 
     if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.02 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.02) {
@@ -148,7 +154,10 @@ public class Shoot extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    superstructure.indexer.setIndexerSpeed(0, 0);
+    superstructure.shooter.setShooterPower(0, 0);
+  }
 
   @Override
   public boolean isFinished() {
