@@ -36,7 +36,6 @@ public class Shoot extends CommandBase {
   private final Vision vision;
   private Alliance alliance;
   private double mainRPM, topRPM;
-  private ArrayList<ShooterPreset> presets = new ArrayList<>();
   private ShooterPreset preset;
   private final boolean useCV;
   private final boolean useAlignment;
@@ -49,20 +48,11 @@ public class Shoot extends CommandBase {
     this.useAlignment = useAlignment;
     
     if (defaultPreset.length == 0) {
-      presets.add(new ShooterPreset(900, 2200, 3));
       useCV = true;
     } else {
-      presets.add(defaultPreset[0]);
+      preset = defaultPreset[0];
       useCV = false;
     }
-
-    presets.add(new ShooterPreset(1950, 1500, 5));
-    presets.add(new ShooterPreset(2150, 1500, 6.5));
-    presets.add(new ShooterPreset(2500, 1450, 8));
-    presets.add(new ShooterPreset(2950, 1350, 10));
-    presets.add(new ShooterPreset(3350, 1200, 11));
-    presets.add(new ShooterPreset(4100, 800, 12));
-    presets.add(new ShooterPreset(4900, 700, 13.5));
 
     addRequirements(drivebase, superstructure, vision);
   }
@@ -71,7 +61,18 @@ public class Shoot extends CommandBase {
     this(drivebase, superstructure, vision, true, defaultPreset);
   }
 
-  private ShooterPreset interpolate(double distance) {
+  public static ShooterPreset interpolate(double distance) {
+    ArrayList<ShooterPreset> presets = new ArrayList<>();
+
+    presets.add(new ShooterPreset(900, 2200, 3));
+    presets.add(new ShooterPreset(1950, 1500, 5));
+    presets.add(new ShooterPreset(2150, 1500, 6.5));
+    presets.add(new ShooterPreset(2500, 1450, 8));
+    presets.add(new ShooterPreset(2950, 1350, 10));
+    presets.add(new ShooterPreset(3350, 1200, 11));
+    presets.add(new ShooterPreset(4100, 800, 12));
+    presets.add(new ShooterPreset(4900, 700, 13.5));
+
     ShooterPreset bottomPreset = presets.get(presets.size() - 1);
     ShooterPreset upperPreset;
     
@@ -108,7 +109,7 @@ public class Shoot extends CommandBase {
 
   @Override
   public void initialize() {
-    preset = presets.get(0);
+    if (useCV) preset = interpolate(4);
     drivebase.enableBrakeMode();
     vision.enableLED();
     alliance = DriverStation.getAlliance();
@@ -135,7 +136,7 @@ public class Shoot extends CommandBase {
 
       preset = interpolate(distance);
 
-      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.25, 0.25);
+      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.125), turnSpeed), -0.25, 0.25);
 
       if (Math.abs(angle) > 2) {
         isAligned = false;
@@ -171,6 +172,7 @@ public class Shoot extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
+    drivebase.disableBrakeMode();
     superstructure.indexer.setIndexerSpeed(0, 0);
     superstructure.shooter.setShooterPower(0, 0);
   }

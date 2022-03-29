@@ -47,7 +47,7 @@ public class RobotContainer {
       () -> driverController.getRightTriggerAxis()
     ));
 
-    ballManager = new BallManager(superstructure);
+    ballManager = new BallManager(superstructure, drivebase);
     superstructure.setDefaultCommand(ballManager);
 
     climber.setDefaultCommand(new RunCommand(() -> climber.setPower(0), climber));
