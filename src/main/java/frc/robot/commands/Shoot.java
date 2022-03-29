@@ -61,7 +61,7 @@ public class Shoot extends CommandBase {
     this(drivebase, superstructure, vision, true, defaultPreset);
   }
 
-  public static ShooterPreset interpolate(double distance) {
+  private ShooterPreset interpolate(double distance) {
     ArrayList<ShooterPreset> presets = new ArrayList<>();
 
     presets.add(new ShooterPreset(900, 2200, 3));
@@ -124,7 +124,7 @@ public class Shoot extends CommandBase {
     if (drivebase.hasGoalPose()) {
       Pose2d robotPose = drivebase.getPose();
       Pose2d goalPose = drivebase.getGoalPose();
-      double goalAngle = goalPose.getRotation().getDegrees() - (180 - Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX())));
+      double goalAngle = (robotPose.getRotation().getDegrees() + (180 - Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX())))) % 360;
 
       if (Math.abs(goalAngle) > 45) {
         isAligned = false;

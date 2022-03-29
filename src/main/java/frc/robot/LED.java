@@ -13,18 +13,11 @@ public class LED {
     public int r;
     public int g;
     public int b;
-    public double percent;
 
-    public RGBPreset(int r, int g, int b, double ... percent) {
+    public RGBPreset(int r, int g, int b) {
       this.r = r;
       this.g = g;
       this.b = b;
-
-      if (percent.length == 1) {
-        this.percent = MathUtil.clamp(percent[0], 0, 1);
-      } else {
-        this.percent = 1;
-      }
     }
   }
 
@@ -32,18 +25,11 @@ public class LED {
     public int h;
     public int s;
     public int v;
-    public double percent;
 
-    public HSVPreset(int h, int s, int v, double ... percent) {
+    public HSVPreset(int h, int s, int v) {
       this.h = h;
       this.s = s;
       this.v = v;
-
-      if (percent.length == 1) {
-        this.percent = MathUtil.clamp(percent[0], 0, 1);
-      } else {
-        this.percent = 1;
-      }
     }
   }
 
@@ -72,12 +58,12 @@ public class LED {
     led.start();
   }
 
-  public void setColor(RGBPreset l) {
-    setColor(l.r, l.g, l.b, l.percent);
-  }
-
   public void setColor(RGBPreset l, double percent) {
     setColor(l.r, l.g, l.b, percent);
+  }
+
+  public void setColor(RGBPreset l) {
+    setColor(l.r, l.g, l.b, 1);
   }
 
   public void wave(HSVPreset color, double time) {
