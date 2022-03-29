@@ -63,7 +63,7 @@ public class BallManager extends CommandBase {
 
       intake.setSpeed(intakeSpeed);
       indexer.setIndexerSpeed(upperSpeed, lowerSpeed);
-    } else if (drivebase != null && drivebase.getGoalPose() != null && indexer.hasUpperBall() && indexer.hasLowerBall()) {
+    } else if (drivebase != null && drivebase.hasGoalPose() && indexer.hasUpperBall() && indexer.hasLowerBall()) {
       double distance = Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation()));
       ShooterPreset preset = Shoot.interpolate(distance);
 

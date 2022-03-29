@@ -164,6 +164,10 @@ public class Drivebase extends SubsystemBase {
     m_field2d.getObject("traj").setTrajectory(trajectory);
   }
 
+  public boolean hasGoalPose() {
+    return currentGoal != null;
+  }
+
   public Pose2d getGoalPose() {
     return currentGoal.relativeTo(getPose());
   }

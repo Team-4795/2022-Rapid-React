@@ -121,12 +121,10 @@ public class Shoot extends CommandBase {
     Color upperColor = superstructure.indexer.getUpperColor();
     boolean isAligned = true;
 
-    Pose2d goalPose = drivebase.getGoalPose();
-
-    if (goalPose != null && Math.abs(goalPose.getRotation().getDegrees()) > 45) {
+    if (drivebase.hasGoalPose() && Math.abs(drivebase.getGoalPose().getRotation().getDegrees()) > 45) {
       isAligned = false;
-      drivebase.arcadeDrive(0, -Math.signum(goalPose.getRotation().getDegrees()));
-    } else if (goalPose != null && Units.metersToFeet(goalPose.getTranslation().getDistance(drivebase.getPose().getTranslation())) < 3.5) {
+      drivebase.arcadeDrive(0, -Math.signum(drivebase.getGoalPose().getRotation().getDegrees()));
+    } else if (drivebase.hasGoalPose() && Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation())) < 3.5) {
       isAligned = false;
       drivebase.arcadeDrive(0.5, 0);
     } else if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
@@ -140,7 +138,7 @@ public class Shoot extends CommandBase {
 
       if (Math.abs(angle) > 2) {
         isAligned = false;
-
+      } else {
         drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(angle)));
         drivebase.setGoalPose(new Pose2d(Units.feetToMeters(distance), 0, Rotation2d.fromDegrees(0)));
       }
