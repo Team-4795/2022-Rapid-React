@@ -55,12 +55,9 @@ public class TrajectorySequence extends SequentialCommandGroup {
         // RamseteCommand passes volts to the callback
         drivebase::tankDriveVolts,
         drivebase);
-      // Push the trajectory to Field2d.
-      drivebase.putTrajectory(trajectory);
 
       // Reset odometry to the starting pose of the trajectory.
       drivebase.resetOdometry(trajectory.getInitialPose());
-      drivebase.putTrajectory(trajectory);
       // Set up a sequence of commands
       // First, we want to reset the drivetrain odometry
       return new InstantCommand(() -> drivebase.resetOdometry(trajectory.getInitialPose()), drivebase)

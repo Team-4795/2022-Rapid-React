@@ -129,9 +129,6 @@ public class Shoot extends CommandBase {
       if (Math.abs(goalAngle) > 45) {
         isAligned = false;
         drivebase.arcadeDrive(0, -Math.signum(goalAngle));
-      } else if (Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation())) < 3.5) {
-        isAligned = false;
-        drivebase.arcadeDrive(0.5, 0);
       }
     }
     

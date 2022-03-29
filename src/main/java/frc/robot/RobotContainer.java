@@ -10,11 +10,13 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivebase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CurvatureDrive;
+import frc.robot.commands.DriveToGoal;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.BallManager;
 import frc.robot.subsystems.Superstructure;
@@ -66,7 +68,7 @@ public class RobotContainer {
     final JoystickButton reverseButton = new JoystickButton(driverController, Controller.Button.kRightBumper.value);
     final JoystickButton shootButton = new JoystickButton(driverController, Controller.Button.kA.value);
     final JoystickButton intakeButton = new JoystickButton(driverController, Controller.Button.kB.value);
-    final JoystickButton tarmacButton = new JoystickButton(driverController, Controller.Button.kX.value);
+    final JoystickButton driveToGoal = new JoystickButton(driverController, Controller.Button.kX.value);
     final JoystickButton lowGoalButton = new JoystickButton(driverController, Controller.Button.kY.value);
 
     final JoystickButton unjamButton = new JoystickButton(operatorController, Controller.Button.kA.value);
@@ -79,7 +81,7 @@ public class RobotContainer {
 
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, vision));
-    tarmacButton.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1650, 1800, 5)));
+    driveToGoal.whileHeld(new SequentialCommandGroup(new DriveToGoal(drivebase), new Shoot(drivebase, superstructure, vision)));
     lowGoalButton.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1500, 750, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
 

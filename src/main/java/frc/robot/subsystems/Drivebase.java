@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -158,10 +157,6 @@ public class Drivebase extends SubsystemBase {
     resetEncoders();
     currentGoal = null;
     odometry.resetPosition(pose, gyro.getRotation2d());
-  }
-
-  public void putTrajectory(Trajectory trajectory) {
-    m_field2d.getObject("traj").setTrajectory(trajectory);
   }
 
   public boolean hasGoalPose() {
