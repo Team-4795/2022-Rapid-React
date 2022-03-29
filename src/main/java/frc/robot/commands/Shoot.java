@@ -121,13 +121,21 @@ public class Shoot extends CommandBase {
     Color upperColor = superstructure.indexer.getUpperColor();
     boolean isAligned = true;
 
-    if (drivebase.hasGoalPose() && Math.abs(drivebase.getGoalPose().getRotation().getDegrees()) > 45) {
-      isAligned = false;
-      drivebase.arcadeDrive(0, -Math.signum(drivebase.getGoalPose().getRotation().getDegrees()));
-    } else if (drivebase.hasGoalPose() && Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation())) < 3.5) {
-      isAligned = false;
-      drivebase.arcadeDrive(0.5, 0);
-    } else if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
+    if (drivebase.hasGoalPose()) {
+      Pose2d robotPose = drivebase.getPose();
+      Pose2d goalPose = drivebase.getGoalPose();
+      double goalAngle = goalPose.getRotation().getDegrees() - (180 - Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX())));
+
+      if (Math.abs(goalAngle) > 45) {
+        isAligned = false;
+        drivebase.arcadeDrive(0, -Math.signum(goalAngle));
+      } else if (Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation())) < 3.5) {
+        isAligned = false;
+        drivebase.arcadeDrive(0.5, 0);
+      }
+    }
+    
+    if (useCV && isAligned && vision.hasTarget() && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();
       double angle = -vision.getTargetAngle();
       double turnSpeed = -angle / 50.0;

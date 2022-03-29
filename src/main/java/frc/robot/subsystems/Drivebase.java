@@ -39,7 +39,7 @@ public class Drivebase extends SubsystemBase {
 
   private final Field2d m_field2d = new Field2d();
 
-  private Pose2d currentGoal = null;
+  private Pose2d currentGoal;
 
   private double movementSpeed = 0;
   private double direction = 1;
@@ -169,7 +169,7 @@ public class Drivebase extends SubsystemBase {
   }
 
   public Pose2d getGoalPose() {
-    return currentGoal.relativeTo(getPose());
+    return currentGoal;
   }
 
   public void setGoalPose(Pose2d pose) {
@@ -182,6 +182,7 @@ public class Drivebase extends SubsystemBase {
     double rightDistance = getRightWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
 
     odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
+    m_field2d.setRobotPose(getPose());
   }
 
   @Override
@@ -191,13 +192,19 @@ public class Drivebase extends SubsystemBase {
     builder.addDoubleProperty("Right speed", m_rightEncoder::getVelocity, null);
     builder.addDoubleProperty("Gyro angle", gyro.getRotation2d()::getDegrees, null);
     builder.addDoubleProperty("Goal X", () -> {
-      return currentGoal != null ? getGoalPose().getX() : 0;
+      return hasGoalPose() ? getGoalPose().getX() : 0;
     }, null);
     builder.addDoubleProperty("Goal Y", () -> {
       return currentGoal != null ? getGoalPose().getY() : 0;
     }, null);
     builder.addDoubleProperty("Goal Angle", () -> {
-      return currentGoal != null ? getGoalPose().getRotation().getDegrees() : 0;
+      if (hasGoalPose()) {
+        Pose2d robotPose = getPose();
+        Pose2d goalPose = getGoalPose();
+        return (robotPose.getRotation().getDegrees() + (180 - Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX())))) % 360;
+      } else {
+        return 0;
+      }
     }, null);
   }
 }
