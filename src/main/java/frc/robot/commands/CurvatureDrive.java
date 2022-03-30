@@ -67,7 +67,7 @@ public class CurvatureDrive extends CommandBase {
     }
     
     if(speed == 0) {
-      double transitionRamp = MathUtil.clamp((System.currentTimeMillis() - lastAcceleration) / 500.0, 0.5, 1.0);
+      double transitionRamp = MathUtil.clamp((System.currentTimeMillis() - lastAcceleration) / 250.0, 0.5, 1.0);
 
       rotation *= Math.max(throttle, 0.4) * transitionRamp * 0.5;
 
