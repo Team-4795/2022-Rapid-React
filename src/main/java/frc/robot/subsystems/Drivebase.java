@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -186,7 +187,10 @@ public class Drivebase extends SubsystemBase {
     builder.addDoubleProperty("Left speed", m_leftEncoder::getVelocity, null);
     builder.addDoubleProperty("Right speed", m_rightEncoder::getVelocity, null);
     builder.addDoubleProperty("Gyro angle", gyro.getRotation2d()::getDegrees, null);
-    builder.addDoubleProperty("Goal Angle", () -> {
+    builder.addDoubleProperty("Distance distance", () -> {
+      return hasGoalPose() ? Units.metersToFeet(getGoalPose().getTranslation().getDistance(getPose().getTranslation())) : 0;
+    }, null);
+    builder.addDoubleProperty("Goal angle", () -> {
       if (hasGoalPose()) {
         Pose2d robotPose = getPose();
         Pose2d goalPose = getGoalPose();
