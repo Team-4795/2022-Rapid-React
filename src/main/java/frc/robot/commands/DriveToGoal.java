@@ -33,14 +33,15 @@ public class DriveToGoal extends CommandBase {
     if (drivebase.hasGoalPose()) {
       var robotPose = drivebase.getPose();
       var goalPose = drivebase.getGoalPose();
-      double goalAngle = (robotPose.getRotation().getDegrees() + (180 - Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX())))) % 360;
+      double rotation = Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX()));
+      double goalAngle = (robotPose.getRotation().getDegrees() + (180 - Math.abs(rotation)) * Math.signum(rotation)) % 360;
 
-      if (Math.abs(goalAngle) > 5) {
+      if (Math.abs(goalAngle) > 6) {
         isAligned = false;
-        drivebase.arcadeDrive(0, MathUtil.clamp(Math.abs(goalAngle / 50), 0.125, 1) * Math.signum(goalAngle));
+        drivebase.arcadeDrive(0, MathUtil.clamp(Math.abs(goalAngle / 50), 0.25, 0.65) * Math.signum(goalAngle));
       } else if (Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation())) > 6) {
         isAligned = false;
-        drivebase.arcadeDrive(-1, 0);
+        drivebase.arcadeDrive(-0.5, 0);
       }
     }
   }

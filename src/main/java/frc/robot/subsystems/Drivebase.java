@@ -186,7 +186,7 @@ public class Drivebase extends SubsystemBase {
     builder.setSmartDashboardType("Drivebase");
     builder.addDoubleProperty("Left speed", m_leftEncoder::getVelocity, null);
     builder.addDoubleProperty("Right speed", m_rightEncoder::getVelocity, null);
-    builder.addDoubleProperty("Gyro angle", () -> gyro.getRotation2d().getDegrees(), null);
+    builder.addDoubleProperty("Gyro angle", () -> getPose().getRotation().getDegrees(), null);
     builder.addDoubleProperty("Distance distance", () -> {
       return hasGoalPose() ? Units.metersToFeet(getGoalPose().getTranslation().getDistance(getPose().getTranslation())) : 0;
     }, null);
@@ -194,7 +194,8 @@ public class Drivebase extends SubsystemBase {
       if (hasGoalPose()) {
         Pose2d robotPose = getPose();
         Pose2d goalPose = getGoalPose();
-        return (robotPose.getRotation().getDegrees() + (180 - Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX())))) % 360;
+        double rotation = Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX()));
+        return (robotPose.getRotation().getDegrees() + (180 - Math.abs(rotation)) * Math.signum(rotation)) % 360;
       } else {
         return 0;
       }
