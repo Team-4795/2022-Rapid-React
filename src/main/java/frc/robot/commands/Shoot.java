@@ -121,19 +121,19 @@ public class Shoot extends CommandBase {
     Color upperColor = superstructure.indexer.getUpperColor();
     boolean isAligned = true;
 
-    if (drivebase.hasGoalPose()) {
-      Pose2d robotPose = drivebase.getPose();
-      Pose2d goalPose = drivebase.getGoalPose();
-      double goalAngle = (robotPose.getRotation().getDegrees() + (180 - Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX())))) % 360;
+    // if (drivebase.hasGoalPose()) {
+    //   Pose2d robotPose = drivebase.getPose();
+    //   Pose2d goalPose = drivebase.getGoalPose();
+    //   double goalAngle = (robotPose.getRotation().getDegrees() + (180 - Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX())))) % 360;
 
-      if (Math.abs(goalAngle) > 45) {
-        isAligned = false;
-        drivebase.arcadeDrive(0, -Math.signum(goalAngle));
-      }
-    }
+    //   if (Math.abs(goalAngle) > 25) {
+    //     isAligned = false;
+    //     drivebase.arcadeDrive(0, Math.signum(goalAngle) * 0.5);
+    //   }
+    // }
     
     if (useCV && isAligned && vision.hasTarget() && System.currentTimeMillis() - start < 3000) {
-      double distance = vision.getTargetDistance();
+      double distance = vision.getTargetDistance() + 1;
       double angle = -vision.getTargetAngle();
       double turnSpeed = -angle / 50.0;
 
@@ -149,7 +149,7 @@ public class Shoot extends CommandBase {
       }
 
       drivebase.curvatureDrive(0, !isAligned && useAlignment ? turnSpeed : 0, true);
-    } else {
+    } else if (isAligned) {
       drivebase.curvatureDrive(0, 0, false);
     }
 
@@ -165,7 +165,7 @@ public class Shoot extends CommandBase {
     }
 
     if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.02 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.02) {
-      upperIndexer = 0.5;
+      upperIndexer = 1;
       lowerIndexer = 1;
     }
 

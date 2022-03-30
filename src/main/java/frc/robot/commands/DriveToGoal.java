@@ -37,7 +37,7 @@ public class DriveToGoal extends CommandBase {
 
       if (Math.abs(goalAngle) > 5) {
         isAligned = false;
-        drivebase.arcadeDrive(0, -MathUtil.clamp(Math.abs(goalAngle / 50), 0.125, 1) * Math.signum(goalAngle));
+        drivebase.arcadeDrive(0, MathUtil.clamp(Math.abs(goalAngle / 50), 0.125, 1) * Math.signum(goalAngle));
       } else if (Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation())) > 6) {
         isAligned = false;
         drivebase.arcadeDrive(-1, 0);

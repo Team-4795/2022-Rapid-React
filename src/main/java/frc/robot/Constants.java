@@ -70,7 +70,7 @@ public final class Constants {
     public static final int DRIVER = 0;
     public static final int OPERATOR = 1;
 
-    public static final double JOYSTICK_DEADBAND = 0.05;
+    public static final double JOYSTICK_DEADBAND = 0.15;
   }
 
   public static final class AutoConstants {
