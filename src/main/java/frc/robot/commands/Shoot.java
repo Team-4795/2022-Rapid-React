@@ -133,7 +133,7 @@ public class Shoot extends CommandBase {
     // }
     
     if (useCV && isAligned && vision.hasTarget() && System.currentTimeMillis() - start < 3000) {
-      double distance = vision.getTargetDistance() + 1;
+      double distance = vision.getTargetDistance();
       double angle = -vision.getTargetAngle();
       double turnSpeed = -angle / 50.0;
 
