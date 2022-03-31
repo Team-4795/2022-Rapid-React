@@ -42,6 +42,9 @@ public class DriveToGoal extends CommandBase {
       } else if (Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation())) > 6) {
         isAligned = false;
         drivebase.arcadeDrive(-0.5, 0);
+      } else if (Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation())) < 3) {
+        isAligned = false;
+        drivebase.arcadeDrive(0.5, 0);
       }
     }
   }
