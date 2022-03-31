@@ -120,19 +120,8 @@ public class Shoot extends CommandBase {
   public void execute() {
     Color upperColor = superstructure.indexer.getUpperColor();
     boolean isAligned = true;
-
-    // if (drivebase.hasGoalPose()) {
-    //   Pose2d robotPose = drivebase.getPose();
-    //   Pose2d goalPose = drivebase.getGoalPose();
-    //   double goalAngle = (robotPose.getRotation().getDegrees() + (180 - Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX())))) % 360;
-
-    //   if (Math.abs(goalAngle) > 25) {
-    //     isAligned = false;
-    //     drivebase.arcadeDrive(0, Math.signum(goalAngle) * 0.5);
-    //   }
-    // }
     
-    if (useCV && isAligned && vision.hasTarget() && System.currentTimeMillis() - start < 3000) {
+    if (useCV && vision.hasTarget() && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();
       double angle = -vision.getTargetAngle();
       double turnSpeed = -angle / 50.0;
@@ -141,7 +130,7 @@ public class Shoot extends CommandBase {
 
       turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.125), turnSpeed), -0.25, 0.25);
 
-      if (Math.abs(angle) > 2) {
+      if (useAlignment && Math.abs(angle) > 2) {
         isAligned = false;
       } else {
         drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(angle)));

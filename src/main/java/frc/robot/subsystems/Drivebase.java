@@ -41,6 +41,8 @@ public class Drivebase extends SubsystemBase {
 
   private Pose2d currentGoal;
 
+  private boolean isAuto = false;
+
   private double movementSpeed = 0;
   private double direction = 1;
 
@@ -172,12 +174,25 @@ public class Drivebase extends SubsystemBase {
     currentGoal = pose;
   }
 
+  public void resetGoalPose() {
+    currentGoal = null;
+  }
+
+  public void setAutoMode(boolean mode) {
+    isAuto = mode;
+  }
+
   @Override
   public void periodic() {
     double leftDistance = getLeftWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
     double rightDistance = getRightWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
 
-    odometry.update(gyro.getRotation2d(), -leftDistance, -rightDistance);
+    if (isAuto) {
+      odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
+    } else {
+      odometry.update(gyro.getRotation2d(), -leftDistance, -rightDistance);
+    }
+
     m_field2d.setRobotPose(getPose());
   }
 

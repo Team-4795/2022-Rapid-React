@@ -32,13 +32,13 @@ public class AutoSelector {
       ),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision, false),
-        new WaitCommand(4)),
+        new WaitCommand(3)),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new SequentialCommandGroup(
           new TrajectorySequence(drivebase, "paths/Terminal_2.wpilib.json"),
-          new WaitCommand(0.75),
+          new WaitCommand(1),
           new TrajectorySequence(drivebase, "paths/Terminal_3.wpilib.json")
         )
       ),
