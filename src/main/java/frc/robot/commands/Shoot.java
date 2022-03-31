@@ -138,7 +138,7 @@ public class Shoot extends CommandBase {
       }
 
       drivebase.curvatureDrive(0, !isAligned && useAlignment ? turnSpeed : 0, true);
-    } else if (isAligned) {
+    } else {
       drivebase.curvatureDrive(0, 0, false);
     }
 
