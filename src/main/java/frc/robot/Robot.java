@@ -17,6 +17,7 @@ import frc.robot.Constants.LEDColors;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer robotContainer;
   private Drivebase drivebase;
+  private Intake intake;
   private Indexer indexer;
   private Shooter shooter;
   private Climber climber;
@@ -43,6 +45,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robotContainer = new RobotContainer();
     drivebase = robotContainer.drivebase;
+    intake = robotContainer.superstructure.intake;
     indexer = robotContainer.superstructure.indexer;
     shooter = robotContainer.superstructure.shooter;
     climber = robotContainer.climber;
@@ -123,11 +126,17 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     if (getSecondsRemaining() < 20 && getSecondsRemaining() > 18) {
-      robotContainer.setRumble(1);
+      robotContainer.setDriverRumble(1);
     } else if (shooter.getTargetRPM() > 0 && shooter.getMainRPM() > 650 && !vision.hasTarget()) {
-      robotContainer.setRumble(0.25);
+      robotContainer.setDriverRumble(0.25);
     } else {
-      robotContainer.setRumble(0);
+      robotContainer.setDriverRumble(0);
+    }
+
+    if (intake.hasBall()) {
+      robotContainer.setOperatorRumble(0.5);
+    } else {
+      robotContainer.setOperatorRumble(0);
     }
   }
 

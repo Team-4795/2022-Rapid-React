@@ -101,8 +101,13 @@ public class RobotContainer {
     return autoSelector.getSelected();
   }
 
-  public void setRumble(double rumble) {
+  public void setDriverRumble(double rumble) {
     driverController.setRumble(RumbleType.kLeftRumble, rumble);
     driverController.setRumble(RumbleType.kRightRumble, rumble);
+  }
+
+  public void setOperatorRumble(double rumble) {
+    operatorController.setRumble(RumbleType.kLeftRumble, rumble);
+    operatorController.setRumble(RumbleType.kRightRumble, rumble);
   }
 }
