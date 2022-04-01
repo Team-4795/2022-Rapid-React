@@ -17,6 +17,7 @@ import frc.robot.Constants.ClimberConstants;
 
 public class Climber extends SubsystemBase {
   private CANSparkMax climb_motor = new CANSparkMax(ClimberConstants.CLIMB_MOTOR, MotorType.kBrushless);
+  private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.FORWARD_CHANNEL, ClimberConstants.REVERSE_CHANNEL);
   private RelativeEncoder m_climb_Encoder;
   private SparkMaxLimitSwitch limitSwitch;
 
@@ -53,6 +54,14 @@ public class Climber extends SubsystemBase {
     }
   }
 
+  public void tilt(){
+    solenoid.set(Value.kForward);
+  }
+ 
+  public void untilt(){
+    solenoid.set(Value.kReverse);
+  }
+  
   public boolean isActive() {
     return climb_motor.get() > 0;
   }
