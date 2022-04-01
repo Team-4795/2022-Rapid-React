@@ -201,8 +201,8 @@ public class Drivebase extends SubsystemBase {
     builder.setSmartDashboardType("Drivebase");
     builder.addDoubleProperty("Left speed", m_leftEncoder::getVelocity, null);
     builder.addDoubleProperty("Right speed", m_rightEncoder::getVelocity, null);
-    builder.addDoubleProperty("Gyro angle", () -> getPose().getRotation().getDegrees(), null);
-    builder.addDoubleProperty("Distance distance", () -> {
+    builder.addDoubleProperty("Gyro angle", () -> gyro.getRotation2d().getDegrees(), null);
+    builder.addDoubleProperty("Goal distance", () -> {
       return hasGoalPose() ? Units.metersToFeet(getGoalPose().getTranslation().getDistance(getPose().getTranslation())) : 0;
     }, null);
     builder.addDoubleProperty("Goal angle", () -> {
