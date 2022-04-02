@@ -30,9 +30,7 @@ public class AutoSelector {
           return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
         })
       ),
-      new ParallelRaceGroup(
-        new Shoot(drivebase, superstructure, vision, false),
-        new WaitCommand(3)),
+      new Shoot(drivebase, superstructure, vision, false).withTimeout(3),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
@@ -42,10 +40,7 @@ public class AutoSelector {
           new TrajectorySequence(drivebase, "paths/Terminal_3.wpilib.json")
         )
       ),
-      new ParallelRaceGroup(
-        new Shoot(drivebase, superstructure, vision),
-        new WaitCommand(3)
-      )
+      new Shoot(drivebase, superstructure, vision).withTimeout(3)
     ));
 
     chooser.addOption("2 Ball", new SequentialCommandGroup(
@@ -58,10 +53,10 @@ public class AutoSelector {
           return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
         })
       ),
-      new TrajectorySequence(drivebase, "paths/Two_2.wpilib.json"),
-      new ParallelRaceGroup(
-        new Shoot(drivebase, superstructure, vision),
-        new WaitCommand(3)
+      new Shoot(drivebase, superstructure, vision, false).withTimeout(3),
+      new ParallelCommandGroup(
+        new BallManager(superstructure),
+        new TrajectorySequence(drivebase, "paths/Two_2.wpilib.json", "paths/Two_3.wpilib.json")
       )
     ));
 
@@ -72,7 +67,7 @@ public class AutoSelector {
         new RunCommand(() -> drivebase.curvatureDrive(0.35, 0, false), drivebase),
         new WaitCommand(2)
       ),
-      new Shoot(drivebase, superstructure, vision)
+      new Shoot(drivebase, superstructure, vision).withTimeout(3)
     ));
     
     SmartDashboard.putData(chooser);
