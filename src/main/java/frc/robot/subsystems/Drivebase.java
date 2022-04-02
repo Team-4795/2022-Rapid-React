@@ -132,18 +132,6 @@ public class Drivebase extends SubsystemBase {
     m_rightEncoder.setPosition(0);
   }
 
-  public void zeroHeading() {
-    gyro.reset();
-  }
-
-  public double getHeading() {
-    return gyro.getRotation2d().getDegrees();
-  }
-
-  public double getTurnRate() {
-    return gyro.getRate();
-  }
-
   public void reverse() {
     if(Math.abs(movementSpeed) < 0.5) direction *= -1;
   }

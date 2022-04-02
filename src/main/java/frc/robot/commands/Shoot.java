@@ -111,7 +111,6 @@ public class Shoot extends CommandBase {
   public void initialize() {
     if (useCV) preset = interpolate(4);
     drivebase.enableBrakeMode();
-    superstructure.intake.retract();
     vision.enableLED();
     alliance = DriverStation.getAlliance();
     start = System.currentTimeMillis();
@@ -157,6 +156,14 @@ public class Shoot extends CommandBase {
     if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.02 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.02) {
       upperIndexer = 1;
       lowerIndexer = 1;
+    }
+
+    if (superstructure.intake.isExtended()) {
+      if (superstructure.indexer.hasUpperBall() && superstructure.indexer.hasLowerBall()) superstructure.intake.toggle();
+
+      superstructure.intake.setSpeed(0.75);
+    } else {
+      superstructure.intake.setSpeed(0);
     }
 
     superstructure.indexer.setIndexerSpeed(upperIndexer, lowerIndexer);
