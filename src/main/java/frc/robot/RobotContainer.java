@@ -76,8 +76,10 @@ public class RobotContainer {
     final JoystickButton resetClimber = new JoystickButton(operatorController, Controller.Button.kX.value);
     final JoystickButton manualRetract = new JoystickButton(operatorController, Controller.Button.kY.value);
     final Trigger reverseIntake = new Trigger(() -> operatorController.getRightTriggerAxis() > 0);
-    final JoystickButton retractClimber = new JoystickButton(operatorController, Controller.Button.kLeftBumper.value);
-    final JoystickButton extendClimber = new JoystickButton(operatorController, Controller.Button.kRightBumper.value);
+    final Trigger extendClimber = new Trigger(() -> operatorController.getLeftY() > 0);
+    final Trigger retractClimber = new Trigger(() -> operatorController.getLeftY() < 0);
+    final JoystickButton tiltClimber = new JoystickButton(operatorController, Controller.Button.kRightBumper.value);
+    final JoystickButton untiltClimber = new JoystickButton(operatorController, Controller.Button.kLeftBumper.value);
 
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, vision));
@@ -93,8 +95,10 @@ public class RobotContainer {
     reverseIntake.whenActive(() -> ballManager.setIntakeReversed(true)).whenInactive(() -> ballManager.setIntakeReversed(false));
     resetClimber.whenPressed(climber::resetEncoder);
     manualRetract.whileHeld(new RunCommand(() -> climber.setPower(-0.2), climber));
-    retractClimber.whileHeld(new RunCommand(climber::retract, climber));
-    extendClimber.whileHeld(new RunCommand(climber::extend, climber));
+    extendClimber.whenActive(new RunCommand(climber::extend, climber));
+    retractClimber.whenActive(new RunCommand(climber::retract, climber));
+    tiltClimber.whenPressed(climber::tilt);
+    untiltClimber.whenPressed(climber::untilt);
   }
 
   public Command getAutonomousCommand() {

@@ -41,13 +41,13 @@ public class Shooter extends SubsystemBase {
     FlywheelMain.config_kF(0, 0.0512, 0);
     FlywheelMain.config_kP(0, 0.14, 0);
     FlywheelMain.config_kI(0, 0.0001, 0);
-    FlywheelMain.config_kD(0, 0.25, 0);
+    FlywheelMain.config_kD(0, 1.4, 0);
     FlywheelMain.config_IntegralZone(0, 150.0 / (600.0) * 2048.0);
 
     FlywheelTop.config_kF(0, 0.0512, 0);
     FlywheelTop.config_kP(0, 0.14, 0);
     FlywheelTop.config_kI(0, 0.0001, 0);
-    FlywheelTop.config_kD(0, 0.25, 0);
+    FlywheelTop.config_kD(0, 1.4, 0);
     FlywheelTop.config_IntegralZone(0, 150.0 / (600.0) * 2048.0);
   }
 
