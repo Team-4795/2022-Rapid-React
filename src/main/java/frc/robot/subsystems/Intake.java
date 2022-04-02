@@ -18,7 +18,7 @@ import frc.robot.sensors.BreakBeam;
 public class Intake extends SubsystemBase {
   private final CANSparkMax leftRoller = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushed);
   private final CANSparkMax rightRoller = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushed);
-  private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.FORWARD_CHANNEL, IntakeConstants.REVERSE_CHANNEL);
+  private final DoubleSolenoid solenoid = new DoubleSolenoid(IntakeConstants.PORT, PneumaticsModuleType.REVPH, IntakeConstants.FORWARD_CHANNEL, IntakeConstants.REVERSE_CHANNEL);
   private final BreakBeam breakBeam = new BreakBeam(IntakeConstants.BREAK_BEAM);
   private boolean extended = false;
 
