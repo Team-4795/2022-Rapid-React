@@ -111,6 +111,7 @@ public class Shoot extends CommandBase {
   public void initialize() {
     if (useCV) preset = interpolate(4);
     drivebase.enableBrakeMode();
+    superstructure.intake.retract();
     vision.enableLED();
     alliance = DriverStation.getAlliance();
     start = System.currentTimeMillis();
