@@ -61,7 +61,7 @@ public class AutoSelector {
       new TrajectorySequence(drivebase, "paths/Two_2.wpilib.json"),
       new ParallelRaceGroup(
         new Shoot(drivebase, superstructure, vision),
-        new WaitCommand(4)
+        new WaitCommand(3)
       )
     ));
 
