@@ -56,8 +56,8 @@ public final class Constants {
 
   public static final class ClimberConstants {
     public static final int CLIMB_MOTOR = 11;
-    public static final int FORWARD_CHANNEL = 3;
-    public static final int REVERSE_CHANNEL = 2;
+    public static final int FORWARD_CHANNEL = 14;
+    public static final int REVERSE_CHANNEL = 15;
   }
  
   public static final class VisionConstants {
