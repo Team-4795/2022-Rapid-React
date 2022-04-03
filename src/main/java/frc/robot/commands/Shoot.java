@@ -134,7 +134,7 @@ public class Shoot extends CommandBase {
         isAligned = false;
       } else {
         drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(angle)));
-        drivebase.setGoalPose(new Pose2d(Units.feetToMeters(distance), 0, Rotation2d.fromDegrees(0)));
+        drivebase.setGoalPose(new Pose2d(Units.feetToMeters(distance + 1.5), 0, Rotation2d.fromDegrees(0)));
       }
 
       drivebase.curvatureDrive(0, !isAligned && useAlignment ? turnSpeed : 0, true);
@@ -159,7 +159,7 @@ public class Shoot extends CommandBase {
     }
 
     if (superstructure.intake.isExtended()) {
-      if (superstructure.indexer.hasUpperBall() && superstructure.indexer.hasLowerBall()) superstructure.intake.toggle();
+      if (superstructure.indexer.hasUpperBall() && superstructure.indexer.hasLowerBall()) superstructure.intake.retract();
 
       superstructure.intake.setSpeed(0.75);
     } else {
