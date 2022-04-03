@@ -45,9 +45,9 @@ public class DriveToGoal extends CommandBase {
         verticalSpeed = Math.signum(7 - goalDistance) * (Math.abs(goalDistance - 7) < 3 ? 0.5 : 1) * (Math.abs(goalAngle) > 10 ? 0.25 : 1);
       }
 
-      if (Math.abs(goalAngle) > 3) {
+      if (Math.abs(goalAngle) > 4) {
         isAligned = false;
-        angularSpeed = MathUtil.clamp(Math.abs(goalAngle / 50), 0.25, 0.65) * Math.signum(goalAngle);
+        angularSpeed = MathUtil.clamp(Math.abs(goalAngle / 50), 0.15, 0.75) * Math.signum(goalAngle);
       }
 
       drivebase.arcadeDrive(verticalSpeed, angularSpeed);
