@@ -109,7 +109,7 @@ public class Shoot extends CommandBase {
 
   @Override
   public void initialize() {
-    if (useCV) preset = interpolate(4);
+    if (useCV) preset = interpolate(3);
     drivebase.enableBrakeMode();
     vision.enableLED();
     alliance = DriverStation.getAlliance();
@@ -123,8 +123,8 @@ public class Shoot extends CommandBase {
     
     if (useCV && vision.hasTarget() && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();
-      double angle = -vision.getTargetAngle();
-      double turnSpeed = -angle / 50.0;
+      double angle = vision.getTargetAngle();
+      double turnSpeed = angle / 50.0;
 
       preset = interpolate(distance);
 
@@ -173,6 +173,7 @@ public class Shoot extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drivebase.disableBrakeMode();
+    superstructure.intake.setSpeed(0);
     superstructure.indexer.setIndexerSpeed(0, 0);
     superstructure.shooter.setShooterPower(0, 0);
   }
