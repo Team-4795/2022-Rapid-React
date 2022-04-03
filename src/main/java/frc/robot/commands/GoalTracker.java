@@ -51,7 +51,15 @@ public class GoalTracker extends CommandBase {
         vision.disableLED();
       }
     } else {
-      vision.disableLED();
+      vision.enableLED();
+
+      if (vision.hasTarget()) {
+        double distance = vision.getTargetDistance();
+        double angle = vision.getTargetAngle();
+        
+        drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(angle)));
+        drivebase.setGoalPose(new Pose2d(Units.feetToMeters(distance + 1.5), 0, Rotation2d.fromDegrees(0)));
+      }
     }
   }
 
