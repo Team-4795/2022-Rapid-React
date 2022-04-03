@@ -136,6 +136,10 @@ public class Drivebase extends SubsystemBase {
     if(Math.abs(movementSpeed) < 0.5) direction *= -1;
   }
 
+  public double getAngularVelocity() {
+    return gyro.getRate();
+  }
+
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }

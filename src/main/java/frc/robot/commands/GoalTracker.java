@@ -38,7 +38,9 @@ public class GoalTracker extends CommandBase {
       if (Math.abs(goalAngle) < 25 && goalDistance > 4 && goalDistance < 12) {
         vision.enableLED();
 
-        if (vision.hasTarget()) {
+        double speed = (drivebase.getWheelSpeeds().leftMetersPerSecond + drivebase.getWheelSpeeds().rightMetersPerSecond) / 2.0;
+
+        if (vision.hasTarget() && drivebase.getAngularVelocity() < 20 && speed < 1.5) {
           double distance = vision.getTargetDistance();
           double angle = vision.getTargetAngle();
           

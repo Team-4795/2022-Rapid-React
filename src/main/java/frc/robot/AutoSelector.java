@@ -60,14 +60,14 @@ public class AutoSelector {
       )
     ));
 
-    chooser.addOption("Backup", new SequentialCommandGroup(
+    chooser.addOption("Drive Back", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new RunCommand(() -> drivebase.curvatureDrive(0.35, 0, false), drivebase),
         new WaitCommand(2)
       ),
-      new Shoot(drivebase, superstructure, vision).withTimeout(3)
+      new Shoot(drivebase, superstructure, vision).withTimeout(4)
     ));
     
     SmartDashboard.putData(chooser);
