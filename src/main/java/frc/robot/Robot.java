@@ -36,6 +36,7 @@ public class Robot extends TimedRobot {
   private Climber climber;
   private Vision vision;
 
+  private boolean isDisabled;
   private long teleopStart;
 
   private double getSecondsRemaining() {
@@ -84,20 +85,32 @@ public class Robot extends TimedRobot {
         led.setColor(LEDColors.HAS_BALL, 0.5);
       }
     } else if (alliance == Alliance.Red) {
-      led.wave(LEDColors.RED, 0.05);
+      if (isDisabled) {
+        led.setColor(LEDColors.RED);
+      } else {
+        led.wave(LEDColors.RED, 0.05);
+      }
     } else {
-      led.wave(LEDColors.BLUE, 0.05);
+      if (isDisabled) {
+        led.setColor(LEDColors.RED);
+      } else {
+        led.wave(LEDColors.BLUE, 0.05);
+      }
     }
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    isDisabled = true;
+  }
 
   @Override
   public void disabledPeriodic() {}
 
   @Override
   public void autonomousInit() {
+    isDisabled = false;
+
     autonomousCommand = robotContainer.getAutonomousCommand();
 
     if (autonomousCommand != null) {
@@ -114,6 +127,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    isDisabled = false;
+
     teleopStart = System.currentTimeMillis();
 
     if (autonomousCommand != null) {
