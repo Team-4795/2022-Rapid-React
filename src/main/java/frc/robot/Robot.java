@@ -92,7 +92,7 @@ public class Robot extends TimedRobot {
       }
     } else {
       if (isDisabled) {
-        led.setColor(LEDColors.RED);
+        led.setColor(LEDColors.BLUE);
       } else {
         led.wave(LEDColors.BLUE, 0.05);
       }
