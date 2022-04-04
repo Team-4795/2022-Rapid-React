@@ -51,7 +51,7 @@ public class DriveToGoal extends CommandBase {
         verticalSpeed *= 1 - Math.sqrt(angularSpeed);
       }
 
-      drivebase.curvatureDrive(verticalSpeed, angularSpeed, verticalSpeed == 0 ? true : false, false);
+      drivebase.arcadeDrive(verticalSpeed, verticalSpeed);
     }
   }
 

@@ -101,18 +101,16 @@ public class Drivebase extends SubsystemBase {
     rightFollower.setIdleMode(IdleMode.kCoast);
   }
 
-  public void curvatureDrive(double speed, double rotation, boolean quickTurn, boolean useDirection) {
+  public void arcadeDrive(double speed, double rotation) {
     movementSpeed = Math.max(Math.abs(speed), Math.abs(rotation));
 
-    if (useDirection) {
-      diffDrive.curvatureDrive(speed * direction, rotation, quickTurn);
-    } else {
-      diffDrive.curvatureDrive(speed, rotation, quickTurn);
-    }
+    diffDrive.arcadeDrive(speed, rotation, false);
   }
 
   public void curvatureDrive(double speed, double rotation, boolean quickTurn) {
-    curvatureDrive(speed, rotation, quickTurn, true);
+    movementSpeed = Math.max(Math.abs(speed), Math.abs(rotation));
+
+    diffDrive.curvatureDrive(speed * direction, rotation, quickTurn);
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
