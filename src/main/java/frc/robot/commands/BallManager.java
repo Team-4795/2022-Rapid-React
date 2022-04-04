@@ -20,6 +20,7 @@ public class BallManager extends CommandBase {
   private Alliance alliance;
   private boolean reversed;
   private long startReject;
+  private long lastExtend;
 
   public BallManager(Superstructure superstructure) {
     this.intake = superstructure.intake;
@@ -54,9 +55,15 @@ public class BallManager extends CommandBase {
 
       intake.setSpeed(intakeSpeed);
       indexer.setIndexerSpeed(upperSpeed, lowerSpeed);
+
+      lastExtend = System.currentTimeMillis();
     } else {
       intake.setSpeed(0);
-      indexer.setIndexerSpeed(0, 0);
+      if (System.currentTimeMillis() - lastExtend < 3000 && !indexer.hasUpperBall()) {
+        indexer.setIndexerSpeed(1, 0.25);
+      } else {
+        indexer.setIndexerSpeed(0, 0);
+      }
     }
 
     Color upperColor = indexer.getUpperColor();
