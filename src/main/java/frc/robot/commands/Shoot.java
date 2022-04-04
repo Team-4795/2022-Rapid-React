@@ -128,7 +128,7 @@ public class Shoot extends CommandBase {
       double angle = vision.getTargetAngle();
       double turnSpeed = angle / 50.0;
 
-      if (Math.abs(angle) > 2 || !interpolated) preset = interpolate(distance);
+      if (Math.abs(angle) > 7 || !interpolated) preset = interpolate(distance);
 
       turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.125), turnSpeed), -0.25, 0.25);
 
@@ -155,7 +155,7 @@ public class Shoot extends CommandBase {
       topRPM = 750;
     }
 
-    if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.02 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.02) {
+    if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.035 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.035) {
       upperIndexer = 1;
       lowerIndexer = 1;
     }

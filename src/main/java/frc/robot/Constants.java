@@ -34,7 +34,7 @@ public final class Constants {
   public static final class IntakeConstants {
     public static final int LEFT_MOTOR = 12;
     public static final int RIGHT_MOTOR = 13;
-    public static final int BREAK_BEAM = 2;
+    public static final int BREAK_BEAM = 3;
 
     public static final int FORWARD_CHANNEL = 0;
     public static final int REVERSE_CHANNEL = 1;
