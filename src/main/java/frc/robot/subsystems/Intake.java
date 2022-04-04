@@ -59,6 +59,9 @@ public class Intake extends SubsystemBase {
     if (extended) {
       leftRoller.set(speed);
       rightRoller.set(speed);
+    } else {
+      leftRoller.set(0);
+      rightRoller.set(0);
     }
   }
 

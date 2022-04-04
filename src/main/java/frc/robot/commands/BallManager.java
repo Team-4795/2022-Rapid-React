@@ -59,6 +59,7 @@ public class BallManager extends CommandBase {
       lastExtend = System.currentTimeMillis();
     } else {
       intake.setSpeed(0);
+
       if (System.currentTimeMillis() - lastExtend < 3000 && !indexer.hasUpperBall()) {
         indexer.setIndexerSpeed(1, 0.25);
       } else {

@@ -28,7 +28,7 @@ public final class Constants {
     public static final double kvVoltSecondsPerMeter = 1.28;
     public static final double kaVoltSecondsSquaredPerMeter = 0.224;
 
-    public static final double kPDriveVel = 3;
+    public static final double kPDriveVel = 3; // Get value from sysid
   }
   
   public static final class IntakeConstants {
@@ -78,7 +78,7 @@ public final class Constants {
 
   public static final class AutoConstants {
     public static final double kRamseteB = 2;
-    public static final double kRamseteZeta = 1.4;
+    public static final double kRamseteZeta = 0.7;
   }
 
   public static final class LEDColors {
