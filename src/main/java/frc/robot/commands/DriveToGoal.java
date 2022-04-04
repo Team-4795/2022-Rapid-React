@@ -40,17 +40,18 @@ public class DriveToGoal extends CommandBase {
       double verticalSpeed = 0;
       double angularSpeed = 0;
 
-      if (Math.abs(goalAngle) < 25 && (goalDistance < 6 || goalDistance > 8)) {
+      if (Math.abs(goalAngle) < 45 && (goalDistance < 7 || goalDistance > 9)) {
         isAligned = false;
-        verticalSpeed = Math.signum(7 - goalDistance) * (Math.abs(7 - goalDistance) < 3 ? 0.5 : 1) * (Math.abs(goalAngle) > 10 ? 0.5 : 1);
+        verticalSpeed = Math.signum(8 - goalDistance) * (Math.abs(8 - goalDistance) < 3 ? 0.5 : 1);
       }
 
       if (Math.abs(goalAngle) > 4) {
         isAligned = false;
-        angularSpeed = MathUtil.clamp(Math.abs(goalAngle / 50), 0.3, 0.7) * Math.signum(goalAngle);
+        angularSpeed = MathUtil.clamp(Math.abs(goalAngle / 90), 0.15, 0.75) * Math.signum(goalAngle);
+        verticalSpeed *= 1 - Math.sqrt(angularSpeed);
       }
 
-      drivebase.arcadeDrive(verticalSpeed, angularSpeed);
+      drivebase.curvatureDrive(verticalSpeed, angularSpeed, verticalSpeed == 0 ? true : false, false);
     }
   }
 
