@@ -28,7 +28,7 @@ public final class Constants {
     public static final double kvVoltSecondsPerMeter = 1.28;
     public static final double kaVoltSecondsSquaredPerMeter = 0.224;
 
-    public static final double kPDriveVel = 3; // Get value from sysid
+    public static final double kPDriveVel = 1.795;
   }
   
   public static final class IntakeConstants {
