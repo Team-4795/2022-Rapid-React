@@ -20,7 +20,40 @@ public class AutoSelector {
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   public AutoSelector(Drivebase drivebase, Superstructure superstructure, Vision vision) {
-    chooser.setDefaultOption("4 Ball", new SequentialCommandGroup(
+    chooser.setDefaultOption("5 Ball", new SequentialCommandGroup(
+      new InstantCommand(superstructure.intake::deploy),
+      new ParallelRaceGroup(
+        new ParallelCommandGroup(
+          new BallManager(superstructure),
+          new TrajectorySequence(drivebase, "paths/Five_1.wpilib.json")),
+        new WaitCommand(5).withInterrupt(() -> {
+          return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
+        })
+      ),
+      new Shoot(drivebase, superstructure, vision, false).withTimeout(2.5),
+      new InstantCommand(superstructure.intake::deploy),
+      new ParallelRaceGroup(
+        new ParallelCommandGroup(
+          new BallManager(superstructure),
+          new TrajectorySequence(drivebase, "paths/Five_2.wpilib.json", "paths/Five_3.wpilib.json")),
+        new WaitCommand(5).withInterrupt(() -> {
+          return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
+        })
+      ),
+      new Shoot(drivebase, superstructure, vision, false).withTimeout(2.5),
+      new InstantCommand(superstructure.intake::deploy),
+      new ParallelRaceGroup(
+        new BallManager(superstructure),
+        new SequentialCommandGroup(
+          new TrajectorySequence(drivebase, "paths/Five_4.wpilib.json"),
+          new WaitCommand(1),
+          new TrajectorySequence(drivebase, "paths/Five_5.wpilib.json")
+        )
+      ),
+      new Shoot(drivebase, superstructure, vision).withTimeout(2.5)
+    ));
+
+    chooser.addOption("4 Ball", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new ParallelCommandGroup(
@@ -30,7 +63,7 @@ public class AutoSelector {
           return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
         })
       ),
-      new Shoot(drivebase, superstructure, vision, false).withTimeout(3),
+      new Shoot(drivebase, superstructure, vision, false).withTimeout(2.5),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
@@ -40,7 +73,7 @@ public class AutoSelector {
           new TrajectorySequence(drivebase, "paths/Terminal_3.wpilib.json")
         )
       ),
-      new Shoot(drivebase, superstructure, vision).withTimeout(3)
+      new Shoot(drivebase, superstructure, vision).withTimeout(2.5)
     ));
 
     chooser.addOption("2 Ball", new SequentialCommandGroup(
@@ -53,7 +86,7 @@ public class AutoSelector {
           return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
         })
       ),
-      new Shoot(drivebase, superstructure, vision, false).withTimeout(3),
+      new Shoot(drivebase, superstructure, vision, false).withTimeout(2.5),
       new ParallelCommandGroup(
         new BallManager(superstructure),
         new TrajectorySequence(drivebase, "paths/Two_2.wpilib.json", "paths/Two_3.wpilib.json")
