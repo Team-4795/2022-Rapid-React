@@ -60,8 +60,17 @@ public class BallManager extends CommandBase {
     } else {
       intake.setSpeed(0);
 
-      if (System.currentTimeMillis() - lastExtend < 3000 && !indexer.hasUpperBall()) {
-        indexer.setIndexerSpeed(1, 0.25);
+      if (System.currentTimeMillis() - lastExtend < 3000) {
+        double upperSpeed = 0.25;
+        double lowerSpeed = 1;
+
+        if (indexer.hasUpperBall()) {
+          upperSpeed = 0;
+
+          if (indexer.hasLowerBall()) lowerSpeed = 0;
+        }
+
+        indexer.setIndexerSpeed(upperSpeed, lowerSpeed);
       } else {
         indexer.setIndexerSpeed(0, 0);
       }
