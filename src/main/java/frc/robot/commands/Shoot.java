@@ -72,7 +72,7 @@ public class Shoot extends CommandBase {
     presets.add(new ShooterPreset(2950, 1350, 10));
     presets.add(new ShooterPreset(3350, 1200, 11));
     presets.add(new ShooterPreset(4100, 800, 12));
-    presets.add(new ShooterPreset(4900, 700, 13.5));
+    presets.add(new ShooterPreset(4600, 700, 13.5));
 
     ShooterPreset bottomPreset = presets.get(presets.size() - 1);
     ShooterPreset upperPreset;
