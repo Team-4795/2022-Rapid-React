@@ -60,7 +60,7 @@ public class BallManager extends CommandBase {
     } else {
       intake.setSpeed(0);
 
-      if (System.currentTimeMillis() - lastExtend < 3000) {
+      if (System.currentTimeMillis() - lastExtend < 2000) {
         double upperSpeed = 0.25;
         double lowerSpeed = 1;
 

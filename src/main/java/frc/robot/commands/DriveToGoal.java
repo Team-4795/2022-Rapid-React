@@ -13,6 +13,7 @@ import frc.robot.subsystems.Drivebase;
 public class DriveToGoal extends CommandBase {
   private final Drivebase drivebase;
   private boolean isAligned;
+  private long alignStart;
 
   public DriveToGoal(Drivebase drivebase) {
     this.drivebase = drivebase;
@@ -53,6 +54,8 @@ public class DriveToGoal extends CommandBase {
 
       drivebase.arcadeDrive(verticalSpeed, angularSpeed);
     }
+
+    if (isAligned && System.currentTimeMillis() - alignStart > 250) alignStart = System.currentTimeMillis();
   }
 
   @Override
@@ -62,6 +65,6 @@ public class DriveToGoal extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return isAligned;
+    return isAligned && System.currentTimeMillis() - alignStart > 200;
   }
 }
