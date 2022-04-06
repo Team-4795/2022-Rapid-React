@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,7 +23,7 @@ import frc.robot.subsystems.Vision;
 
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
-  private PowerDistribution PD = new PowerDistribution(1, ModuleType.kRev);
+  private PowerDistribution PD = new PowerDistribution();
   private LED led = new LED();
   private Alliance alliance;
 
@@ -36,7 +35,6 @@ public class Robot extends TimedRobot {
   private Climber climber;
   private Vision vision;
 
-  private boolean isDisabled;
   private long teleopStart;
 
   private double getSecondsRemaining() {
@@ -84,33 +82,21 @@ public class Robot extends TimedRobot {
       } else {
         led.setColor(LEDColors.HAS_BALL, 0.5);
       }
-    } else if (alliance == Alliance.Red) {
-      if (isDisabled) {
-        led.setColor(LEDColors.RED);
-      } else {
-        led.wave(LEDColors.RED, 0.05);
-      }
+    } else if (isEnabled()) {
+      led.wave(alliance == Alliance.Red ? LEDColors.RED : LEDColors.BLUE, 0.05);
     } else {
-      if (isDisabled) {
-        led.setColor(LEDColors.BLUE);
-      } else {
-        led.wave(LEDColors.BLUE, 0.05);
-      }
+      led.setColor(alliance == Alliance.Red ? LEDColors.RED : LEDColors.BLUE);
     }
   }
 
   @Override
-  public void disabledInit() {
-    isDisabled = true;
-  }
+  public void disabledInit() {}
 
   @Override
   public void disabledPeriodic() {}
 
   @Override
   public void autonomousInit() {
-    isDisabled = false;
-
     autonomousCommand = robotContainer.getAutonomousCommand();
 
     if (autonomousCommand != null) {
@@ -127,8 +113,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    isDisabled = false;
-
     teleopStart = System.currentTimeMillis();
 
     if (autonomousCommand != null) {

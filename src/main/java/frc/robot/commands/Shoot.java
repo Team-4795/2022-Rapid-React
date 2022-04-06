@@ -78,7 +78,7 @@ public class Shoot extends CommandBase {
     ShooterPreset bottomPreset = presets.get(presets.size() - 1);
     ShooterPreset upperPreset;
     
-	  for (ShooterPreset p : presets) {
+    for (ShooterPreset p : presets) {
       if (distance - p.distance < 0) {
         bottomPreset = p;
         break;
