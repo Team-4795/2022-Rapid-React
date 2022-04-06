@@ -40,7 +40,6 @@ public class Shoot extends CommandBase {
   private final boolean useCV;
   private final boolean useAlignment;
   private long start;
-  private boolean interpolated;
   private boolean reachedAngle;
 
   public Shoot(Drivebase drivebase, Superstructure superstructure, Vision vision, boolean useAlignment, ShooterPreset ... defaultPreset) {
@@ -116,7 +115,6 @@ public class Shoot extends CommandBase {
     vision.enableLED();
     alliance = DriverStation.getAlliance();
     start = System.currentTimeMillis();
-    interpolated = false;
     reachedAngle = false;
   }
 
@@ -130,11 +128,7 @@ public class Shoot extends CommandBase {
       double angle = vision.getTargetAngle();
       double turnSpeed = angle / 50.0;
 
-      if (Math.abs(angle) > 3 || !interpolated) {
-        preset = interpolate(distance);
-
-        interpolated = true;
-      }
+      preset = interpolate(distance);
 
       turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.125), turnSpeed), -0.25, 0.25);
 

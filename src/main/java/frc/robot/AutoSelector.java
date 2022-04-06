@@ -87,6 +87,7 @@ public class AutoSelector {
         })
       ),
       new Shoot(drivebase, superstructure, vision, false).withTimeout(2.5),
+      new InstantCommand(superstructure.intake::deploy),
       new ParallelCommandGroup(
         new BallManager(superstructure),
         new TrajectorySequence(drivebase, "paths/Two_2.wpilib.json", "paths/Two_3.wpilib.json")
