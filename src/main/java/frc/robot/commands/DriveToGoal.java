@@ -41,14 +41,14 @@ public class DriveToGoal extends CommandBase {
       double verticalSpeed = 0;
       double angularSpeed = 0;
 
-      if (Math.abs(goalAngle) < 45 && (goalDistance < 7 || goalDistance > 9)) {
+      if (Math.abs(goalAngle) < 45 && (goalDistance < 5 || goalDistance > 13)) {
         isAligned = false;
-        verticalSpeed = Math.signum(8 - goalDistance) * (Math.abs(8 - goalDistance) < 3 ? 0.5 : 1);
+        verticalSpeed = Math.signum(9 - goalDistance);
       }
 
       if (Math.abs(goalAngle) > 4) {
         isAligned = false;
-        angularSpeed = MathUtil.clamp(Math.abs(goalAngle / 90), 0.15, 0.75) * Math.signum(goalAngle);
+        angularSpeed = MathUtil.clamp(Math.abs(goalAngle / 90), 0.15, 0.6) * Math.signum(goalAngle);
         verticalSpeed *= 1 - Math.sqrt(angularSpeed);
       }
 

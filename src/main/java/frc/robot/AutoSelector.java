@@ -37,10 +37,10 @@ public class AutoSelector {
           new BallManager(superstructure),
           new TrajectorySequence(drivebase, "paths/Five_2.wpilib.json", "paths/Five_3.wpilib.json")),
         new WaitCommand(5).withInterrupt(() -> {
-          return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
+          return superstructure.indexer.hasLowerBall();
         })
       ),
-      new Shoot(drivebase, superstructure, vision, false).withTimeout(2.5),
+      new Shoot(drivebase, superstructure, vision, false).withTimeout(1.5),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),

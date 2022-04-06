@@ -41,6 +41,7 @@ public class Shoot extends CommandBase {
   private final boolean useAlignment;
   private long start;
   private boolean interpolated;
+  private boolean reachedAngle;
 
   public Shoot(Drivebase drivebase, Superstructure superstructure, Vision vision, boolean useAlignment, ShooterPreset ... defaultPreset) {
     this.drivebase = drivebase;
@@ -116,6 +117,7 @@ public class Shoot extends CommandBase {
     alliance = DriverStation.getAlliance();
     start = System.currentTimeMillis();
     interpolated = false;
+    reachedAngle = false;
   }
 
   @Override
@@ -123,7 +125,7 @@ public class Shoot extends CommandBase {
     Color upperColor = superstructure.indexer.getUpperColor();
     boolean isAligned = true;
     
-    if (useCV && vision.hasTarget() && System.currentTimeMillis() - start < 3000) {
+    if (useCV && vision.hasTarget() && !reachedAngle && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();
       double angle = vision.getTargetAngle();
       double turnSpeed = angle / 50.0;
@@ -141,6 +143,8 @@ public class Shoot extends CommandBase {
       } else {
         drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(angle)));
         drivebase.setGoalPose(new Pose2d(Units.feetToMeters(distance + 1.5), 0, Rotation2d.fromDegrees(0)));
+
+        reachedAngle = true;
       }
 
       drivebase.curvatureDrive(0, !isAligned && useAlignment ? turnSpeed : 0, true);
