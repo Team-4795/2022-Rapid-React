@@ -63,7 +63,7 @@ public class Shoot extends CommandBase {
     this(drivebase, superstructure, vision, true, defaultPreset);
   }
 
-  private ShooterPreset interpolate(double distance) {
+  public static ShooterPreset interpolate(double distance) {
     ArrayList<ShooterPreset> presets = new ArrayList<>();
 
     presets.add(new ShooterPreset(900, 2200, 3));

@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CurvatureDrive;
-import frc.robot.commands.DriveToGoal;
+import frc.robot.commands.PrepareShot;
 import frc.robot.commands.GoalTracker;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.BallManager;
@@ -84,7 +84,7 @@ public class RobotContainer {
 
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, vision));
-    driveToGoal.whileHeld(new SequentialCommandGroup(new DriveToGoal(drivebase), new Shoot(drivebase, superstructure, vision)));
+    driveToGoal.whileHeld(new SequentialCommandGroup(new PrepareShot(drivebase, superstructure, vision), new Shoot(drivebase, superstructure, vision)));
     lowGoalButton.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1500, 750, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
 

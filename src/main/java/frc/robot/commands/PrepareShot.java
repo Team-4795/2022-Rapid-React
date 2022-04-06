@@ -9,22 +9,29 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Vision;
 
-public class DriveToGoal extends CommandBase {
+public class PrepareShot extends CommandBase {
   private final Drivebase drivebase;
+  private final Superstructure superstructure;
+  private final Vision vision;
   private boolean isAligned;
   private long alignStart;
 
-  public DriveToGoal(Drivebase drivebase) {
+  public PrepareShot(Drivebase drivebase, Superstructure superstructure, Vision vision) {
     this.drivebase = drivebase;
+    this.superstructure = superstructure;
+    this.vision = vision;
 
-    addRequirements(drivebase);
+    addRequirements(drivebase, superstructure);
   }
 
   @Override
   public void initialize() {
     drivebase.enableBrakeMode();
     isAligned = false;
+    alignStart = System.currentTimeMillis();
   }
 
   @Override
@@ -41,21 +48,41 @@ public class DriveToGoal extends CommandBase {
       double verticalSpeed = 0;
       double angularSpeed = 0;
 
-      if (Math.abs(goalAngle) < 45 && (goalDistance < 5 || goalDistance > 13)) {
+      if (Math.abs(goalAngle) < 45 && (goalDistance < 5 || goalDistance > 12.5)) {
         isAligned = false;
         verticalSpeed = Math.signum(9 - goalDistance);
+
+        var preset = Shoot.interpolate(goalDistance - 1.5);
+
+        superstructure.shooter.setShooterRPM(preset.mainRPM * 0.6, preset.topRPM * 0.8);
+      } else {
+        superstructure.shooter.setShooterPower(0, 0);
       }
 
       if (Math.abs(goalAngle) > 4) {
-        isAligned = false;
+        if (!vision.hasTarget() || Math.abs(goalAngle) > 15) isAligned = false;
+
         angularSpeed = MathUtil.clamp(Math.abs(goalAngle / 90), 0.15, 0.6) * Math.signum(goalAngle);
         verticalSpeed *= 1 - Math.sqrt(angularSpeed);
       }
 
       drivebase.arcadeDrive(verticalSpeed, angularSpeed);
+    } else {
+      drivebase.arcadeDrive(0, 0);
+      superstructure.shooter.setShooterPower(0, 0);
     }
 
     if (isAligned && System.currentTimeMillis() - alignStart > 250) alignStart = System.currentTimeMillis();
+
+    if (superstructure.intake.isExtended()) {
+      if (superstructure.indexer.hasUpperBall() && superstructure.indexer.hasLowerBall()) superstructure.intake.retract();
+
+      superstructure.intake.setSpeed(0.75);
+    } else {
+      superstructure.intake.setSpeed(0);
+    }
+
+    superstructure.indexer.setIndexerSpeed(0, 0);
   }
 
   @Override
