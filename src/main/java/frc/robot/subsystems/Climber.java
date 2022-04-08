@@ -38,6 +38,10 @@ public class Climber extends SubsystemBase {
     climb_encoder.setPosition(0);
   }
 
+  public double getPosition() {
+    return climb_encoder.getPosition();
+  }
+
   public void extend() {
     if (climb_encoder.getPosition() < 110) {
       climb_motor.set(1);
