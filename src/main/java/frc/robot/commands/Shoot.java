@@ -64,6 +64,8 @@ public class Shoot extends CommandBase {
   public static ShooterPreset interpolate(double distance) {
     ArrayList<ShooterPreset> presets = new ArrayList<>();
 
+    distance -= 0.5;
+
     presets.add(new ShooterPreset(900, 2200, 3));
     presets.add(new ShooterPreset(1950, 1500, 5));
     presets.add(new ShooterPreset(2150, 1500, 6.5));
@@ -159,8 +161,6 @@ public class Shoot extends CommandBase {
     }
 
     if (superstructure.intake.isExtended()) {
-      if (superstructure.indexer.hasUpperBall() && superstructure.indexer.hasLowerBall()) superstructure.intake.retract();
-
       superstructure.intake.setSpeed(0.75);
     } else {
       superstructure.intake.setSpeed(0);
