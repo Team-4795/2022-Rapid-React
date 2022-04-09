@@ -17,23 +17,17 @@ public class BallManager extends CommandBase {
   private final Intake intake;
   private final Indexer indexer;
   private final Shooter shooter;
-  private final boolean autoRetract;
   private Alliance alliance;
   private boolean reversed;
   private long startReject;
   private long lastExtend;
 
-  public BallManager(Superstructure superstructure, boolean autoRetract) {
+  public BallManager(Superstructure superstructure) {
     this.intake = superstructure.intake;
     this.indexer = superstructure.indexer;
     this.shooter = superstructure.shooter;
-    this.autoRetract = autoRetract;
 
     addRequirements(superstructure);
-  }
-
-  public BallManager(Superstructure superstructure) {
-    this(superstructure, true);
   }
 
   @Override
@@ -56,11 +50,7 @@ public class BallManager extends CommandBase {
       if (indexer.hasUpperBall()) {
         upperSpeed = 0;
 
-        if (indexer.hasLowerBall()) {
-          lowerSpeed = 0;
-
-          if (autoRetract) intake.retract();
-        }
+        if (indexer.hasLowerBall()) intake.retract();
       }
 
       intake.setSpeed(intakeSpeed);
