@@ -27,7 +27,6 @@ public class AutoSelector {
         new TrajectorySequence(drivebase, "paths/Five_1.wpilib.json", "paths/Five_2.wpilib.json", "paths/Five_3.wpilib.json")
       ),
       new Shoot(drivebase, superstructure, vision, false).withTimeout(3),
-      new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new SequentialCommandGroup(
