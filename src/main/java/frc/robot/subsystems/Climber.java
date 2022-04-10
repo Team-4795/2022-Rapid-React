@@ -67,7 +67,7 @@ public class Climber extends SubsystemBase {
   }
   
   public boolean isActive() {
-    return climb_motor.get() > 0;
+    return Math.abs(climb_motor.get()) > 0;
   }
 
   @Override
