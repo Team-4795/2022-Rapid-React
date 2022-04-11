@@ -12,8 +12,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -38,6 +38,10 @@ public class Drivebase extends SubsystemBase {
   private final DifferentialDriveOdometry odometry;
 
   private final Field2d m_field2d = new Field2d();
+
+  private Pose2d currentGoal;
+
+  private boolean isAuto = false;
 
   private double movementSpeed = 0;
   private double direction = 1;
@@ -97,6 +101,12 @@ public class Drivebase extends SubsystemBase {
     rightFollower.setIdleMode(IdleMode.kCoast);
   }
 
+  public void arcadeDrive(double speed, double rotation) {
+    movementSpeed = Math.max(Math.abs(speed), Math.abs(rotation));
+
+    diffDrive.arcadeDrive(speed, rotation, false);
+  }
+
   public void curvatureDrive(double speed, double rotation, boolean quickTurn) {
     movementSpeed = Math.max(Math.abs(speed), Math.abs(rotation));
 
@@ -122,20 +132,12 @@ public class Drivebase extends SubsystemBase {
     m_rightEncoder.setPosition(0);
   }
 
-  public void zeroHeading() {
-    gyro.reset();
-  }
-
-  public double getHeading() {
-    return gyro.getRotation2d().getDegrees();
-  }
-
-  public double getTurnRate() {
-    return gyro.getRate();
-  }
-
   public void reverse() {
     if(Math.abs(movementSpeed) < 0.5) direction *= -1;
+  }
+
+  public double getAngularVelocity() {
+    return gyro.getRate();
   }
 
   public Pose2d getPose() {
@@ -148,11 +150,28 @@ public class Drivebase extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
+    currentGoal = null;
     odometry.resetPosition(pose, gyro.getRotation2d());
   }
 
-  public void putTrajectory(Trajectory trajectory) {
-    m_field2d.getObject("traj").setTrajectory(trajectory);
+  public boolean hasGoalPose() {
+    return currentGoal != null;
+  }
+
+  public Pose2d getGoalPose() {
+    return currentGoal;
+  }
+
+  public void setGoalPose(Pose2d pose) {
+    currentGoal = pose;
+  }
+
+  public void resetGoalPose() {
+    currentGoal = null;
+  }
+
+  public void setAutoMode(boolean mode) {
+    isAuto = mode;
   }
 
   @Override
@@ -160,7 +179,13 @@ public class Drivebase extends SubsystemBase {
     double leftDistance = getLeftWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
     double rightDistance = getRightWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
 
-    odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
+    if (isAuto) {
+      odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
+    } else {
+      odometry.update(gyro.getRotation2d(), -leftDistance, -rightDistance);
+    }
+
+    m_field2d.setRobotPose(getPose());
   }
 
   @Override
@@ -168,6 +193,19 @@ public class Drivebase extends SubsystemBase {
     builder.setSmartDashboardType("Drivebase");
     builder.addDoubleProperty("Left speed", m_leftEncoder::getVelocity, null);
     builder.addDoubleProperty("Right speed", m_rightEncoder::getVelocity, null);
-    builder.addDoubleProperty("Gyro angle", gyro.getRotation2d()::getDegrees, null);
+    builder.addDoubleProperty("Gyro angle", () -> gyro.getRotation2d().getDegrees(), null);
+    builder.addDoubleProperty("Goal distance", () -> {
+      return hasGoalPose() ? Units.metersToFeet(getGoalPose().getTranslation().getDistance(getPose().getTranslation())) : 0;
+    }, null);
+    builder.addDoubleProperty("Goal angle", () -> {
+      if (hasGoalPose()) {
+        Pose2d robotPose = getPose();
+        Pose2d goalPose = getGoalPose();
+        double rotation = Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX()));
+        return (robotPose.getRotation().getDegrees() + (180 - Math.abs(rotation)) * Math.signum(rotation)) % 360;
+      } else {
+        return 0;
+      }
+    }, null);
   }
 }

@@ -9,24 +9,27 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.LEDColors;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
-  private PowerDistribution PD = new PowerDistribution(1, ModuleType.kRev);
+  private PowerDistribution PD = new PowerDistribution();
   private LED led = new LED();
   private Alliance alliance;
 
   private RobotContainer robotContainer;
+  private Drivebase drivebase;
+  private Intake intake;
   private Indexer indexer;
   private Shooter shooter;
   private Climber climber;
@@ -41,6 +44,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robotContainer = new RobotContainer();
+    drivebase = robotContainer.drivebase;
+    intake = robotContainer.superstructure.intake;
     indexer = robotContainer.superstructure.indexer;
     shooter = robotContainer.superstructure.shooter;
     climber = robotContainer.climber;
@@ -49,6 +54,8 @@ public class Robot extends TimedRobot {
     alliance = DriverStation.getAlliance();
 
     CameraServer.startAutomaticCapture();
+
+    LiveWindow.disableAllTelemetry();
   }
 
   @Override
@@ -75,10 +82,10 @@ public class Robot extends TimedRobot {
       } else {
         led.setColor(LEDColors.HAS_BALL, 0.5);
       }
-    } else if (alliance == Alliance.Red) {
-      led.wave(LEDColors.RED, 0.05);
+    } else if (isEnabled()) {
+      led.wave(alliance == Alliance.Red ? LEDColors.RED : LEDColors.BLUE, 0.05);
     } else {
-      led.wave(LEDColors.BLUE, 0.05);
+      led.setColor(alliance == Alliance.Red ? LEDColors.RED : LEDColors.BLUE);
     }
   }
 
@@ -97,6 +104,8 @@ public class Robot extends TimedRobot {
     }
 
     alliance = DriverStation.getAlliance();
+
+    drivebase.setAutoMode(true);
   }
 
   @Override
@@ -108,25 +117,33 @@ public class Robot extends TimedRobot {
 
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
+      drivebase.resetGoalPose();
     }
 
     alliance = DriverStation.getAlliance();
+
+    drivebase.setAutoMode(false);
   }
 
   @Override
   public void teleopPeriodic() {
     if (getSecondsRemaining() < 20 && getSecondsRemaining() > 18) {
-      robotContainer.setRumble(1);
+      robotContainer.setDriverRumble(1);
     } else if (shooter.getTargetRPM() > 0 && shooter.getMainRPM() > 650 && !vision.hasTarget()) {
-      robotContainer.setRumble(0.25);
+      robotContainer.setDriverRumble(0.25);
     } else {
-      robotContainer.setRumble(0);
+      robotContainer.setDriverRumble(0);
+    }
+
+    if (intake.hasBall()) {
+      robotContainer.setOperatorRumble(0.5);
+    } else {
+      robotContainer.setOperatorRumble(0);
     }
   }
 
   @Override
   public void testInit() {
-    LiveWindow.disableAllTelemetry();
     CommandScheduler.getInstance().cancelAll();
   }
 

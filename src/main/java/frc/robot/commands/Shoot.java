@@ -7,6 +7,9 @@ package frc.robot.commands;
 import java.util.ArrayList;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -33,7 +36,6 @@ public class Shoot extends CommandBase {
   private final Vision vision;
   private Alliance alliance;
   private double mainRPM, topRPM;
-  private ArrayList<ShooterPreset> presets = new ArrayList<>();
   private ShooterPreset preset;
   private final boolean useCV;
   private final boolean useAlignment;
@@ -46,20 +48,11 @@ public class Shoot extends CommandBase {
     this.useAlignment = useAlignment;
     
     if (defaultPreset.length == 0) {
-      presets.add(new ShooterPreset(900, 2200, 3));
       useCV = true;
     } else {
-      presets.add(defaultPreset[0]);
+      preset = defaultPreset[0];
       useCV = false;
     }
-
-    presets.add(new ShooterPreset(1950, 1500, 5));
-    presets.add(new ShooterPreset(2150, 1500, 6.5));
-    presets.add(new ShooterPreset(2500, 1450, 8));
-    presets.add(new ShooterPreset(2950, 1350, 10));
-    presets.add(new ShooterPreset(3350, 1200, 11));
-    presets.add(new ShooterPreset(4100, 800, 12));
-    presets.add(new ShooterPreset(4900, 700, 13.5));
 
     addRequirements(drivebase, superstructure, vision);
   }
@@ -68,11 +61,24 @@ public class Shoot extends CommandBase {
     this(drivebase, superstructure, vision, true, defaultPreset);
   }
 
-  private ShooterPreset interpolate(double distance) {
+  public static ShooterPreset interpolate(double distance) {
+    ArrayList<ShooterPreset> presets = new ArrayList<>();
+
+    distance -= 0.5;
+
+    presets.add(new ShooterPreset(900, 2200, 3));
+    presets.add(new ShooterPreset(1950, 1500, 5));
+    presets.add(new ShooterPreset(2150, 1500, 6.5));
+    presets.add(new ShooterPreset(2500, 1450, 8));
+    presets.add(new ShooterPreset(2950, 1350, 10));
+    presets.add(new ShooterPreset(3350, 1200, 11));
+    presets.add(new ShooterPreset(4100, 800, 12));
+    presets.add(new ShooterPreset(4600, 700, 13.5));
+
     ShooterPreset bottomPreset = presets.get(presets.size() - 1);
     ShooterPreset upperPreset;
     
-	  for (ShooterPreset p : presets) {
+    for (ShooterPreset p : presets) {
       if (distance - p.distance < 0) {
         bottomPreset = p;
         break;
@@ -105,7 +111,7 @@ public class Shoot extends CommandBase {
 
   @Override
   public void initialize() {
-    preset = presets.get(0);
+    if (useCV) preset = interpolate(3);
     drivebase.enableBrakeMode();
     vision.enableLED();
     alliance = DriverStation.getAlliance();
@@ -116,17 +122,22 @@ public class Shoot extends CommandBase {
   public void execute() {
     Color upperColor = superstructure.indexer.getUpperColor();
     boolean isAligned = true;
-
-    if (vision.hasTarget() && useCV && System.currentTimeMillis() - start < 3000) {
+    
+    if (useCV && vision.hasTarget() && System.currentTimeMillis() - start < 3000) {
       double distance = vision.getTargetDistance();
-      double angle = -vision.getTargetAngle();
-      double turnSpeed = -angle / 50.0;
+      double angle = vision.getTargetAngle();
+      double turnSpeed = angle / 50.0;
 
       preset = interpolate(distance);
 
-      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.12), turnSpeed), -0.25, 0.25);
+      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.125), turnSpeed), -0.25, 0.25);
 
-      if (Math.abs(angle) > 2) isAligned = false;
+      if (useAlignment && Math.abs(angle) > 2) {
+        isAligned = false;
+      } else {
+        drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(angle)));
+        drivebase.setGoalPose(new Pose2d(Units.feetToMeters(distance + 1.5), 0, Rotation2d.fromDegrees(0)));
+      }
 
       drivebase.curvatureDrive(0, !isAligned && useAlignment ? turnSpeed : 0, true);
     } else {
@@ -144,9 +155,15 @@ public class Shoot extends CommandBase {
       topRPM = 750;
     }
 
-    if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.02 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.02) {
-      upperIndexer = 0.5;
+    if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.035 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.035) {
+      upperIndexer = 1;
       lowerIndexer = 1;
+    }
+
+    if (superstructure.intake.isExtended()) {
+      superstructure.intake.setSpeed(0.75);
+    } else {
+      superstructure.intake.setSpeed(0);
     }
 
     superstructure.indexer.setIndexerSpeed(upperIndexer, lowerIndexer);
@@ -155,6 +172,8 @@ public class Shoot extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
+    drivebase.disableBrakeMode();
+    superstructure.intake.setSpeed(0);
     superstructure.indexer.setIndexerSpeed(0, 0);
     superstructure.shooter.setShooterPower(0, 0);
   }

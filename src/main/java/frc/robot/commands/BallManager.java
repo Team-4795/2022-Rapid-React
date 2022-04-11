@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake;
-import frc.robot.sensors.ColorSensor.Color;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
+import frc.robot.sensors.ColorSensor.Color;
 
 public class BallManager extends CommandBase {
   private final Intake intake;
@@ -20,6 +20,7 @@ public class BallManager extends CommandBase {
   private Alliance alliance;
   private boolean reversed;
   private long startReject;
+  private long lastExtend;
 
   public BallManager(Superstructure superstructure) {
     this.intake = superstructure.intake;
@@ -49,26 +50,40 @@ public class BallManager extends CommandBase {
       if (indexer.hasUpperBall()) {
         upperSpeed = 0;
 
-        if (indexer.hasLowerBall()) intake.toggle();
+        if (indexer.hasLowerBall()) intake.retract();
       }
 
       intake.setSpeed(intakeSpeed);
       indexer.setIndexerSpeed(upperSpeed, lowerSpeed);
+
+      lastExtend = System.currentTimeMillis();
     } else {
       intake.setSpeed(0);
-      indexer.setIndexerSpeed(0, 0);
+
+      if (System.currentTimeMillis() - lastExtend < 2000) {
+        double upperSpeed = 0.25;
+        double lowerSpeed = 1;
+
+        if (indexer.hasUpperBall()) {
+          upperSpeed = 0;
+
+          if (indexer.hasLowerBall()) lowerSpeed = 0;
+        }
+
+        indexer.setIndexerSpeed(upperSpeed, lowerSpeed);
+      } else {
+        indexer.setIndexerSpeed(0, 0);
+      }
     }
 
     Color upperColor = indexer.getUpperColor();
 
     if (System.currentTimeMillis() - startReject < 1250 || (indexer.hasUpperBall() && ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)))) {
       shooter.setShooterRPM(1000, 750);
-      if (System.currentTimeMillis() - startReject > 2000) {
-        startReject = System.currentTimeMillis();
-      }
-      if (shooter.getMainRPM() > 900) {
-        indexer.setIndexerSpeed(0.5, 1);
-      }
+
+      if (System.currentTimeMillis() - startReject > 2000) startReject = System.currentTimeMillis();
+
+      if (shooter.getMainRPM() > 900) indexer.setIndexerSpeed(0.5, 1);
     } else {
       shooter.setShooterPower(0, 0);
     }

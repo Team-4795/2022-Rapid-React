@@ -13,11 +13,13 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.sensors.BreakBeam;
 
 public class Intake extends SubsystemBase {
   private final CANSparkMax leftRoller = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushed);
   private final CANSparkMax rightRoller = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushed);
   private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.FORWARD_CHANNEL, IntakeConstants.REVERSE_CHANNEL);
+  private final BreakBeam breakBeam = new BreakBeam(IntakeConstants.BREAK_BEAM);
   private boolean extended = false;
 
   public Intake() {
@@ -57,10 +59,17 @@ public class Intake extends SubsystemBase {
     if (extended) {
       leftRoller.set(speed);
       rightRoller.set(speed);
+    } else {
+      leftRoller.set(0);
+      rightRoller.set(0);
     }
   }
 
   public boolean isExtended() {
     return extended;
+  }
+
+  public boolean hasBall() {
+    return breakBeam.isBroken();
   }
 }

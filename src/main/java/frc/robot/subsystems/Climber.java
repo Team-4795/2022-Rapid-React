@@ -5,28 +5,29 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxLimitSwitch;
-
 import frc.robot.Constants.ClimberConstants;
 
 public class Climber extends SubsystemBase {
-  private CANSparkMax climb_motor = new CANSparkMax(ClimberConstants.CLIMB_MOTOR, MotorType.kBrushless);
-  private RelativeEncoder m_climb_Encoder;
-  private SparkMaxLimitSwitch limitSwitch;
+  private final CANSparkMax climb_motor = new CANSparkMax(ClimberConstants.CLIMB_MOTOR, MotorType.kBrushless);
+  private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.FORWARD_CHANNEL, ClimberConstants.REVERSE_CHANNEL);
+  private final RelativeEncoder climb_encoder;
 
   public Climber() {
     climb_motor.restoreFactoryDefaults();
     climb_motor.setIdleMode(IdleMode.kBrake);
-    m_climb_Encoder = climb_motor.getEncoder();
     climb_motor.setInverted(false);
-    limitSwitch = climb_motor.getReverseLimitSwitch(Type.kNormallyOpen);
-    limitSwitch.enableLimitSwitch(true);
+
+    climb_encoder = climb_motor.getEncoder();
+
+    solenoid.set(Value.kForward);
   }
 
   public void setPower(double power) {
@@ -34,11 +35,15 @@ public class Climber extends SubsystemBase {
   }
 
   public void resetEncoder() {
-    m_climb_Encoder.setPosition(0);
+    climb_encoder.setPosition(0);
+  }
+
+  public double getPosition() {
+    return climb_encoder.getPosition();
   }
 
   public void extend() {
-    if (m_climb_Encoder.getPosition() < 110) {
+    if (climb_encoder.getPosition() < 110) {
       climb_motor.set(1);
     } else {
       climb_motor.set(0.0);
@@ -46,21 +51,28 @@ public class Climber extends SubsystemBase {
   }
   
   public void retract() {
-    if (m_climb_Encoder.getPosition() > 2) {
+    if (climb_encoder.getPosition() > -10) {
       climb_motor.set(-1);
     } else {
       climb_motor.set(0.0);
     }
   }
 
+  public void tilt() {
+    solenoid.set(Value.kReverse);
+  }
+
+  public void untilt() {
+    solenoid.set(Value.kForward);
+  }
+  
   public boolean isActive() {
-    return climb_motor.get() > 0;
+    return Math.abs(climb_motor.get()) > 0;
   }
 
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("Climber");
-    builder.addDoubleProperty("Rotations", m_climb_Encoder::getPosition, null);
-    builder.addBooleanProperty("Limit switch", limitSwitch::isPressed, null);
+    builder.addDoubleProperty("Rotations", climb_encoder::getPosition, null);
   }
 }

@@ -10,11 +10,13 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivebase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CurvatureDrive;
+import frc.robot.commands.PrepareShot;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.BallManager;
 import frc.robot.subsystems.Superstructure;
@@ -50,7 +52,7 @@ public class RobotContainer {
     ballManager = new BallManager(superstructure);
     superstructure.setDefaultCommand(ballManager);
 
-    climber.setDefaultCommand(new RunCommand(() -> climber.setPower(0), climber));
+    climber.setDefaultCommand(new RunCommand(() -> climber.setPower(climber.getPosition() > 4 && climber.getPosition() < 15 ? -1 : 0), climber));
     vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
 
     SmartDashboard.putData(drivebase);
@@ -66,7 +68,7 @@ public class RobotContainer {
     final JoystickButton reverseButton = new JoystickButton(driverController, Controller.Button.kRightBumper.value);
     final JoystickButton shootButton = new JoystickButton(driverController, Controller.Button.kA.value);
     final JoystickButton intakeButton = new JoystickButton(driverController, Controller.Button.kB.value);
-    final JoystickButton tarmacButton = new JoystickButton(driverController, Controller.Button.kX.value);
+    final JoystickButton driveToGoal = new JoystickButton(driverController, Controller.Button.kX.value);
     final JoystickButton lowGoalButton = new JoystickButton(driverController, Controller.Button.kY.value);
 
     final JoystickButton unjamButton = new JoystickButton(operatorController, Controller.Button.kA.value);
@@ -74,12 +76,14 @@ public class RobotContainer {
     final JoystickButton resetClimber = new JoystickButton(operatorController, Controller.Button.kX.value);
     final JoystickButton manualRetract = new JoystickButton(operatorController, Controller.Button.kY.value);
     final Trigger reverseIntake = new Trigger(() -> operatorController.getRightTriggerAxis() > 0);
-    final JoystickButton retractClimber = new JoystickButton(operatorController, Controller.Button.kLeftBumper.value);
+    final Trigger tiltClimber = new Trigger(() -> operatorController.getPOV() == 0);
+    final Trigger untiltClimber = new Trigger(() -> operatorController.getPOV() == 180);
     final JoystickButton extendClimber = new JoystickButton(operatorController, Controller.Button.kRightBumper.value);
+    final JoystickButton retractClimber = new JoystickButton(operatorController, Controller.Button.kLeftBumper.value);
 
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, vision));
-    tarmacButton.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1650, 1800, 5)));
+    driveToGoal.whileHeld(new SequentialCommandGroup(new PrepareShot(drivebase, superstructure, vision), new Shoot(drivebase, superstructure, vision)));
     lowGoalButton.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1500, 750, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
 
@@ -91,16 +95,23 @@ public class RobotContainer {
     reverseIntake.whenActive(() -> ballManager.setIntakeReversed(true)).whenInactive(() -> ballManager.setIntakeReversed(false));
     resetClimber.whenPressed(climber::resetEncoder);
     manualRetract.whileHeld(new RunCommand(() -> climber.setPower(-0.2), climber));
-    retractClimber.whileHeld(new RunCommand(climber::retract, climber));
+    tiltClimber.whenActive(climber::tilt);
+    untiltClimber.whenActive(climber::untilt);
     extendClimber.whileHeld(new RunCommand(climber::extend, climber));
+    retractClimber.whileHeld(new RunCommand(climber::retract, climber));
   }
 
   public Command getAutonomousCommand() {
     return autoSelector.getSelected();
   }
 
-  public void setRumble(double rumble) {
+  public void setDriverRumble(double rumble) {
     driverController.setRumble(RumbleType.kLeftRumble, rumble);
     driverController.setRumble(RumbleType.kRightRumble, rumble);
+  }
+
+  public void setOperatorRumble(double rumble) {
+    operatorController.setRumble(RumbleType.kLeftRumble, rumble);
+    operatorController.setRumble(RumbleType.kRightRumble, rumble);
   }
 }

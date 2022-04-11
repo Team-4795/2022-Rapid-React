@@ -28,12 +28,13 @@ public final class Constants {
     public static final double kvVoltSecondsPerMeter = 1.28;
     public static final double kaVoltSecondsSquaredPerMeter = 0.224;
 
-    public static final double kPDriveVel = 3;
+    public static final double kPDriveVel = 1.795;
   }
   
   public static final class IntakeConstants {
     public static final int LEFT_MOTOR = 12;
     public static final int RIGHT_MOTOR = 13;
+    public static final int BREAK_BEAM = 3;
 
     public static final int FORWARD_CHANNEL = 0;
     public static final int REVERSE_CHANNEL = 1;
@@ -55,6 +56,8 @@ public final class Constants {
 
   public static final class ClimberConstants {
     public static final int CLIMB_MOTOR = 11;
+    public static final int FORWARD_CHANNEL = 13;
+    public static final int REVERSE_CHANNEL = 15;
   }
  
   public static final class VisionConstants {
@@ -81,7 +84,7 @@ public final class Constants {
   public static final class LEDColors {
     public static final HSVPreset RED = new HSVPreset(0, 255, 255);
     public static final HSVPreset BLUE = new HSVPreset(125, 255, 255);
-    public static final RGBPreset HAS_BALL = new RGBPreset(0, 128, 0, 0.5);
+    public static final RGBPreset HAS_BALL = new RGBPreset(0, 128, 0);
     public static final RGBPreset SHOOTER_CHARGING = new RGBPreset(200, 90, 240);
     public static final RGBPreset SHOOTING = new RGBPreset(235, 52, 119);
     public static final HSVPreset CLIMBING = new HSVPreset(150, 200, 235);
