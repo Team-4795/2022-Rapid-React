@@ -48,15 +48,15 @@ public class PrepareShot extends CommandBase {
       double verticalSpeed = 0;
       double angularSpeed = 0;
 
-      if (Math.abs(goalAngle) < 45 && (goalDistance < 5 || goalDistance > 12.5)) {
+      if (Math.abs(goalAngle) < 45 && (goalDistance < 6 || goalDistance > 11)) {
         isAligned = false;
         verticalSpeed = Math.signum(9 - goalDistance);
 
+        superstructure.shooter.setShooterPower(0, 0);
+      } else {
         var preset = Shoot.interpolate(goalDistance - 1.5);
 
         superstructure.shooter.setShooterRPM(preset.mainRPM * 0.6, preset.topRPM * 0.8);
-      } else {
-        superstructure.shooter.setShooterPower(0, 0);
       }
 
       if (Math.abs(goalAngle) > 4) {

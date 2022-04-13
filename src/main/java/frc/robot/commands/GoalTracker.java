@@ -35,12 +35,10 @@ public class GoalTracker extends CommandBase {
       double goalAngle = (robotPose.getRotation().getDegrees() + (180 - Math.abs(rotation)) * Math.signum(rotation)) % 360;
       double goalDistance = Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation()));
 
-      if (Math.abs(goalAngle) < 25 && goalDistance > 6 && goalDistance < 13) {
+      if (Math.abs(goalAngle) < Math.min(20 + goalDistance * 1.5, 45) && goalDistance > 5 && goalDistance < 14) {
         vision.enableLED();
 
-        double speed = (drivebase.getWheelSpeeds().leftMetersPerSecond + drivebase.getWheelSpeeds().rightMetersPerSecond) / 2.0;
-
-        if (vision.hasTarget() && drivebase.getAngularVelocity() < 30 && (speed < 1.5 || Math.abs(goalAngle) < 10)) {
+        if (vision.hasTarget() && drivebase.getAngularVelocity() < 30) {
           double distance = vision.getTargetDistance();
           double angle = vision.getTargetAngle();
           

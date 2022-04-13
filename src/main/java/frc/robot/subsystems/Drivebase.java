@@ -9,6 +9,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
+
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -64,6 +66,11 @@ public class Drivebase extends SubsystemBase {
     leftFollower.setInverted(true);
     rightLeader.setInverted(false);
     rightFollower.setInverted(false);
+
+    leftLeader.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 10);
+    leftLeader.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10);
+    rightLeader.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 10);
+    rightLeader.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10);
 
     m_leftEncoder = leftLeader.getEncoder();
     m_rightEncoder = rightLeader.getEncoder();
