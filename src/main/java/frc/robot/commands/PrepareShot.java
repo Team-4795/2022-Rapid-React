@@ -41,7 +41,7 @@ public class PrepareShot extends CommandBase {
     var robotPose = drivebase.getPose();
     var goalPose = drivebase.getGoalPose();
     double rotation = Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX()));
-    double goalAngle = (robotPose.getRotation().getDegrees() + (180 - Math.abs(rotation)) * Math.signum(rotation)) % 360;
+    double goalAngle = (robotPose.getRotation().getDegrees() - rotation) % 360;
     double goalDistance = Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation()));
 
     double verticalSpeed = 0;

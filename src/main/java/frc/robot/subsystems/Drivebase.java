@@ -186,7 +186,7 @@ public class Drivebase extends SubsystemBase {
       Pose2d robotPose = getPose();
       Pose2d goalPose = getGoalPose();
       double rotation = Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX()));
-      return (robotPose.getRotation().getDegrees() + (180 - Math.abs(rotation)) * Math.signum(rotation)) % 360;
+      return (robotPose.getRotation().getDegrees() - rotation) % 360;
     }, null);
   }
 }

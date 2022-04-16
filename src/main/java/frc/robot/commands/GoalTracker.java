@@ -30,7 +30,7 @@ public class GoalTracker extends CommandBase {
     Pose2d robotPose = drivebase.getPose();
     Pose2d goalPose = drivebase.getGoalPose();
     double rotation = Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX()));
-    double goalAngle = (robotPose.getRotation().getDegrees() + (180 - Math.abs(rotation)) * Math.signum(rotation)) % 360;
+    double goalAngle = (robotPose.getRotation().getDegrees() - rotation) % 360;
     double goalDistance = Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation()));
 
     if (Math.abs(goalAngle) < Math.min(20 + goalDistance * 1.5, 45) && goalDistance > 5 && goalDistance < 14) {
@@ -39,7 +39,7 @@ public class GoalTracker extends CommandBase {
       if (vision.hasTarget() && drivebase.getAngularVelocity() < 30) {
         double distance = Units.feetToMeters(vision.getTargetDistance() + 1.5 + 2);
         double angle = vision.getTargetAngle();
-        double transformRotation = drivebase.getPose().getRotation().getDegrees() - angle;
+        double transformRotation = drivebase.getPose().getRotation().getDegrees() + angle;
         double newX = 16.4592 / 2.0 - distance * Math.sin(Math.toRadians(transformRotation));
         double newY = 8.2296 / 2.0 + distance * Math.cos(Math.toRadians(transformRotation));
         
