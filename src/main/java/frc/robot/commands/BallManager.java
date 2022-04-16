@@ -4,11 +4,13 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.sensors.ColorSensor.Color;
@@ -17,17 +19,23 @@ public class BallManager extends CommandBase {
   private final Intake intake;
   private final Indexer indexer;
   private final Shooter shooter;
+  private Drivebase drivebase;
   private Alliance alliance;
   private boolean reversed;
   private long startReject;
   private long lastExtend;
 
-  public BallManager(Superstructure superstructure) {
+  public BallManager(Superstructure superstructure, Drivebase drivebase) {
     this.intake = superstructure.intake;
     this.indexer = superstructure.indexer;
     this.shooter = superstructure.shooter;
+    this.drivebase = drivebase;
 
     addRequirements(superstructure);
+  }
+
+  public BallManager(Superstructure superstructure) {
+    this(superstructure, null);
   }
 
   @Override
@@ -84,6 +92,11 @@ public class BallManager extends CommandBase {
       if (System.currentTimeMillis() - startReject > 2000) startReject = System.currentTimeMillis();
 
       if (shooter.getMainRPM() > 900) indexer.setIndexerSpeed(0.5, 1);
+    } else if (indexer.hasUpperBall() && indexer.hasLowerBall() && drivebase != null) {
+      double distance = Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation())) - 3.5;
+      var preset = Shoot.interpolate(distance);
+
+      shooter.setShooterRPM(preset.mainRPM * 0.6, preset.topRPM * 0.8);
     } else {
       shooter.setShooterPower(0, 0);
     }

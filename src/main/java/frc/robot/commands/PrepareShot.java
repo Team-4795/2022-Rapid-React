@@ -47,7 +47,7 @@ public class PrepareShot extends CommandBase {
     double verticalSpeed = 0;
     double angularSpeed = 0;
 
-    if (Math.abs(goalAngle) < 45 && (goalDistance < 6 || goalDistance > 11)) {
+    if (Math.abs(goalAngle) < 45 && (goalDistance < 6 || goalDistance > 13)) {
       isAligned = false;
       verticalSpeed = Math.signum(9 - goalDistance);
 
