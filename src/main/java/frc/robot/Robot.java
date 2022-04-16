@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
 
     if (climber.isActive()) {
       led.wave(LEDColors.CLIMBING, 0.05);
-    } else if (shooter.getTargetRPM() > 0) {
+    } else if (shooter.isShooting()) {
       if (indexer.isActive()) {
         led.setColor(LEDColors.SHOOTING);
       } else {
@@ -119,7 +119,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     if (getSecondsRemaining() < 20 && getSecondsRemaining() > 18) {
       robotContainer.setDriverRumble(1);
-    } else if (shooter.getTargetRPM() > 0 && shooter.getMainRPM() > 650 && !vision.hasTarget()) {
+    } else if (shooter.isShooting() && !vision.hasTarget()) {
       robotContainer.setDriverRumble(0.25);
     } else {
       robotContainer.setDriverRumble(0);

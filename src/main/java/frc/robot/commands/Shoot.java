@@ -170,7 +170,7 @@ public class Shoot extends CommandBase {
     }
 
     superstructure.indexer.setIndexerSpeed(upperIndexer, lowerIndexer);
-    superstructure.shooter.setShooterRPM(mainRPM, topRPM);
+    superstructure.shooter.setShooterRPM(mainRPM, topRPM, true);
   }
 
   @Override

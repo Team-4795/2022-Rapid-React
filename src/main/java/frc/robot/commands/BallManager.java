@@ -87,7 +87,7 @@ public class BallManager extends CommandBase {
     Color upperColor = indexer.getUpperColor();
 
     if (System.currentTimeMillis() - startReject < 1250 || (indexer.hasUpperBall() && ((upperColor == Color.Red && alliance == Alliance.Blue) || (upperColor == Color.Blue && alliance == Alliance.Red)))) {
-      shooter.setShooterRPM(1000, 750);
+      shooter.setShooterRPM(1000, 750, true);
 
       if (System.currentTimeMillis() - startReject > 2000) startReject = System.currentTimeMillis();
 
@@ -96,7 +96,7 @@ public class BallManager extends CommandBase {
       double distance = Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation())) - 3.5;
       var preset = Shoot.interpolate(distance);
 
-      if (distance < 14) {
+      if (distance > 6 && distance < 13) {
         shooter.setShooterRPM(preset.mainRPM * 0.6, preset.topRPM * 0.6);
       } else {
         shooter.setShooterPower(0, 0);
