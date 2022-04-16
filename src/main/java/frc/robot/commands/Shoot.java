@@ -135,7 +135,7 @@ public class Shoot extends CommandBase {
         isAligned = false;
       } else {
         double centerDistance = Units.feetToMeters(vision.getTargetDistance() + 1.5 + 2);
-        double transformRotation = drivebase.getPose().getRotation().getDegrees() + angle;
+        double transformRotation = angle - drivebase.getPose().getRotation().getDegrees();
         double newX = 16.4592 / 2.0 - centerDistance * Math.sin(Math.toRadians(transformRotation));
         double newY = 8.2296 / 2.0 + centerDistance * Math.cos(Math.toRadians(transformRotation));
         
