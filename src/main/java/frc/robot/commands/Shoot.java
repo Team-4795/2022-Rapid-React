@@ -134,10 +134,11 @@ public class Shoot extends CommandBase {
       if (useAlignment && Math.abs(angle) > 2) {
         isAligned = false;
       } else {
+        var goalPose = drivebase.getGoalPose();
         double centerDistance = Units.feetToMeters(vision.getTargetDistance() + 1.5 + 2);
         double transformRotation = angle - drivebase.getPose().getRotation().getDegrees();
-        double newX = 16.4592 / 2.0 - centerDistance * Math.sin(Math.toRadians(transformRotation));
-        double newY = 8.2296 / 2.0 + centerDistance * Math.cos(Math.toRadians(transformRotation));
+        double newX = goalPose.getX() - centerDistance * Math.sin(Math.toRadians(transformRotation));
+        double newY = goalPose.getY() + centerDistance * Math.cos(Math.toRadians(transformRotation));
         
         drivebase.resetOdometry(new Pose2d(newX, newY, drivebase.getPose().getRotation()));
       }

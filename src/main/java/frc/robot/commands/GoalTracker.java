@@ -40,8 +40,8 @@ public class GoalTracker extends CommandBase {
         double distance = Units.feetToMeters(vision.getTargetDistance() + 1.5 + 2);
         double angle = vision.getTargetAngle();
         double transformRotation = angle - drivebase.getPose().getRotation().getDegrees();
-        double newX = 16.4592 / 2.0 - distance * Math.sin(Math.toRadians(transformRotation));
-        double newY = 8.2296 / 2.0 + distance * Math.cos(Math.toRadians(transformRotation));
+        double newX = goalPose.getX() - distance * Math.sin(Math.toRadians(transformRotation));
+        double newY = goalPose.getY() + distance * Math.cos(Math.toRadians(transformRotation));
         
         drivebase.resetOdometry(new Pose2d(newX, newY, drivebase.getPose().getRotation()));
       }
