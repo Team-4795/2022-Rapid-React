@@ -96,7 +96,11 @@ public class BallManager extends CommandBase {
       double distance = Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation())) - 3.5;
       var preset = Shoot.interpolate(distance);
 
-      shooter.setShooterRPM(preset.mainRPM * 0.6, preset.topRPM * 0.8);
+      if (distance < 14) {
+        shooter.setShooterRPM(preset.mainRPM * 0.6, preset.topRPM * 0.6);
+      } else {
+        shooter.setShooterPower(0, 0);
+      }
     } else {
       shooter.setShooterPower(0, 0);
     }
