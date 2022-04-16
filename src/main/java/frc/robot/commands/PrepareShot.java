@@ -53,7 +53,7 @@ public class PrepareShot extends CommandBase {
 
       superstructure.shooter.setShooterPower(0, 0);
     } else {
-      var preset = Shoot.interpolate(goalDistance - 1.5);
+      var preset = Shoot.interpolate(goalDistance - 3.5);
 
       superstructure.shooter.setShooterRPM(preset.mainRPM * 0.6, preset.topRPM * 0.6);
     }

@@ -86,7 +86,7 @@ public final class Constants {
     public static final HSVPreset BLUE = new HSVPreset(125, 255, 255);
     public static final RGBPreset HAS_BALL = new RGBPreset(0, 128, 0);
     public static final RGBPreset SHOOTER_CHARGING = new RGBPreset(200, 90, 240);
-    public static final RGBPreset SHOOTING = new RGBPreset(235, 52, 119);
-    public static final HSVPreset CLIMBING = new HSVPreset(150, 200, 235);
+    public static final RGBPreset SHOOTING = new RGBPreset(209, 31, 96);
+    public static final HSVPreset CLIMBING = new HSVPreset(117, 190, 235);
   }
 }

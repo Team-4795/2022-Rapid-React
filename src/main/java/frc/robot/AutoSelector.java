@@ -49,9 +49,9 @@ public class AutoSelector {
       new ParallelCommandGroup(
         new BallManager(superstructure).withInterrupt(() -> {
           return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
-        }),
+        }).withTimeout(4),
         new TrajectorySequence(drivebase, "paths/Terminal_1.wpilib.json")
-      ).withTimeout(6),
+      ),
       new Shoot(drivebase, superstructure, vision, false).withTimeout(2.5),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(

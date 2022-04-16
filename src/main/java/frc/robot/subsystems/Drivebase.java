@@ -180,7 +180,7 @@ public class Drivebase extends SubsystemBase {
     builder.addDoubleProperty("Right speed", m_rightEncoder::getVelocity, null);
     builder.addDoubleProperty("Gyro angle", () -> gyro.getRotation2d().getDegrees(), null);
     builder.addDoubleProperty("Goal distance", () -> {
-      return Units.metersToFeet(getGoalPose().getTranslation().getDistance(getPose().getTranslation()));
+      return Units.metersToFeet(getGoalPose().getTranslation().getDistance(getPose().getTranslation())) - 3.5;
     }, null);
     builder.addDoubleProperty("Goal angle", () -> {
       Pose2d robotPose = getPose();
