@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.LEDColors;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -28,7 +27,6 @@ public class Robot extends TimedRobot {
   private Alliance alliance;
 
   private RobotContainer robotContainer;
-  private Drivebase drivebase;
   private Intake intake;
   private Indexer indexer;
   private Shooter shooter;
@@ -44,7 +42,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robotContainer = new RobotContainer();
-    drivebase = robotContainer.drivebase;
     intake = robotContainer.superstructure.intake;
     indexer = robotContainer.superstructure.indexer;
     shooter = robotContainer.superstructure.shooter;
@@ -104,8 +101,6 @@ public class Robot extends TimedRobot {
     }
 
     alliance = DriverStation.getAlliance();
-
-    drivebase.setAutoMode(true);
   }
 
   @Override
@@ -115,14 +110,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     teleopStart = System.currentTimeMillis();
 
-    if (autonomousCommand != null) {
-      autonomousCommand.cancel();
-      drivebase.resetGoalPose();
-    }
+    if (autonomousCommand != null) autonomousCommand.cancel();
 
     alliance = DriverStation.getAlliance();
-
-    drivebase.setAutoMode(false);
   }
 
   @Override

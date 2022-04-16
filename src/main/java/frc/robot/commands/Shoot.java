@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -135,8 +134,12 @@ public class Shoot extends CommandBase {
       if (useAlignment && Math.abs(angle) > 2) {
         isAligned = false;
       } else {
-        drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(angle)));
-        drivebase.setGoalPose(new Pose2d(Units.feetToMeters(distance + 1.5), 0, Rotation2d.fromDegrees(0)));
+        double centerDistance = Units.feetToMeters(vision.getTargetDistance() + 1.5 + 2);
+        double transformRotation = drivebase.getPose().getRotation().getDegrees() - angle;
+        double newX = 16.4592 / 2.0 - centerDistance * Math.sin(Math.toRadians(transformRotation));
+        double newY = 8.2296 / 2.0 + centerDistance * Math.cos(Math.toRadians(transformRotation));
+        
+        drivebase.resetOdometry(new Pose2d(newX, newY, drivebase.getPose().getRotation()));
       }
 
       drivebase.curvatureDrive(0, !isAligned && useAlignment ? turnSpeed : 0, true);

@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -28,36 +27,26 @@ public class GoalTracker extends CommandBase {
 
   @Override
   public void execute() {
-    if (drivebase.hasGoalPose()) {
-      Pose2d robotPose = drivebase.getPose();
-      Pose2d goalPose = drivebase.getGoalPose();
-      double rotation = Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX()));
-      double goalAngle = (robotPose.getRotation().getDegrees() + (180 - Math.abs(rotation)) * Math.signum(rotation)) % 360;
-      double goalDistance = Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation()));
+    Pose2d robotPose = drivebase.getPose();
+    Pose2d goalPose = drivebase.getGoalPose();
+    double rotation = Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX()));
+    double goalAngle = (robotPose.getRotation().getDegrees() + (180 - Math.abs(rotation)) * Math.signum(rotation)) % 360;
+    double goalDistance = Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation()));
 
-      if (Math.abs(goalAngle) < Math.min(20 + goalDistance * 1.5, 45) && goalDistance > 5 && goalDistance < 14) {
-        vision.enableLED();
-
-        if (vision.hasTarget() && drivebase.getAngularVelocity() < 30) {
-          double distance = vision.getTargetDistance();
-          double angle = vision.getTargetAngle();
-          
-          drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(angle)));
-          drivebase.setGoalPose(new Pose2d(Units.feetToMeters(distance + 1.5), 0, Rotation2d.fromDegrees(0)));
-        }
-      } else {
-        vision.disableLED();
-      }
-    } else {
+    if (Math.abs(goalAngle) < Math.min(20 + goalDistance * 1.5, 45) && goalDistance > 5 && goalDistance < 14) {
       vision.enableLED();
 
-      if (vision.hasTarget()) {
-        double distance = vision.getTargetDistance();
+      if (vision.hasTarget() && drivebase.getAngularVelocity() < 30) {
+        double distance = Units.feetToMeters(vision.getTargetDistance() + 1.5 + 2);
         double angle = vision.getTargetAngle();
+        double transformRotation = drivebase.getPose().getRotation().getDegrees() - angle;
+        double newX = 16.4592 / 2.0 - distance * Math.sin(Math.toRadians(transformRotation));
+        double newY = 8.2296 / 2.0 + distance * Math.cos(Math.toRadians(transformRotation));
         
-        drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(angle)));
-        drivebase.setGoalPose(new Pose2d(Units.feetToMeters(distance + 1.5), 0, Rotation2d.fromDegrees(0)));
+        drivebase.resetOdometry(new Pose2d(newX, newY, drivebase.getPose().getRotation()));
       }
+    } else {
+      vision.disableLED();
     }
   }
 
