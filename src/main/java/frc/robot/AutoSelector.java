@@ -29,19 +29,19 @@ public class AutoSelector {
       new ParallelCommandGroup(
         new Shoot(drivebase, superstructure, vision, false).withTimeout(2.5),
         new SequentialCommandGroup(
-          new WaitCommand(0.5),
+          new WaitCommand(0.75),
           new InstantCommand(superstructure.intake::deploy)
         )
       ),
       new ParallelRaceGroup(
-        new BallManager(superstructure),
+        new BallManager(superstructure, drivebase),
         new SequentialCommandGroup(
           new TrajectorySequence(drivebase, "paths/output/Five_4.wpilib.json"),
           new WaitCommand(0.75),
           new TrajectorySequence(drivebase, "paths/output/Five_5.wpilib.json")
         )
       ),
-      new Shoot(drivebase, superstructure, vision).withTimeout(2.25)
+      new Shoot(drivebase, superstructure, vision).withTimeout(2)
     ));
 
     chooser.addOption("4 Ball", new SequentialCommandGroup(
