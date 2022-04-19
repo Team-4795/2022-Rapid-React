@@ -24,21 +24,21 @@ public class AutoSelector {
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/Five_1.wpilib.json")
+        new TrajectorySequence(drivebase, "paths/output/Five_1.wpilib.json")
       ),
       new Shoot(drivebase, superstructure, vision, false).withTimeout(2.25),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/Five_2.wpilib.json", "paths/Five_3.wpilib.json")
+        new TrajectorySequence(drivebase, "paths/output/output/Five_2.wpilib.json", "paths/output/Five_3.wpilib.json")
       ),
       new Shoot(drivebase, superstructure, vision, false).withTimeout(1.5),
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new SequentialCommandGroup(
-          new TrajectorySequence(drivebase, "paths/Five_4.wpilib.json"),
+          new TrajectorySequence(drivebase, "paths/output/Five_4.wpilib.json"),
           new WaitCommand(0.75),
-          new TrajectorySequence(drivebase, "paths/Five_5.wpilib.json")
+          new TrajectorySequence(drivebase, "paths/output/Five_5.wpilib.json")
         )
       ),
       new Shoot(drivebase, superstructure, vision).withTimeout(2.25)
@@ -50,16 +50,16 @@ public class AutoSelector {
         new BallManager(superstructure).withInterrupt(() -> {
           return superstructure.indexer.hasLowerBall() && superstructure.indexer.hasUpperBall();
         }).withTimeout(4),
-        new TrajectorySequence(drivebase, "paths/Terminal_1.wpilib.json")
+        new TrajectorySequence(drivebase, "paths/output/Terminal_1.wpilib.json")
       ),
       new Shoot(drivebase, superstructure, vision, false).withTimeout(2.5),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new SequentialCommandGroup(
-          new TrajectorySequence(drivebase, "paths/Terminal_2.wpilib.json"),
+          new TrajectorySequence(drivebase, "paths/output/Terminal_2.wpilib.json"),
           new WaitCommand(1),
-          new TrajectorySequence(drivebase, "paths/Terminal_3.wpilib.json")
+          new TrajectorySequence(drivebase, "paths/output/Terminal_3.wpilib.json")
         )
       ),
       new Shoot(drivebase, superstructure, vision).withTimeout(2.5)
@@ -69,13 +69,13 @@ public class AutoSelector {
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/Two_1.wpilib.json")
+        new TrajectorySequence(drivebase, "paths/output/Two_1.wpilib.json")
       ),
       new Shoot(drivebase, superstructure, vision, false).withTimeout(2.5),
       new InstantCommand(superstructure.intake::deploy),
       new ParallelCommandGroup(
         new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/Two_2.wpilib.json", "paths/Two_3.wpilib.json")
+        new TrajectorySequence(drivebase, "paths/output/Two_2.wpilib.json", "paths/output/Two_3.wpilib.json")
       )
     ));
 
