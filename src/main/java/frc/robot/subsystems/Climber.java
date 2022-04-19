@@ -83,8 +83,10 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (!hasZeroed) climb_motor.set(-0.2);
+    if (!hasZeroed) {
+      climb_motor.set(-0.2);
 
-    if (Math.abs(climb_motor.get()) > 0 && climb_encoder.getVelocity() < 2) resetEncoder();
+      if (Math.abs(climb_motor.get()) > 0 && climb_encoder.getVelocity() < 2) resetEncoder();
+    }
   }
 }
