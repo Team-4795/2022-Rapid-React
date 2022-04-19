@@ -23,16 +23,16 @@ public class AutoSelector {
     chooser.setDefaultOption("5 Ball", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
-        new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/output/Five_1.wpilib.json")
+        new BallManager(superstructure, drivebase),
+        new TrajectorySequence(drivebase, "paths/output/Five_1.wpilib.json", "paths/output/output/Five_2.wpilib.json", "paths/output/Five_3.wpilib.json")
       ),
-      new Shoot(drivebase, superstructure, vision, false).withTimeout(2.25),
-      new InstantCommand(superstructure.intake::deploy),
-      new ParallelRaceGroup(
-        new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/output/output/Five_2.wpilib.json", "paths/output/Five_3.wpilib.json")
+      new ParallelCommandGroup(
+        new Shoot(drivebase, superstructure, vision, false).withTimeout(2.5),
+        new SequentialCommandGroup(
+          new WaitCommand(0.5),
+          new InstantCommand(superstructure.intake::deploy)
+        )
       ),
-      new Shoot(drivebase, superstructure, vision, false).withTimeout(1.5),
       new ParallelRaceGroup(
         new BallManager(superstructure),
         new SequentialCommandGroup(
