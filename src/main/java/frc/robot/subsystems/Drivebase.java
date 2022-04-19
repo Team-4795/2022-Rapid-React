@@ -186,6 +186,9 @@ public class Drivebase extends SubsystemBase {
     }
 
     m_field2d.setRobotPose(getPose());
+
+    SmartDashboard.putNumber("Left Distance", leftDistance);
+    SmartDashboard.putNumber("Right Distance", rightDistance);
   }
 
   @Override
