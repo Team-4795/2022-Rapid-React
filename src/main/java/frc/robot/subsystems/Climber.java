@@ -75,18 +75,18 @@ public class Climber extends SubsystemBase {
   }
 
   @Override
-  public void initSendable(SendableBuilder builder) {
-    builder.setSmartDashboardType("Climber");
-    builder.addDoubleProperty("Rotations", climb_encoder::getPosition, null);
-    builder.addBooleanProperty("Has zeroed", () -> hasZeroed, null);
-  }
-
-  @Override
   public void periodic() {
     if (!hasZeroed) {
       climb_motor.set(-0.2);
 
       if (Math.abs(climb_motor.get()) > 0 && climb_encoder.getVelocity() < 2) resetEncoder();
     }
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.setSmartDashboardType("Climber");
+    builder.addDoubleProperty("Position", climb_encoder::getPosition, null);
+    builder.addBooleanProperty("Has zeroed", () -> hasZeroed, null);
   }
 }

@@ -46,6 +46,7 @@ public class Drivebase extends SubsystemBase {
 
   private double movementSpeed = 0;
   private double direction = 1;
+  private double totalDistance = 0;
 
   public Drivebase() {
     leftLeader.restoreFactoryDefaults();
@@ -168,7 +169,11 @@ public class Drivebase extends SubsystemBase {
     double leftDistance = getLeftWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
     double rightDistance = getRightWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
 
+    Pose2d oldPose = getPose();
+
     odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
+
+    totalDistance += oldPose.getTranslation().getDistance(getPose().getTranslation());
 
     m_field2d.setRobotPose(getPose());
   }
@@ -178,6 +183,7 @@ public class Drivebase extends SubsystemBase {
     builder.setSmartDashboardType("Drivebase");
     builder.addDoubleProperty("Left speed", m_leftEncoder::getVelocity, null);
     builder.addDoubleProperty("Right speed", m_rightEncoder::getVelocity, null);
+    builder.addDoubleProperty("Distance travelled", () -> totalDistance, null);
     builder.addDoubleProperty("Gyro angle", () -> gyro.getRotation2d().getDegrees(), null);
     builder.addDoubleProperty("Goal distance", () -> {
       return Units.metersToFeet(getGoalPose().getTranslation().getDistance(getPose().getTranslation())) - 3.5;
