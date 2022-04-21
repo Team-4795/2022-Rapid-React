@@ -19,7 +19,6 @@ public class Climber extends SubsystemBase {
   private final CANSparkMax climb_motor = new CANSparkMax(ClimberConstants.CLIMB_MOTOR, MotorType.kBrushless);
   private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.FORWARD_CHANNEL, ClimberConstants.REVERSE_CHANNEL);
   private final RelativeEncoder climb_encoder;
-  private boolean hasZeroed;
 
   public Climber() {
     climb_motor.restoreFactoryDefaults();
@@ -29,8 +28,6 @@ public class Climber extends SubsystemBase {
     climb_encoder = climb_motor.getEncoder();
 
     solenoid.set(Value.kForward);
-
-    hasZeroed = false;
   }
 
   public void setPower(double power) {
@@ -38,7 +35,6 @@ public class Climber extends SubsystemBase {
   }
 
   public void resetEncoder() {
-    hasZeroed = true;
     climb_encoder.setPosition(0);
   }
 
@@ -75,18 +71,11 @@ public class Climber extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    if (!hasZeroed) {
-      climb_motor.set(-0.2);
-
-      if (Math.abs(climb_motor.get()) > 0 && climb_encoder.getVelocity() < 2) resetEncoder();
-    }
-  }
+  public void periodic() {}
 
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("Climber");
     builder.addDoubleProperty("Position", climb_encoder::getPosition, null);
-    builder.addBooleanProperty("Has zeroed", () -> hasZeroed, null);
   }
 }
