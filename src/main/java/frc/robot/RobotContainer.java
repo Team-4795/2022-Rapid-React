@@ -53,7 +53,7 @@ public class RobotContainer {
     ballManager = new BallManager(superstructure, drivebase);
     superstructure.setDefaultCommand(ballManager);
 
-    climber.setDefaultCommand(new RunCommand(() -> climber.setPower(climber.getPosition() > 4 && climber.getPosition() < 15 ? -1 : 0), climber));
+    climber.setDefaultCommand(new RunCommand(() -> climber.setPower(climber.getPosition() > 8 && climber.getPosition() < 15 ? -1 : 0), climber));
     vision.setDefaultCommand(new GoalTracker(drivebase, vision));
 
     SmartDashboard.putData(drivebase);

@@ -24,7 +24,7 @@ public class AutoSelector {
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
         new BallManager(superstructure, drivebase),
-        new TrajectorySequence(drivebase, "paths/output/Five_1.wpilib.json", "paths/output/output/Five_2.wpilib.json", "paths/output/Five_3.wpilib.json")
+        new TrajectorySequence(drivebase, "paths/output/Five_1.wpilib.json", "paths/output/Five_2.wpilib.json", "paths/output/Five_3.wpilib.json")
       ),
       new ParallelCommandGroup(
         new Shoot(drivebase, superstructure, vision, false).withTimeout(2.5),
