@@ -39,7 +39,7 @@ public class GoalTracker extends CommandBase {
       if (vision.hasTarget() && drivebase.getAngularVelocity() < 30) {
         double distance = Units.feetToMeters(vision.getTargetDistance() + 1.5 + 2);
         double angle = vision.getTargetAngle();
-        double transformRotation = drivebase.getPose().getRotation().getDegrees() - angle;
+        double transformRotation = 180 - (drivebase.getPose().getRotation().getDegrees() + angle);
         double newX = goalPose.getX() - distance * Math.sin(Math.toRadians(transformRotation));
         double newY = goalPose.getY() + distance * Math.cos(Math.toRadians(transformRotation));
         

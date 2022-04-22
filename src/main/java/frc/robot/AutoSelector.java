@@ -79,6 +79,15 @@ public class AutoSelector {
       )
     ));
 
+    chooser.addOption("1 Ball", new SequentialCommandGroup(
+      new Shoot(drivebase, superstructure, vision, false).withTimeout(4),
+      new InstantCommand(superstructure.intake::deploy),
+      new ParallelCommandGroup(
+        new BallManager(superstructure),
+        new TrajectorySequence(drivebase, "paths/output/One-1.wpilib.json")
+      )
+    ));
+
     chooser.addOption("Drive Back", new SequentialCommandGroup(
       new InstantCommand(superstructure.intake::deploy),
       new ParallelRaceGroup(
