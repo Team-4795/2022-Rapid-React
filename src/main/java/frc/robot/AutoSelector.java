@@ -84,7 +84,7 @@ public class AutoSelector {
       new InstantCommand(superstructure.intake::deploy),
       new ParallelCommandGroup(
         new BallManager(superstructure),
-        new TrajectorySequence(drivebase, "paths/output/One-1.wpilib.json")
+        new TrajectorySequence(drivebase, "paths/output/One-1.wpilib.json", "paths/output/One-2.wpilib.json")
       )
     ));
 
