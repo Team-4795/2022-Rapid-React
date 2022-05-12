@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CurvatureDrive;
+import frc.robot.commands.GoalTracker;
 import frc.robot.commands.PrepareShot;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.BallManager;
@@ -49,11 +50,11 @@ public class RobotContainer {
       () -> driverController.getRightTriggerAxis()
     ));
 
-    ballManager = new BallManager(superstructure);
+    ballManager = new BallManager(superstructure, drivebase);
     superstructure.setDefaultCommand(ballManager);
 
-    climber.setDefaultCommand(new RunCommand(() -> climber.setPower(climber.getPosition() > 4 && climber.getPosition() < 15 ? -1 : 0), climber));
-    vision.setDefaultCommand(new RunCommand(vision::disableLED, vision));
+    climber.setDefaultCommand(new RunCommand(() -> climber.setPower(climber.getPosition() > 8 && climber.getPosition() < 15 ? -1 : 0), climber));
+    vision.setDefaultCommand(new GoalTracker(drivebase, vision));
 
     SmartDashboard.putData(drivebase);
     SmartDashboard.putData(superstructure.indexer);

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -130,13 +129,28 @@ public class Shoot extends CommandBase {
 
       preset = interpolate(distance);
 
-      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.125), turnSpeed), -0.25, 0.25);
+      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.125), turnSpeed), -0.35, 0.35);
 
       if (useAlignment && Math.abs(angle) > 2) {
         isAligned = false;
       } else {
-        drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(angle)));
-        drivebase.setGoalPose(new Pose2d(Units.feetToMeters(distance + 1.5), 0, Rotation2d.fromDegrees(0)));
+        var goalPose = drivebase.getGoalPose();
+        double centerDistance = Units.feetToMeters(vision.getTargetDistance() + 1.5 + 2);
+        double poseAngle = drivebase.getPose().getRotation().getDegrees();
+        double transformRotation = 0;
+        if (angle < 0 && poseAngle > 0) {
+          transformRotation = angle + poseAngle;
+        } else if (angle > 0 && poseAngle > 0) {
+          transformRotation = angle + poseAngle + 90;
+        } else if (angle < 0 && poseAngle < 0) {
+          transformRotation = angle + poseAngle + 90;
+        } else if (angle >  0 && poseAngle < 0) {
+          transformRotation = angle + poseAngle + 90;
+        }
+        double newX = goalPose.getX() - centerDistance * Math.sin(Math.toRadians(transformRotation));
+        double newY = goalPose.getY() + centerDistance * Math.cos(Math.toRadians(transformRotation));
+        
+        drivebase.resetOdometry(new Pose2d(newX, newY, drivebase.getPose().getRotation()));
       }
 
       drivebase.curvatureDrive(0, !isAligned && useAlignment ? turnSpeed : 0, true);
@@ -167,7 +181,7 @@ public class Shoot extends CommandBase {
     }
 
     superstructure.indexer.setIndexerSpeed(upperIndexer, lowerIndexer);
-    superstructure.shooter.setShooterRPM(mainRPM, topRPM);
+    superstructure.shooter.setShooterRPM(mainRPM, topRPM, true);
   }
 
   @Override

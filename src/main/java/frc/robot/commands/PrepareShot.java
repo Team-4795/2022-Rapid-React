@@ -38,39 +38,34 @@ public class PrepareShot extends CommandBase {
   public void execute() {
     isAligned = true;
 
-    if (drivebase.hasGoalPose()) {
-      var robotPose = drivebase.getPose();
-      var goalPose = drivebase.getGoalPose();
-      double rotation = Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX()));
-      double goalAngle = (robotPose.getRotation().getDegrees() + (180 - Math.abs(rotation)) * Math.signum(rotation)) % 360;
-      double goalDistance = Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation()));
+    var robotPose = drivebase.getPose();
+    var goalPose = drivebase.getGoalPose();
+    double rotation = Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX()));
+    double goalAngle = (robotPose.getRotation().getDegrees() - rotation) % 360;
+    double goalDistance = Units.metersToFeet(drivebase.getGoalPose().getTranslation().getDistance(drivebase.getPose().getTranslation()));
 
-      double verticalSpeed = 0;
-      double angularSpeed = 0;
+    double verticalSpeed = 0;
+    double angularSpeed = 0;
 
-      if (Math.abs(goalAngle) < 45 && (goalDistance < 5 || goalDistance > 12.5)) {
-        isAligned = false;
-        verticalSpeed = Math.signum(9 - goalDistance);
+    if (Math.abs(goalAngle) < 45 && (goalDistance < 6 || goalDistance > 13)) {
+      isAligned = false;
+      verticalSpeed = Math.signum(9 - goalDistance);
 
-        var preset = Shoot.interpolate(goalDistance - 1.5);
-
-        superstructure.shooter.setShooterRPM(preset.mainRPM * 0.6, preset.topRPM * 0.8);
-      } else {
-        superstructure.shooter.setShooterPower(0, 0);
-      }
-
-      if (Math.abs(goalAngle) > 4) {
-        if (!vision.hasTarget() || Math.abs(goalAngle) > 15) isAligned = false;
-
-        angularSpeed = MathUtil.clamp(Math.abs(goalAngle / 90), 0.15, 0.6) * Math.signum(goalAngle);
-        verticalSpeed *= 1 - Math.sqrt(angularSpeed);
-      }
-
-      drivebase.arcadeDrive(verticalSpeed, angularSpeed);
-    } else {
-      drivebase.arcadeDrive(0, 0);
       superstructure.shooter.setShooterPower(0, 0);
+    } else {
+      var preset = Shoot.interpolate(goalDistance - 3.5);
+
+      superstructure.shooter.setShooterRPM(preset.mainRPM * 0.6, preset.topRPM * 0.6);
     }
+
+    if (Math.abs(goalAngle) > 4) {
+      if (!vision.hasTarget() || Math.abs(goalAngle) > 15) isAligned = false;
+
+      angularSpeed = MathUtil.clamp(Math.abs(goalAngle / 90), 0.15, 0.6) * Math.signum(goalAngle);
+      verticalSpeed *= 1 - Math.sqrt(angularSpeed);
+    }
+
+    drivebase.arcadeDrive(verticalSpeed, angularSpeed);
 
     if (isAligned && System.currentTimeMillis() - alignStart > 250) alignStart = System.currentTimeMillis();
 

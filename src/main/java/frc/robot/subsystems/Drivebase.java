@@ -9,8 +9,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -39,12 +41,11 @@ public class Drivebase extends SubsystemBase {
 
   private final Field2d m_field2d = new Field2d();
 
-  private Pose2d currentGoal;
-
-  private boolean isAuto = false;
+  private Pose2d currentGoal = new Pose2d(16.4592 / 2.0, 8.2296 / 2.0, Rotation2d.fromDegrees(0));
 
   private double movementSpeed = 0;
   private double direction = 1;
+  private double totalDistance = 0;
 
   public Drivebase() {
     leftLeader.restoreFactoryDefaults();
@@ -150,28 +151,11 @@ public class Drivebase extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    currentGoal = null;
     odometry.resetPosition(pose, gyro.getRotation2d());
-  }
-
-  public boolean hasGoalPose() {
-    return currentGoal != null;
   }
 
   public Pose2d getGoalPose() {
     return currentGoal;
-  }
-
-  public void setGoalPose(Pose2d pose) {
-    currentGoal = pose;
-  }
-
-  public void resetGoalPose() {
-    currentGoal = null;
-  }
-
-  public void setAutoMode(boolean mode) {
-    isAuto = mode;
   }
 
   @Override
@@ -179,11 +163,11 @@ public class Drivebase extends SubsystemBase {
     double leftDistance = getLeftWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
     double rightDistance = getRightWheelEncoder() / DrivebaseConstants.GEARING * DrivebaseConstants.WHEEL_DIAMETER_METERS * Math.PI;
 
-    if (isAuto) {
-      odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
-    } else {
-      odometry.update(gyro.getRotation2d(), -leftDistance, -rightDistance);
-    }
+    Pose2d oldPose = getPose();
+
+    odometry.update(gyro.getRotation2d(), leftDistance, rightDistance);
+
+    totalDistance += oldPose.getTranslation().getDistance(getPose().getTranslation());
 
     m_field2d.setRobotPose(getPose());
   }
@@ -193,19 +177,16 @@ public class Drivebase extends SubsystemBase {
     builder.setSmartDashboardType("Drivebase");
     builder.addDoubleProperty("Left speed", m_leftEncoder::getVelocity, null);
     builder.addDoubleProperty("Right speed", m_rightEncoder::getVelocity, null);
-    builder.addDoubleProperty("Gyro angle", () -> gyro.getRotation2d().getDegrees(), null);
+    builder.addDoubleProperty("Distance travelled", () -> totalDistance, null);
+    builder.addDoubleProperty("Gyro angle", () -> getPose().getRotation().getDegrees(), null);
     builder.addDoubleProperty("Goal distance", () -> {
-      return hasGoalPose() ? Units.metersToFeet(getGoalPose().getTranslation().getDistance(getPose().getTranslation())) : 0;
+      return Units.metersToFeet(getGoalPose().getTranslation().getDistance(getPose().getTranslation())) - 3.5;
     }, null);
     builder.addDoubleProperty("Goal angle", () -> {
-      if (hasGoalPose()) {
-        Pose2d robotPose = getPose();
-        Pose2d goalPose = getGoalPose();
-        double rotation = Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX()));
-        return (robotPose.getRotation().getDegrees() + (180 - Math.abs(rotation)) * Math.signum(rotation)) % 360;
-      } else {
-        return 0;
-      }
+      Pose2d robotPose = getPose();
+      Pose2d goalPose = getGoalPose();
+      double rotation = Math.toDegrees(Math.atan2(robotPose.getY() - goalPose.getY(), robotPose.getX() - goalPose.getX()));
+      return (robotPose.getRotation().getDegrees() - rotation) % 360;
     }, null);
   }
 }

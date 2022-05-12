@@ -71,8 +71,11 @@ public class Climber extends SubsystemBase {
   }
 
   @Override
+  public void periodic() {}
+
+  @Override
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("Climber");
-    builder.addDoubleProperty("Rotations", climb_encoder::getPosition, null);
+    builder.addDoubleProperty("Position", climb_encoder::getPosition, null);
   }
 }
