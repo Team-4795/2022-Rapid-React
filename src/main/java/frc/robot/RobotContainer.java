@@ -45,7 +45,7 @@ public class RobotContainer {
 
     drivebase.setDefaultCommand(new CurvatureDrive(
       drivebase,
-      () -> .3*-driverController.getLeftY(),
+      () -> .3*driverController.getLeftY(),
       () -> .3*driverController.getRightX(),
       () -> driverController.getRightTriggerAxis()
     ));
