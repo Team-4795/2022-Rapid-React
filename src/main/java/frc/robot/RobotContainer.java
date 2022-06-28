@@ -85,7 +85,7 @@ public class RobotContainer {
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, vision));
     driveToGoal.whileHeld(new SequentialCommandGroup(new PrepareShot(drivebase, superstructure, vision), new Shoot(drivebase, superstructure, vision)));
-    lowGoalButton.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1500, 750, 0)));
+    lowGoalButton.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1800, 1200, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
 
     unjamButton.whileHeld(new RunCommand(() -> {
