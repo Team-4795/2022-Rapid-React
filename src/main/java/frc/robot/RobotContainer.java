@@ -83,7 +83,7 @@ public class RobotContainer {
     final JoystickButton retractClimber = new JoystickButton(operatorController, Controller.Button.kLeftBumper.value);
 
     reverseButton.whenPressed(drivebase::reverse);
-    lowShot.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1400, 500, 0)));
+    lowShot.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1500, 700, 0)));
     highShot.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1800, 1200, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
 
