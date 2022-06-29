@@ -170,12 +170,12 @@ public class Shoot extends CommandBase {
     }
 
     if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.035 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.035) {
-      upperIndexer = 1;
-      lowerIndexer = 1;
+      upperIndexer = .3;
+      lowerIndexer = .3;
     }
 
     if (superstructure.intake.isExtended()) {
-      superstructure.intake.setSpeed(0.75);
+      superstructure.intake.setSpeed(0.1);
     } else {
       superstructure.intake.setSpeed(0);
     }
