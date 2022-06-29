@@ -124,12 +124,6 @@ public class Robot extends TimedRobot {
     } else {
       robotContainer.setDriverRumble(0);
     }
-
-    if (intake.hasBall()) {
-      robotContainer.setOperatorRumble(0.5);
-    } else {
-      robotContainer.setOperatorRumble(0);
-    }
   }
 
   @Override
