@@ -120,7 +120,7 @@ public class Robot extends TimedRobot {
     if (getSecondsRemaining() < 20 && getSecondsRemaining() > 18) {
       robotContainer.setDriverRumble(1);
     } else if (shooter.isShooting() && !vision.hasTarget()) {
-      robotContainer.setDriverRumble(0.25);
+      robotContainer.setDriverRumble(1);
     } else {
       robotContainer.setDriverRumble(0);
     }
