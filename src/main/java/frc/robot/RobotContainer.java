@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CurvatureDrive;
 import frc.robot.commands.GoalTracker;
+import frc.robot.commands.IndependentDrive;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.BallManager;
 import frc.robot.subsystems.Superstructure;
@@ -39,11 +40,10 @@ public class RobotContainer {
     vision = new Vision();
     autoSelector = new AutoSelector(drivebase, superstructure, vision);
 
-    drivebase.setDefaultCommand(new CurvatureDrive(
+    drivebase.setDefaultCommand(new IndependentDrive(
       drivebase,
-      () -> .3*driverController.getLeftY(),
-      () -> .3*driverController.getRightX(),
-      () -> driverController.getRightTriggerAxis()
+      () -> driverController.getLeftY(),
+      () -> driverController.getRightX()
     ));
 
     ballManager = new BallManager(superstructure, drivebase);
