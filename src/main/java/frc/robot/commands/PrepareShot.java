@@ -29,7 +29,6 @@ public class PrepareShot extends CommandBase {
 
   @Override
   public void initialize() {
-    drivebase.enableBrakeMode();
     isAligned = false;
     alignStart = System.currentTimeMillis();
   }
@@ -82,7 +81,6 @@ public class PrepareShot extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    drivebase.disableBrakeMode();
   }
 
   @Override

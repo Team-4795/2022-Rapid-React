@@ -111,7 +111,6 @@ public class Shoot extends CommandBase {
   @Override
   public void initialize() {
     if (useCV) preset = interpolate(3);
-    drivebase.enableBrakeMode();
     vision.enableLED();
     alliance = DriverStation.getAlliance();
     start = System.currentTimeMillis();
@@ -186,7 +185,6 @@ public class Shoot extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    drivebase.disableBrakeMode();
     superstructure.intake.setSpeed(0);
     superstructure.indexer.setIndexerSpeed(0, 0);
     superstructure.shooter.setShooterPower(0, 0);
