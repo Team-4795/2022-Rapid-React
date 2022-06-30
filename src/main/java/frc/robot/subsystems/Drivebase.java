@@ -56,10 +56,10 @@ public class Drivebase extends SubsystemBase {
     leftFollower.follow(leftLeader);
     rightFollower.follow(rightLeader);
 
-    leftLeader.setIdleMode(IdleMode.kCoast);
-    leftFollower.setIdleMode(IdleMode.kCoast);
-    rightLeader.setIdleMode(IdleMode.kCoast);
-    rightFollower.setIdleMode(IdleMode.kCoast);
+    leftLeader.setIdleMode(IdleMode.kBrake);
+    leftFollower.setIdleMode(IdleMode.kBrake);
+    rightLeader.setIdleMode(IdleMode.kBrake);
+    rightFollower.setIdleMode(IdleMode.kBrake);
 
     leftLeader.setInverted(true);
     leftFollower.setInverted(true);
