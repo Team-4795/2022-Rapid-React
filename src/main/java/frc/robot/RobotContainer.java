@@ -31,6 +31,7 @@ public class RobotContainer {
   private final BallManager ballManager;
 
   private final Controller driverController = new Controller(ControllerConstants.DRIVER);
+  private final Controller operatorController = new Controller(ControllerConstants.OPERATOR);
 
   public RobotContainer() {
     drivebase = new Drivebase();
@@ -62,11 +63,10 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    final JoystickButton reverseButton = new JoystickButton(driverController, Controller.Button.kRightBumper.value);
-    final JoystickButton lowShot = new JoystickButton(driverController, Controller.Button.kA.value);
-    final JoystickButton intakeButton = new JoystickButton(driverController, Controller.Button.kB.value);
-
-    final JoystickButton highShot = new JoystickButton(driverController, Controller.Button.kY.value);
+    final JoystickButton reverseButton = new JoystickButton(operatorController, Controller.Button.kRightBumper.value);
+    final JoystickButton lowShot = new JoystickButton(operatorController, Controller.Button.kA.value);
+    final JoystickButton intakeButton = new JoystickButton(operatorController, Controller.Button.kB.value);
+    final JoystickButton highShot = new JoystickButton(operatorController, Controller.Button.kY.value);
 
     reverseButton.whenPressed(drivebase::reverse);
     lowShot.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1500, 700, 0)));
