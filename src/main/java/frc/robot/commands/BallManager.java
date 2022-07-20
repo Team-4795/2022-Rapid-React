@@ -51,9 +51,9 @@ public class BallManager extends CommandBase {
   @Override
   public void execute() {
     if (intake.isExtended()) {
-      double intakeSpeed = 0.3 * (reversed ? -1 : 1);
+      double intakeSpeed = 0.75 * (reversed ? -1 : 1);
       double upperSpeed = 0.25;
-      double lowerSpeed = 0.25;
+      double lowerSpeed = 0.1;
 
       if (indexer.hasUpperBall()) {
         upperSpeed = 0;
