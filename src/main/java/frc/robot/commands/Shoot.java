@@ -129,9 +129,9 @@ public class Shoot extends CommandBase {
 
       preset = interpolate(distance);
 
-      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.125), turnSpeed), -0.35, 0.35);
+      turnSpeed = MathUtil.clamp(Math.copySign(Math.max(Math.abs(turnSpeed), 0.125), turnSpeed), -0.05, 0.05);
 
-      if (useAlignment && Math.abs(angle) > 2) {
+      if (useAlignment && Math.abs(angle) > 1) {
         isAligned = false;
       } else {
         var goalPose = drivebase.getGoalPose();
@@ -169,7 +169,7 @@ public class Shoot extends CommandBase {
       topRPM = 750;
     }
 
-    if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.035 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.035) {
+    if (isAligned && Math.abs(superstructure.shooter.getMainRPM() - mainRPM) < mainRPM * 0.01 && Math.abs(superstructure.shooter.getTopRPM() - topRPM) < topRPM * 0.01) {
       upperIndexer = 1;
       lowerIndexer = 1;
     }
