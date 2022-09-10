@@ -62,13 +62,11 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    final JoystickButton reverseButton = new JoystickButton(driverController, Controller.Button.kRightBumper.value);
     final JoystickButton lowShot = new JoystickButton(driverController, Controller.Button.kA.value);
     final JoystickButton intakeButton = new JoystickButton(driverController, Controller.Button.kB.value);
 
     final JoystickButton highShot = new JoystickButton(driverController, Controller.Button.kY.value);
 
-    reverseButton.whenPressed(drivebase::reverse);
     lowShot.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1500, 700, 0)));
     highShot.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1800, 1200, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
