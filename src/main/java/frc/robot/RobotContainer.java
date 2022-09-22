@@ -11,6 +11,7 @@ import frc.robot.subsystems.Drivebase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CurvatureDrive;
@@ -64,12 +65,16 @@ public class RobotContainer {
   private void configureButtonBindings() {
     final JoystickButton lowShot = new JoystickButton(driverController, Controller.Button.kA.value);
     final JoystickButton intakeButton = new JoystickButton(driverController, Controller.Button.kB.value);
-
     final JoystickButton highShot = new JoystickButton(driverController, Controller.Button.kY.value);
+
+    final Trigger tiltClimber = new Trigger(() -> driverController.getPOV() == 0);
+    final Trigger untiltClimber = new Trigger(() -> driverController.getPOV() == 180);
 
     lowShot.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1500, 700, 0)));
     highShot.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(3000, 2500, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
+    tiltClimber.whenActive(climber::tilt);
+    untiltClimber.whenActive(climber::untilt);
   }
 
   public Command getAutonomousCommand() {
