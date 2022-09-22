@@ -68,7 +68,7 @@ public class RobotContainer {
     final JoystickButton highShot = new JoystickButton(driverController, Controller.Button.kY.value);
 
     lowShot.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1500, 700, 0)));
-    highShot.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1800, 1200, 0)));
+    highShot.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(3000, 2500, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
   }
 
