@@ -80,6 +80,10 @@ repositories {
     }
 }
 
+configurations.all {
+    exclude group: "edu.wpi.first.wpilibj"
+}
+
 // Simulation configuration (e.g. environment variables).
 wpi.sim.addGui().defaultEnabled = true
 wpi.sim.addDriverstation()
