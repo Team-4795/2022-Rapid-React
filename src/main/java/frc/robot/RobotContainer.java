@@ -10,14 +10,12 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivebase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CurvatureDrive;
 import frc.robot.commands.GoalTracker;
-import frc.robot.commands.PrepareShot;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.BallManager;
 import frc.robot.subsystems.Superstructure;
@@ -66,25 +64,25 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    final JoystickButton reverseButton = new JoystickButton(driverController, Controller.Button.kRightBumper.value);
-    final JoystickButton shootButton = new JoystickButton(driverController, Controller.Button.kA.value);
-    final JoystickButton intakeButton = new JoystickButton(driverController, Controller.Button.kB.value);
-    final JoystickButton driveToGoal = new JoystickButton(driverController, Controller.Button.kX.value);
-    final JoystickButton lowGoalButton = new JoystickButton(driverController, Controller.Button.kY.value);
+    final JoystickButton reverseButton = new JoystickButton(driverController, 6);
+    final JoystickButton shootButton = new JoystickButton(driverController, 1);
+    final JoystickButton intakeButton = new JoystickButton(driverController, 2);
+    // final JoystickButton driveToGoal = new JoystickButton(driverController, 3);
+    final JoystickButton lowGoalButton = new JoystickButton(driverController, 4);
 
-    final JoystickButton unjamButton = new JoystickButton(operatorController, Controller.Button.kA.value);
-    final JoystickButton intakeOverride = new JoystickButton(operatorController, Controller.Button.kB.value);
-    final JoystickButton resetClimber = new JoystickButton(operatorController, Controller.Button.kX.value);
-    final JoystickButton manualRetract = new JoystickButton(operatorController, Controller.Button.kY.value);
+    final JoystickButton unjamButton = new JoystickButton(operatorController, 2);
+    final JoystickButton intakeOverride = new JoystickButton(operatorController, 3);
+    final JoystickButton resetClimber = new JoystickButton(operatorController, 1);
+    final JoystickButton manualRetract = new JoystickButton(operatorController, 4);
     final Trigger reverseIntake = new Trigger(() -> operatorController.getRightTriggerAxis() > 0);
     final Trigger tiltClimber = new Trigger(() -> operatorController.getPOV() == 0);
     final Trigger untiltClimber = new Trigger(() -> operatorController.getPOV() == 180);
-    final JoystickButton extendClimber = new JoystickButton(operatorController, Controller.Button.kRightBumper.value);
-    final JoystickButton retractClimber = new JoystickButton(operatorController, Controller.Button.kLeftBumper.value);
+    final JoystickButton extendClimber = new JoystickButton(operatorController, 6);
+    final JoystickButton retractClimber = new JoystickButton(operatorController, 5);
 
     reverseButton.whenPressed(drivebase::reverse);
     shootButton.whileHeld(new Shoot(drivebase, superstructure, vision));
-    driveToGoal.whileHeld(new SequentialCommandGroup(new PrepareShot(drivebase, superstructure, vision), new Shoot(drivebase, superstructure, vision)));
+    // driveToGoal.whileHeld(new SequentialCommandGroup(new PrepareShot(drivebase, superstructure, vision), new Shoot(drivebase, superstructure, vision)));
     lowGoalButton.whileHeld(new Shoot(drivebase, superstructure, vision, new ShooterPreset(1500, 750, 0)));
     intakeButton.whenPressed(superstructure.intake::toggle);
 
