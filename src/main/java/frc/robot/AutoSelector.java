@@ -62,7 +62,7 @@ public class AutoSelector {
           new TrajectorySequence(drivebase, "paths/output/Terminal_3.wpilib.json")
         )
       ),
-      new Shoot(drivebase, superstructure, vision).withTimeout(2.5)
+      new Shoot(drivebase, superstructure, vision).withTimeout(5)
     ));
 
     chooser.addOption("2 Ball", new SequentialCommandGroup(

@@ -70,9 +70,9 @@ public class RobotContainer {
     // final JoystickButton driveToGoal = new JoystickButton(driverController, 3);
     final JoystickButton lowGoalButton = new JoystickButton(driverController, 4);
 
-    final JoystickButton unjamButton = new JoystickButton(operatorController, 2);
+    final JoystickButton unjamButton = new JoystickButton(operatorController, 1);
     final JoystickButton intakeOverride = new JoystickButton(operatorController, 3);
-    final JoystickButton resetClimber = new JoystickButton(operatorController, 1);
+    final JoystickButton resetClimber = new JoystickButton(operatorController, 10);
     final JoystickButton manualRetract = new JoystickButton(operatorController, 4);
     final Trigger reverseIntake = new Trigger(() -> operatorController.getRightTriggerAxis() > 0);
     final Trigger tiltClimber = new Trigger(() -> operatorController.getPOV() == 0);
